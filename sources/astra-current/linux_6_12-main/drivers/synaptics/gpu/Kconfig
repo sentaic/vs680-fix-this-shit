@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: GPL-2.0
+#
+# Synaptics driver config
+#
+
+menu "Synaptics GPU drivers"
+
+source "drivers/synaptics/gpu/arm/mali/Kconfig"
+
+source "drivers/synaptics/gpu/arm/mali-midgard/Kconfig"
+
+source "drivers/synaptics/gpu/vivante/Kconfig"
+
+endmenu

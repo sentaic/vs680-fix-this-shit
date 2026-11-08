@@ -1,0 +1,20 @@
+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+/*
+ * Copyright (C) 2025 Synaptics Incorporated
+ */
+
+/dts-v1/;
+
+#include "sl2615-nand-rescue-rdk.dts"
+
+&partition1 {
+	read-only;
+};
+
+&partition2 {
+	read-only;
+};
+
+&partition3 {
+	read-only;
+};

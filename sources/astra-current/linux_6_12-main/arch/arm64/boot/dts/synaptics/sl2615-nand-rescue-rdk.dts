@@ -1,0 +1,58 @@
+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+/*
+ * Copyright (C) 2025 Synaptics Incorporated
+ */
+
+/dts-v1/;
+
+#include "sl2615-rdk.dts"
+
+/ {
+	model = "Synaptics SL2615 NAND RDK";
+	compatible = "syna,sl2615-nand-rdk", "syna,sl2615";
+};
+
+&xspi0 {
+	status = "okay";
+	/delete-node/ flash@0;
+
+	flash@0 {
+		compatible = "spi-nand";
+		reg = <0>;
+		status = "okay";
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		partition0: partition@0 {
+			label = "block0";
+			reg = <0x00000000 0x00020000>; /* 128 KiB */
+			read-only;
+		};
+
+		partition1: partition@20000 {
+			label = "prebootloader";
+			reg = <0x00020000 0x00400000>; /* 4 MiB */
+		};
+
+		partition2: partition@420000 {
+			label = "cmboot_a";
+			reg = <0x00420000 0x01000000>; /* 16 MiB */
+		};
+
+		partition3: partition@1420000 {
+			label = "cmboot_b";
+			reg = <0x01420000 0x01000000>; /* 16 MiB */
+		};
+
+		partition4: partition@2420000 {
+			label = "rescue";
+			reg = <0x02420000 0x037e0000>; /* 55 MiB + 896 KiB */
+		};
+
+		partition5: partition@5c00000 {
+			label = "rootfs_a";
+			reg = <0x05c00000 0xda400000>; /* 164 MiB */
+		};
+	};
+};
+

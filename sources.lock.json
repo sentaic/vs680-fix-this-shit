@@ -1,0 +1,66 @@
+{
+  "optee-os": {
+    "url": "https://github.com/OP-TEE/optee_os.git",
+    "revision": "0919de0f7c79ad35ad3c8ace5f823ad1344b4716",
+    "path": "sources/optee-os",
+    "timestamp": "Fri, 17 Jan 2025 13:34:34 +0100",
+    "platform_overlay": {
+      "repository": "https://github.com/synaptics-astra/meta-synaptics.git",
+      "revision": "dff2ee3f04193b309000bef2640450d0b9a08bfd",
+      "file": "recipes-security/optee/optee-os/astra-optee-os.patch"
+    }
+  },
+  "trusted-firmware-a": {
+    "url": "https://github.com/ARM-software/arm-trusted-firmware.git",
+    "revision": "35f4c7295bafeb32c8bcbdfb6a3f2e74a57e732b",
+    "path": "sources/trusted-firmware-a",
+    "timestamp": "Wed, 1 Jun 2022 17:02:46 +0200",
+    "platform_overlay": {
+      "repository": "https://github.com/synaptics-astra/meta-synaptics.git",
+      "revision": "dff2ee3f04193b309000bef2640450d0b9a08bfd",
+      "file": "recipes-security/arm-trusted-firmware/files/astra-atf.patch"
+    }
+  },
+  "optee-client": {
+    "url": "https://github.com/OP-TEE/optee_client.git",
+    "revision": "6486773583b5983af8250a47cf07eca938e0e422",
+    "path": "sources/optee-client",
+    "timestamp": "Fri, 29 Nov 2024 17:32:41 +0100"
+  },
+  "meta-synaptics": {
+    "url": "https://github.com/synaptics-astra/meta-synaptics.git",
+    "revision": "dff2ee3f04193b309000bef2640450d0b9a08bfd",
+    "path": "sources/astra-current/sdk/meta-synaptics",
+    "timestamp": "Fri, 31 Jul 2026 14:12:45 +0800"
+  },
+  "linux_6_12-main": {
+    "url": "https://github.com/synaptics-astra/linux_6_12-main.git",
+    "revision": "822c418972646f73b3771a92fb78ab09a343897b",
+    "path": "sources/astra-current/linux_6_12-main",
+    "timestamp": "Thu, 23 Jul 2026 11:28:49 +0000"
+  },
+  "linux_6_12-drivers-synaptics": {
+    "url": "https://github.com/synaptics-astra/linux_6_12-drivers-synaptics.git",
+    "revision": "bb8b58e4b342f23efc6bc4a3fe931388ef811efe",
+    "path": "sources/astra-current/linux_6_12-main/drivers/synaptics",
+    "timestamp": "Thu, 23 Jul 2026 11:31:21 +0000"
+  },
+  "linux_5_15-modules": {
+    "url": "https://github.com/synaptics-astra/linux_5_15-modules.git",
+    "revision": "75932239d32198cacf2a442f80a25b31bb004854",
+    "path": "sources/astra-current/linux_5_15-modules",
+    "timestamp": "Wed, 20 Aug 2025 10:26:48 +0000"
+  },
+  "tee-optee_dev": {
+    "url": "https://github.com/synaptics-astra/tee-optee_dev.git",
+    "revision": "e397232786bfee0599dc9d51eb3ca2d6db008eda",
+    "path": "sources/astra-current/tee-optee_dev",
+    "timestamp": "Thu, 30 Jul 2026 01:49:05 +0800"
+  },
+  "synap-vsi_npu_driver": {
+    "url": "https://github.com/synaptics-astra/synap-vsi_npu_driver.git",
+    "revision": "0b95578d6c6cd8c747c6e37c73c3859bfa3f7e8c",
+    "path": "sources/astra-current/synap-vsi_npu_driver",
+    "timestamp": "Mon, 15 Dec 2025 22:50:48 +0800"
+  }
+}

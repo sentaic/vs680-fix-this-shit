@@ -1,0 +1,40 @@
+# SPDX-License-Identifier: GPL-2.0-only
+#
+# Touchscreen driver configuration
+#
+
+config TOUCHSCREEN_FT7421
+	tristate "FT7421 I2C touchscreen"
+	depends on I2C && OF
+	help
+	  Say Y here to enable support for the Focaltech FT7421 touch panel
+
+config TOUCHSCREEN_FT5X06
+	tristate "FT5X06 I2C touchscreen"
+	depends on I2C && OF
+	help
+	  Say Y here to enable support for the Focaltech FT5X06 touch panel
+
+config TOUCHSCREEN_DVF9A
+	tristate "DVF9A based touchscreens"
+	depends on MFD_DSPG_DVF9A
+	help
+	Say Y here if you have a DVF9A acting as a touchscreen
+	controller.
+
+	If unsure, say N.
+
+config TOUCHSCREEN_GOODIX_TS
+	tristate "Goodix I2C touchscreen"
+	depends on I2C
+	depends on GPIOLIB || COMPILE_TEST
+	help
+	  Say Y here if you have the Goodix touchscreen (such as one
+	  installed in Onda v975w tablets) connected to your
+	  system. It also supports 5-finger chip models, which can be
+	  found on ARM tablets, like Wexler TAB7200 and MSI Primo73.
+
+	  If unsure, say N.
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called goodix.

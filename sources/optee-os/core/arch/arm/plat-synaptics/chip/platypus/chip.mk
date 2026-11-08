@@ -1,0 +1,7 @@
+$(call force,CFG_SZC,y)
+$(call force,CFG_SZC_ZONE,y)
+$(call force,CFG_SZC_MPT,y)
+$(call force,CFG_SZC_RULE,y)
+CFG_TZDRAM_SIZE =  0x03EA0000
+CFG_TEE_RAM_VA_SIZE=0x2000000
+CFG_CORE_HEAP_SIZE = 0xA00000

@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Android gadget start - re-enable gadget on UDC (called via udev)
+# Waits for FunctionFS (ep2) to be available before enabling
+
+COMMON_SCRIPT=/usr/bin/android-gadget-common.sh
+
+if [ ! -r "$COMMON_SCRIPT" ]; then
+  echo "Error: missing helper script $COMMON_SCRIPT" >&2
+  exit 1
+fi
+
+. "$COMMON_SCRIPT"
+enable_gadget_udc_with_retry 10 3 /dev/usb-ffs/adb/ep2
+
+exit 0
+

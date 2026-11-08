@@ -1,0 +1,132 @@
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/leds/common.h>
+
+/dts-v1/;
+/plugin/;
+
+&{/leds} {
+	hat_led_red: hat-led-red {
+		pinctrl-names = "default";
+		pinctrl-0 = <&led_red_pmux>;
+		gpios = <&portc 10 GPIO_ACTIVE_HIGH>;
+		color = <LED_COLOR_ID_RED>;
+		function = LED_FUNCTION_STATUS;
+		default-state = "off";
+	};
+
+	hat_led_green: hat-led-green {
+		pinctrl-names = "default";
+		pinctrl-0 = <&led_green_pmux>;
+		gpios = <&portc 11 GPIO_ACTIVE_HIGH>;
+		color = <LED_COLOR_ID_GREEN>;
+		function = LED_FUNCTION_STATUS;
+		default-state = "off";
+	};
+
+	hat_led_blue: hat-led-blue {
+		pinctrl-names = "default";
+		pinctrl-0 = <&led_blue_pmux>;
+		gpios = <&portf 1 GPIO_ACTIVE_HIGH>;
+		color = <LED_COLOR_ID_BLUE>;
+		function = LED_FUNCTION_STATUS;
+		default-state = "off";
+	};
+};
+
+&avio {
+	status = "okay";
+};
+
+&dmic {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&pdm_pmux>;
+	pdm-type = <0>;
+	pdm-clk-sel = <0>;
+	ch-shift-check;
+	disablemicmute;
+	dmic-mux-reg = <0xe5025800 24>;
+};
+
+&i2c0 {
+	status = "disabled";
+};
+
+&klamath_asoc {
+	status = "okay";
+
+	asoc_dmic: asoc-dmic {
+		status = "okay";
+		stream-name = "dummy-dmic";
+		link-name = "dummy-dmic";
+		cpu-node = <&dmic>;
+		codec-name = "snd-soc-dummy";
+		codec-dai-name = "snd-soc-dummy-dai";
+		platform-node = <&klamath_pcm>;
+	};
+};
+
+&klamath_pcm {
+	status = "okay";
+};
+
+&portc {
+	/* Configure buzzer pin mux via GPIO controller,
+	   buzzer can be driven from userspace with gpioset */
+	pinctrl-names = "default";
+	pinctrl-0 = <&buzzer_pmux>;
+
+	gpio-line-names =
+		"", "", "", "", "", "VCORE_ONn", "BUZZERn", "",
+		"", "", "LED_RED", "LED_GREEN", "", "", "LED_1", "LED_2";
+};
+
+&portf {
+	gpio-line-names =
+		"", "LED_BLUE", "SM_GPIO34", "", "", "", "", "";
+};
+
+&sm_pinctrl {
+	buzzer_pmux: buzzer-pmux {
+		groups = "SM_GPIO6";
+		function = "gpio";
+	};
+
+	led_red_pmux: led-red-pmux {
+		groups = "SM_GPIO10";
+		function = "gpio";
+	};
+
+	led_green_pmux: led-green-pmux {
+		groups = "SM_GPIO11";
+		function = "gpio";
+	};
+
+	led_blue_pmux: led-blue-pmux {
+		groups = "SM_GPIO33";
+		function = "gpio";
+	};
+
+	pdm_pmux: pdm-pmux {
+		groups = "SM_GPIO37", "SM_GPIO38";
+		function = "pdm";
+	};
+
+	uart0_pmux: uart0-pmux {
+		groups = "SM_GPIO28", "SM_GPIO29";
+		function = "uart0";
+	};
+};
+
+&spi1 {
+	status = "disabled";
+};
+
+&uart0 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart0_pmux>;
+};
+
+&uart3 {
+	status = "disabled";
+};

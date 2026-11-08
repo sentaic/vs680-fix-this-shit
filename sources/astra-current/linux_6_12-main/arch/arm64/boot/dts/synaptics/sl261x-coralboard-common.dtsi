@@ -1,0 +1,689 @@
+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+/*
+ * Copyright (C) 2025 Synaptics Incorporated
+ *
+ * Author: Jisheng Zhang <jszhang@kernel.org>
+ */
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/input/linux-event-codes.h>
+#include <dt-bindings/input/input.h>
+#include <dt-bindings/leds/common.h>
+
+/ {
+	cpus {
+		cpu@0 {
+			cpu0-supply = <&vcore>;
+		};
+	};
+
+	chosen {
+		stdout-path = "serial0:115200n8";
+	};
+
+	memory {
+		device_type = "memory";
+		reg = <0x0 0x01000000 0x0 0xdf000000>,
+		      <0x1 0xe0000000 0x0 0x20000000>;
+	};
+
+	reserved-memory {
+		#address-cells = <2>;
+		#size-cells = <2>;
+		ranges;
+
+		vdev0vring0: vdev0vring0@0 {
+			compatible = "shared-dma-pool";
+			reg = <0 0x0000000 0 0x8000>;
+			no-map;
+		};
+
+		vdev0vring1: vdev0vring1@8000 {
+			compatible = "shared-dma-pool";
+			reg = <0 0x0008000 0 0x8000>;
+			no-map;
+		};
+
+		vdevbuffer: vdevbuffer {
+			compatible = "shared-dma-pool";
+			reg = <0 0x0010000 0 0xf0000>;
+			no-map;
+		};
+
+		linux,cma {
+			compatible = "shared-dma-pool";
+			reg = <0x00 0x5c000000 0x00 0x20000000>;
+			linux,cma-default;
+			reusable;
+		};
+	};
+
+	rpmsg {
+		compatible = "syna,rpmsg";
+		mbox-names = "rpmsg";
+		mboxes = <&ipc 0>;
+		syna,vdev-nums = <1>;
+		reg = <0x0 0x0000000 0x0 0x10000>;
+		memory-region = <&vdevbuffer>;
+	};
+
+	dmabuf_heap {
+		compatible = "syna,berlin-heaps";
+		pool-num = <0>;
+		reg-names = "NonSecure-NC";
+		reg = <0 0x7f800000 0 0x00800000>;
+		attributes-num-per-pool = <2>;
+		pool-attributes = <0x00000105 0x00000F3A>;
+	};
+
+	sdhci1_pwrseq: sdhci1-pwrseq {
+		compatible = "mmc-pwrseq-simple";
+		pinctrl-names = "default";
+		pinctrl-0 = <&w_disable1_pmux>;
+		reset-gpios = <&portb 16 GPIO_ACTIVE_LOW>;
+		post-power-on-delay-ms = <50>;
+	};
+
+	regulators {
+		compatible = "simple-bus";
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		vmmc_sdhci2: vmmc-sdhci2 {
+			compatible = "regulator-fixed";
+			pinctrl-names = "default";
+			pinctrl-0 = <&vmmc_sdhci2_pmux>;
+			regulator-name = "vmmc_sdio";
+			regulator-min-microvolt = <3300000>;
+			regulator-max-microvolt = <3300000>;
+			gpio = <&portb 21 GPIO_ACTIVE_HIGH>;
+			enable-active-high;
+			regulator-boot-on;
+		};
+
+		vqmmc_sdhci2: vqmmc-sdhci2 {
+			compatible = "regulator-gpio";
+			pinctrl-names = "default";
+			pinctrl-0 = <&vqmmc_sdhci2_pmux>;
+			regulator-name = "vqmmc_sdio";
+			regulator-type = "voltage";
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <3300000>;
+			gpios = <&portb 23 GPIO_ACTIVE_HIGH>;
+			enable-active-high;
+			states = <1800000 0x0
+				  3300000 0x1>;
+		};
+
+		usb1_vbus: usb1-vbus {
+			compatible = "regulator-fixed";
+			pinctrl-names = "default";
+			pinctrl-0 = <&usb_host_pwr_en_pmux>;
+			regulator-name = "usb1_vbus";
+			regulator-min-microvolt = <5000000>;
+			regulator-max-microvolt = <5000000>;
+			gpio = <&portb 22 GPIO_ACTIVE_HIGH>;
+			enable-active-high;
+		};
+	};
+
+	leds {
+		compatible = "gpio-leds";
+		status = "okay";
+
+		status_led_blue: status-led-blue {
+			pinctrl-names = "default";
+			pinctrl-0 = <&led_1_pmux>;
+			gpios = <&portc 14 GPIO_ACTIVE_HIGH>;
+			color = <LED_COLOR_ID_BLUE>;
+			function = LED_FUNCTION_DISK_ACTIVITY;
+			linux,default-trigger = "mmc0";
+			default-state = "off";
+		};
+
+		status_led_red: status-led-red {
+			pinctrl-names = "default";
+			pinctrl-0 = <&led_2_pmux>;
+			gpios = <&portc 15 GPIO_ACTIVE_HIGH>;
+			color = <LED_COLOR_ID_RED>;
+			function = LED_FUNCTION_HEARTBEAT;
+			linux,default-trigger = "heartbeat";
+			default-state = "off";
+		};
+	};
+
+	keys {
+		compatible = "gpio-keys";
+		status = "okay";
+
+		user-button {
+			pinctrl-names = "default";
+			pinctrl-0 = <&user_button_pmux>;
+			label = "Enter Button";
+			linux,code = <KEY_ENTER>;
+			gpios = <&portb 26 GPIO_ACTIVE_LOW>;
+			debounce-interval = <50>;
+		};
+	};
+
+	bt_reg_on: bt-reg-on {
+		compatible = "syna,rfkill";
+		status = "okay";
+		pinctrl-names = "default";
+		pinctrl-0 = <&w_disable2_pmux>;
+		bt-power-gpio = <&portb 18 GPIO_ACTIVE_HIGH>;
+	};
+};
+
+&pinctrl {
+	sdhci2_pmux: sdhci2-pmux {
+		groups = "GPIO16", "GPIO17", "GPIO18", "GPIO19", "GPIO20", "GPIO21";
+		function = "sdio2";
+		drive-strength = <10>;
+	};
+
+	sdhci2_cdn_pmux: sdhci2_cdn-pmux {
+		groups = "GPIO22";
+		function = "sdio2";
+		drive-strength = <7>;
+	};
+
+	i2c2_pmux: i2c2-pmux {
+		groups = "GPIO23", "GPIO24";
+		function = "tw2";
+		drive-strength = <7>;
+	};
+
+	i2c3_pmux: i2c3-pmux {
+		groups = "GPIO27", "GPIO28";
+		function = "tw3";
+		drive-strength = <7>;
+	};
+
+	spi5_pmux: spi5-pmux {
+		groups = "GPIO37", "GPIO38", "GPIO41";
+		function = "spi5";
+	};
+
+	spi5_ss2_pmux: spi5-ss2-pmux {
+		groups = "GPIO40";
+		function = "gpio";
+	};
+
+	uart5_pmux: uart5-pmux {
+		groups = "GPIO25", "GPIO26";
+		function = "uart5";
+		drive-strength = <7>;
+	};
+
+	usb_host_pwr_en_pmux: usb-host-pwr-en-pmux {
+		groups = "GPIO54";
+		function = "gpio";
+	};
+
+	user_button_pmux: user-button-pmux {
+		groups = "GPIO58";
+		function = "gpio";
+	};
+
+	vmmc_sdhci2_pmux: vmmc-sdhci2-pmux {
+		groups = "GPIO53";
+		function = "gpio";
+	};
+
+	vqmmc_sdhci2_pmux: vqmmc-sdhci2-pmux {
+		groups = "GPIO55";
+		function = "gpio";
+	};
+
+	w_disable1_pmux: w-disable1-pmux {
+		groups = "GPIO48";
+		function = "gpio";
+	};
+
+	w_disable2_pmux: w-disable2-pmux {
+		groups = "GPIO50";
+		function = "gpio";
+	};
+};
+
+&sm_pinctrl {
+	i3c0_pmux: i3c0-pmux {
+		groups = "SM_GPIO12", "SM_GPIO13";
+		function = "i3c";
+		drive-strength = <7>;
+	};
+
+	i2c1_pmux: i2c1-pmux {
+		groups = "SM_GPIO3", "SM_GPIO4";
+		function = "tw1";
+		drive-strength = <7>;
+	};
+
+	vcore_gpio_pmux: vcore-gpio-pmux {
+		groups = "SM_GPIO5";
+		function = "gpio";
+	};
+
+	csi_gpio1_pmux: csi-gpio1-pmux {
+		groups = "SM_GPIO30";
+		function = "gpio";
+	};
+
+	led_1_pmux: led-1-pmux {
+		groups = "SM_GPIO14";
+		function = "gpio";
+	};
+
+	led_2_pmux: led-2-pmux {
+		groups = "SM_GPIO15";
+		function = "gpio";
+	};
+
+	spi1_pmux: spi1-pmux {
+		groups = "SM_GPIO9", "SM_GPIO10", "SM_GPIO11";
+		function = "spi1";
+	};
+
+	spi1_ss3_pmux: spi1-ss3-pmux {
+		groups = "SM_GPIO6";
+		function = "gpio";
+	};
+
+	xspi0_pmux: xspi0-pmux {
+		groups = "SM_GPIO18", "SM_GPIO19", "SM_GPIO20", "SM_GPIO21", "SM_GPIO22", "SM_GPIO23";
+		function = "xspi";
+		drive-strength = <7>;
+	};
+
+	uart1_pmux: uart1-pmux {
+		groups = "SM_GPIO31", "SM_GPIO32", "SM_GPIO35", "SM_GPIO36";
+		function = "uart1";
+		drive-strength = <7>;
+	};
+
+	uart3_pmux: uart3-pmux {
+		groups = "SM_GPIO28", "SM_GPIO29";
+		function = "uart3";
+		drive-strength = <7>;
+	};
+
+	pdm_pmux: pdm-pmux {
+		groups = "SM_GPIO37", "SM_GPIO38";
+		function = "pdm";
+	};
+};
+
+&ipc {
+	status = "okay";
+};
+
+&mux0 {
+	status = "okay";
+};
+
+&pdma0 {
+	status = "okay";
+};
+
+&pdma1 {
+	status = "okay";
+};
+
+&sdhci0 {
+	status = "okay";
+	sdclkdl-dc = /bits/ 8 <20>;
+	pad-sp = /bits/ 8 <10>;
+	pad-sn = /bits/ 8 <10>;
+	mmc-ddr-1_8v;
+	mmc-hs200-1_8v;
+	mmc-hs400-1_8v;
+	mmc-hs400-enhanced-strobe;
+};
+
+&sdhci1 {
+	status = "okay";
+	bus-width = <4>;
+	sdclkdl-dc = /bits/ 8 <50>;
+	pad-sp = /bits/ 8 <12>;
+	pad-sn = /bits/ 8 <12>;
+	no-sd;
+	no-mmc;
+	non-removable;
+	mmc-pwrseq = <&sdhci1_pwrseq>;
+	mode1-tune;
+	keep-power-in-suspend;
+};
+
+&sdhci2 {
+	status = "okay";
+	pinctrl-0 = <&sdhci2_pmux>, <&sdhci2_cdn_pmux>;
+	pinctrl-names = "default";
+	bus-width = <4>;
+	no-sdio;
+	no-mmc;
+	disable-wp;
+	vmmc-supply = <&vmmc_sdhci2>;
+	vqmmc-supply = <&vqmmc_sdhci2>;
+	mux-states = <&mux0 0 3>;
+};
+
+&uart0 {
+	status = "okay";
+};
+
+&i3c0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&i3c0_pmux>;
+};
+
+&i2c1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c1_pmux>;
+	clock-frequency = <100000>;
+
+	vcore: regulator@60 {
+		compatible = "silergy,sy8827n";
+		regulator-name = "vcore";
+		regulator-min-microvolt = <700000>;
+		regulator-max-microvolt = <987500>;
+		regulator-always-on;
+		regulator-boot-on;
+		regulator-active-discharge = <0>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&vcore_gpio_pmux>;
+		enable-gpios = <&portc 5 GPIO_ACTIVE_LOW>;
+		silergy,vsel-step = <1>;
+		reg = <0x60>;
+	};
+};
+
+&i2c2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c2_pmux>;
+	clock-frequency = <400000>;
+	i2c-sda-hold-time-ns = <300>;
+	i2c-sda-falling-time-ns = <250>;
+	i2c-scl-falling-time-ns = <250>;
+};
+
+&usb0 {
+	status = "okay";
+	dr_mode = "peripheral";
+};
+
+&usb_phy0 {
+	status = "okay";
+};
+
+&usb1 {
+	status = "okay";
+	dr_mode = "host";
+};
+
+&usb_phy1{
+	status = "okay";
+};
+
+&uart1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart1_pmux>;
+	/delete-property/ dmas;
+	/delete-property/ dma-names;
+};
+
+&xspi0 {
+	status = "okay";
+	pinctrl-0 = <&xspi0_pmux>;
+	pinctrl-names = "default";
+
+	flash@0 {
+		compatible = "jedec,spi-nor";
+		reg = <0>;
+		spi-tx-bus-width = <4>;
+		spi-rx-bus-width = <4>;
+		status = "okay";
+	};
+};
+
+&axi_meter {
+	status = "okay";
+};
+
+&porta {
+	gpio-line-names =
+		"", "", "", "SDIO_RSTn", "", "", "", "",
+		"", "CSI_GPIO0", "", "", "", "", "", "",
+		"", "", "", "", "", "", "", "",
+		"", "", "", "", "", "", "", "";
+};
+
+&portb {
+	gpio-line-names =
+		"", "", "", "", "", "", "", "",
+		"SPI5_SS2", "", "GPIO42", "", "GPIO44", "GPIO45", "POWER_SOURCE", "GPIO47",
+		"W_DISABLE1n", "M2_SDIO_HOST_WAKEn", "W_DISABLE2n", "USB_HOST_OCSn", "", "USD_PWR_EN", "USB_HOST_POWER_EN", "USD_VSEL",
+		"GPIO56", "WAKEUPn", "USER_BUTTONn", "", "", "", "", "";
+};
+
+&portc {
+	gpio-line-names =
+		"", "", "", "", "", "VCORE_ONn", "SM_SPI1_SS3", "",
+		"", "", "", "", "", "", "LED_1", "LED_2";
+};
+
+&porte {
+	gpio-line-names =
+		"", "", "", "SM_GPIO27", "", "", "CSI_GPIO1", "";
+};
+
+&portf {
+	gpio-line-names =
+		"", "", "SM_GPIO34", "", "", "", "", "";
+};
+
+&avio {
+	status = "okay";
+};
+
+&camera_video {
+	status = "okay";
+};
+
+&csi {
+	status = "okay";
+
+	ports {
+		port@0 {
+			csi_input: endpoint@0 {
+				remote-endpoint = <&cam_endpoint>;
+			};
+		};
+	};
+};
+
+&drm {
+	status = "okay";
+
+	dsi_panel {
+		status = "okay";
+		power-supply = <&rpi_panel_regulator>;
+		backlight = <&rpi_panel_regulator>;
+		compatible_panel="";
+		ACTIVE_WIDTH = <800>;
+		HFP = <70>;
+		HSYNCWIDTH = <20>;
+		HBP = <26>;
+		ACTIVE_HEIGHT = <480>;
+		VFP = <7>;
+		VSYNCWIDTH = <2>;
+		VBP = <21>;
+		FREQ = <28030>;
+		HTOTAL = <916>;
+		Lanes = /bits/ 8 <1>;
+		H_polarity = /bits/ 8 <1>;
+		V_Polarity = /bits/ 8 <1>;
+		Data_Polarity = /bits/ 8 <1>;
+		Color_coding = /bits/ 8 <5>;
+		Byte_clk = <84090>;
+		command = /bits/ 8 <0x29  0x06 0x10  0x02  0x03  0x00  0x00 0x00
+			0x29  0x06 0x64  0x01  0x0C  0x00  0x00 0x00
+			0x29  0x06 0x68  0x01  0x0C  0x00  0x00 0x00
+			0x29  0x06 0x44  0x01  0x00  0x00  0x00 0x00
+			0x29  0x06 0x48  0x01  0x00  0x00  0x00 0x00
+			0x29  0x06 0x14  0x01  0x15  0x00  0x00 0x00
+			0x29  0x06 0x50  0x04  0x60  0x00  0x00 0x00
+			0x29  0x06 0x20  0x04  0x52  0x01  0x10 0x00
+			0x29  0x06 0x28  0x04  0x20  0x03  0x69 0x00
+			0x29  0x06 0x2C  0x04  0x02  0x00  0x15 0x00
+			0x29  0x06 0x30  0x04  0xe0  0x01  0x07 0x00
+			0x29  0x06 0x34  0x04  0x0f  0x04  0x00 0x00
+			0x29  0x06 0x64  0x04  0x0f  0x04  0x00 0x00
+			0x29  0x06 0x04  0x01  0x01  0x00  0x00 0x00
+			0x29  0x06 0x04  0x02  0x01  0x00  0x00 0x00
+			0xFF  0xC0 0xD4  0x01  0x00
+			0xFF  0x10 0x27  0x00  0x00>;
+	};
+};
+
+&gpu {
+	mali-supply = <&vcore>;
+	status = "okay";
+};
+
+&i2c3 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c3_pmux>;
+	clock-frequency = <100000>;
+	i2c-sda-hold-time-ns = <300>;
+	i2c-sda-falling-time-ns = <250>;
+	i2c-scl-falling-time-ns = <250>;
+
+	camera: ov5647@36 {
+		compatible = "ovti,ov5647";
+		status = "okay";
+		pinctrl-names = "default";
+		pinctrl-0 = <&csi_gpio1_pmux>;
+		reg = <0x36>;
+		pwdn-gpios = <&porta 9 GPIO_ACTIVE_LOW>;
+		clocks = <&osc>;
+		rotation = <0>;
+		orientation = <2>;
+
+		port {
+			cam_endpoint: endpoint {
+				clock-lanes = <0>;
+				data-lanes = <1 2>;
+				clock-noncontinuous;
+				remote-endpoint = <&csi_input>;
+			};
+		};
+	};
+
+	rpi_panel_regulator: rpi_panel_regulator@45 {
+		compatible = "raspberrypi,7inch-touchscreen-panel-regulator";
+		reg = <0x45>;
+		gpio-controller;
+		#gpio-cells = <2>;
+	};
+
+	ft5406: ts@38 {
+		compatible = "edt,edt-ft5506";
+		reg = <0x38>;
+
+		vcc-supply = <&rpi_panel_regulator>;
+		reset-gpios = <&rpi_panel_regulator 1 GPIO_ACTIVE_LOW>;
+
+		touchscreen-size-x = < 800 >;
+		touchscreen-size-y = < 480 >;
+
+		touchscreen-inverted-x;
+		touchscreen-inverted-y;
+	};
+};
+
+&isp {
+	status = "okay";
+};
+
+&spi1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&spi1_pmux>, <&spi1_ss3_pmux>;
+	cs-gpios = <&portc 6 GPIO_ACTIVE_LOW>;
+};
+
+&spi5 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&spi5_pmux>, <&spi5_ss2_pmux>;
+	cs-gpios = <&portb 8 GPIO_ACTIVE_LOW>;
+};
+
+&smmu {
+	status = "okay";
+};
+
+&synpu {
+	npu-supply = <&vcore>;
+	status = "okay";
+};
+
+&uart3 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart3_pmux>;
+};
+
+&uart5 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart5_pmux>;
+};
+
+&usb1 {
+	status = "okay";
+	vbus-supply = <&usb1_vbus>;
+	dr_mode = "host";
+};
+
+&usb_phy1 {
+	status = "okay";
+};
+
+&vpp {
+	status = "okay";
+	enable_ampless_boot = <1>;
+};
+
+&dmic {
+	status = "okay";
+	pinctrl-0 = <&pdm_pmux>;
+	pinctrl-names = "default";
+	pdm-type = <1>;
+	pdm-clk-sel = <1>;
+	dmic-mux-reg = <0xe5025800 24>;
+};
+
+&klamath_asoc {
+	status = "okay";
+
+	asoc_dmic: asoc-dmic {
+		status = "okay";
+		stream-name = "dummy-dmic";
+		link-name = "dummy-dmic";
+		cpu-node = <&dmic>;
+		codec-name = "snd-soc-dummy";
+		codec-dai-name = "snd-soc-dummy-dai";
+		platform-node = <&klamath_pcm>;
+	};
+};
+
+&klamath_pcm {
+	status = "okay";
+};

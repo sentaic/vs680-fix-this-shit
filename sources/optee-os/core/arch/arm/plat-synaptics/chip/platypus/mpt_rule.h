@@ -1,0 +1,24 @@
+// SPDX-License-Identifier: BSD-2-Clause
+/*
+ * Copyright (c) 2024, Synaptics Incorporated.
+ */
+
+#ifndef _MPT_RULE_H_
+#define _MPT_RULE_H_
+
+#define PTMTA_UUID	{0x1316a183, 0x894d, 0x43fe,\
+		{0x98, 0x93, 0xbb, 0x94, 0x6a, 0xe1, 0x04, 0x2d}}
+
+#define TA_SYNAP_UUID	{0x1316a183, 0x894d, 0x43fe,\
+		{0x98, 0x93, 0xbb, 0x94, 0x6a, 0xe1, 0x04, 0x2F}}
+
+#define SYNA_TEST_UUID	{0x1316a183, 0x894d, 0x43fe,\
+		{0x98, 0x93, 0xbb, 0x94, 0x6a, 0xe1, 0x04, 0x3F}}
+
+#define SG_MR_NAME "system"
+
+#define NON_SECURE_RULE (0)
+
+static const TEE_UUID PERMITTED_TA_UUID_LIST[] = {PTMTA_UUID, TA_SYNAP_UUID, SYNA_TEST_UUID};
+
+#endif /* _MPT_RULE_H_ */

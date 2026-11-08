@@ -1,0 +1,99 @@
+DESCRIPTION = "Trusted Firmware-A"
+LICENSE = "BSD-3-Clause & MIT"
+
+PACKAGE_ARCH = "${MACHINE_ARCH}"
+PATCHTOOL = "git"
+
+inherit deploy syna-security
+
+BRANCH = "master"
+SRC_URI = "git://git.trustedfirmware.org/TF-A/trusted-firmware-a.git;protocol=http;branch=${BRANCH}"
+
+# TF-A v2.7.0
+SRCREV = "35f4c7295bafeb32c8bcbdfb6a3f2e74a57e732b"
+LIC_FILES_CHKSUM += "file://docs/license.rst;md5=b2c740efedc159745b9b31f88ff03dde"
+
+SRC_URI:append= " \
+            file://astra-atf.patch \
+        "
+
+require recipes-devtools/synasdk/synasdk-config.inc
+DEPENDS:append = " \
+    synasdk-tools-native \
+    synasdk-security-native \
+    synasdk-tee-bootparam-native \
+"
+SRC_URI:append: = "${SYNA_SRC_TEE}"
+SRCREV_tee = "${SYNA_SRCREV_TEE}"
+SRCREV_FORMAT = "tee"
+SYNA_TEE_PATH = "${WORKDIR}/${SYNA_SOURCE_PREFIX}/tee"
+
+S = "${WORKDIR}/git"
+B = "${WORKDIR}/build"
+
+ATF_SUFFIX ??= "bin"
+ATF_TARGET ?= "bl31"
+
+ATF_PLATFORM ?= "berlin"
+
+ATF_SOC:myna2 = "myna2"
+ATF_SOC:platypus = "platypus"
+ATF_SOC:dolphin = "dolphin"
+ATF_SOC:klamath = "klamath"
+
+do_compile:prepend() {
+    . ${CONFIG_FILE}
+    . ${CHIP_RC_FILE}
+
+    def_file="${S}/plat/syna/${ATF_PLATFORM}/include/platform_def.h"
+
+    mr_file="${STAGING_DIR_NATIVE}${datadir}/syna/tee/bootparam/mr_config"
+    bbnote "MR file: ${mr_file}"
+
+    if [ ! -r "${mr_file}" ]; then
+        bbfatal "Missing or unreadable MR file: ${mr_file}"
+    fi
+
+    bl33_base="$(awk '/bootloader/{print $2}' ${mr_file})"
+    sed "s/BL33_BASE[[:space:]]*0x[0-9a-fA-F]\+/BL33_BASE\t\t\t$bl33_base/g" -i ${def_file}
+
+    if [ "is${CONFIG_TEE_OS}" = "isn" ]; then
+        sed "s/BL32_BASE.*/BL32_BASE\t\t\t0/g" -i ${def_file}
+    fi
+}
+
+do_compile() {
+	unset LDFLAGS
+	unset CFLAGS
+	unset CPPFLAGS
+
+    oe_runmake -C ${S} BUILD_BASE=${B} DEBUG=0 CROSS_COMPILE=${TARGET_PREFIX} \
+        PLAT=${ATF_PLATFORM} TARGET_SOC=${ATF_SOC} SPD=opteed ${ATF_TARGET} SYNA_GENX=1
+}
+
+do_install:append() {
+    . ${CONFIG_FILE}
+    . ${CHIP_RC_FILE}
+
+    security_keys_path="${STAGING_DATADIR_NATIVE}/syna/keys/${syna_chip_name}/${syna_chip_rev}"
+    security_tools_path="${STAGING_DIR_NATIVE}${prefix}/libexec/syna/"
+
+    in_bin=${B}/${ATF_PLATFORM}/${ATF_SOC}/release/${ATF_TARGET}.${ATF_SUFFIX}
+    out_bin=${D}${nonarch_base_libdir}/firmware/tz1_en.bin
+    mkdir -pv ${D}${nonarch_base_libdir}/firmware/
+
+    prod_image_flag=0x00000000
+    destination_addr=0x00120000
+    ${security_tools_path}/in_extras.py "ATF" ${B}/atf_extras.bin ${prod_image_flag} ${destination_addr}
+
+    # Generate image
+    genx_secure_image "ATF" "ree" ${B}/atf_extras.bin 0x0 ${in_bin} ${out_bin}
+}
+
+do_deploy() {
+    install -m 644 ${B}/${ATF_PLATFORM}/${ATF_SOC}/release/${ATF_TARGET}.${ATF_SUFFIX} \
+        ${DEPLOYDIR}/${ATF_TARGET}.${ATF_SUFFIX}
+}
+addtask deploy after do_compile
+
+FILES:${PN} = "${nonarch_base_libdir}/firmware/"

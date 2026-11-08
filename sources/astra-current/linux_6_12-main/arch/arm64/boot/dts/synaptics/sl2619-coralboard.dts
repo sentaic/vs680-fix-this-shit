@@ -1,0 +1,9 @@
+/dts-v1/;
+
+#include "sl2619.dtsi"
+#include "sl261x-coralboard-common.dtsi"
+
+/ {
+	model = "Synaptics SL2619 Coralboard";
+	compatible = "syna,sl2619-coralboard", "syna,sl2619";
+};

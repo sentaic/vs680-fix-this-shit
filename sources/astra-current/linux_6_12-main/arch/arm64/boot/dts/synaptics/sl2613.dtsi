@@ -1,0 +1,257 @@
+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+/*
+ * Copyright (C) 2025 Synaptics Incorporated
+ *
+ * Author: Jisheng Zhang <jszhang@kernel.org>
+ */
+
+#include "sl2611.dtsi"
+
+/ {
+	compatible = "syna,sl2613";
+
+	soc {
+		sm {
+			can0: can@e5060000 {
+				compatible = "arasan,canfd";
+				reg = <0xe5060000 0x1000>;
+				interrupts = <GIC_SPI 163 IRQ_TYPE_LEVEL_HIGH>;
+				clocks = <&sm_clk CLK_SER_CAN0>, <&sm_clk CLK_BUS_CAN0>;
+				clock-names = "can", "sys";
+				resets = <&sm_chip 0x0 3 1 0>, <&sm_chip 0x0 2 1 0>;
+				reset-names = "can", "sys";
+				status = "disabled";
+			};
+
+			can1: can@e5061000 {
+				compatible = "arasan,canfd";
+				reg = <0xe5061000 0x1000>;
+				interrupts = <GIC_SPI 164 IRQ_TYPE_LEVEL_HIGH>;
+				clocks = <&sm_clk CLK_SER_CAN1>, <&sm_clk CLK_BUS_CAN1>;
+				clock-names = "can", "sys";
+				resets = <&sm_chip 0x0 5 1 0>, <&sm_chip 0x0 4 1 0>;
+				reset-names = "can", "sys";
+				status = "disabled";
+			};
+		};
+
+		csi: csi@f7450000 {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			status = "disabled";
+			compatible = "snps,dw-mipi-csi";
+			reg = <0xf7450000 0x8000>;
+			data-lanes = <2>;
+			data-type = <0x300a>; /* Bayer Raw 10 */
+			clocks = <&clk CLK_AVIO_IPI>;
+			clock-names = "avioipiclk";
+
+			ports {
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				port@0 {
+					reg = <0>;
+					#address-cells = <1>;
+					#size-cells = <0>;
+					csi_input: endpoint@0 {
+						reg = <0>;
+					};
+				};
+
+				port@1 {
+					reg = <1>;
+					#address-cells = <1>;
+					#size-cells = <0>;
+					/* FIXME endpoint numbering not intuitive */
+					csi_output: endpoint@0 {
+						reg = <0>;
+						remote-endpoint = <&isp_subdev_ep0>;
+					};
+				};
+			};
+		};
+
+		isp: isp@f7458000 {
+			#address-cells = <2>;
+			#size-cells = <1>;
+			status = "disabled";
+			compatible = "syna,camera-isp";
+			reg = <0xf7458000 0xc400>, <0xf7440000 0x10000>;
+			interrupts = <GIC_SPI 114 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "isp_dhub";
+			clocks = <&clk CLK_AVIO_P>;
+			clock-names = "aviopclk";
+			resets = <&chip 0x37c 2 1 0>;
+			reset-names = "isprst";
+
+			white-balance-config {
+				wb-mode = <1>;
+				wb-p00-mantissa = <48>;
+				wb-p00-exponent = <1>;
+				wb-p01-mantissa = <54>;
+				wb-p01-exponent = <0>;
+				wb-p10-mantissa = <54>;
+				wb-p10-exponent = <0>;
+				wb-p11-mantissa = <62>;
+				wb-p11-exponent = <0>;
+				input-sel = <32>;
+			};
+
+			ports {
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				port@0 {
+					reg = <0>;
+					#address-cells = <1>;
+					#size-cells = <0>;
+					isp_subdev_ep0: endpoint@0 {
+						reg = <0>;
+						remote-endpoint = <&csi_output>;
+					};
+				};
+
+				port@1 {
+					reg = <1>;
+					#address-cells = <1>;
+					#size-cells = <0>;
+					isp_video_out_ep0: endpoint@0 {
+						reg = <0>;
+						remote-endpoint = <&video_ep0>;
+					};
+				};
+
+				port@2 {
+					reg = <2>;
+					#address-cells = <1>;
+					#size-cells = <0>;
+					isp_video_out_ep1: endpoint@0 {
+						reg = <0>;
+						remote-endpoint = <&video_ep1>;
+					};
+				};
+			};
+		};
+
+		camera_video: camera-video {
+			compatible = "syna,video";
+			id = <0>;
+			status = "disabled";
+
+			ports {
+				#address-cells = <1>;
+				#size-cells = <0>;
+
+				/* Video port 0 configuration */
+				port@0 {
+					reg = <0>;
+					#address-cells = <1>;
+					#size-cells = <0>;
+					video_ep0: endpoint@0 {
+						reg = <0>;
+						remote-endpoint = <&isp_video_out_ep0>;
+					};
+				};
+
+				/* Video port 1 configuration */
+				port@1 {
+					reg = <1>;
+					#address-cells = <1>;
+					#size-cells = <0>;
+					video_ep1: endpoint@1 {
+						reg = <1>;
+						remote-endpoint = <&isp_video_out_ep1>;
+					};
+				};
+			};
+		};
+
+		synpu: synpu@f7600000 {
+			compatible = "syna,npu";
+			reg = <0xf7600000 0x200000>;
+			reg-names = "npu_region";
+			clocks = <&clk CLK_NPU>, <&syspll1 0>, <&syspll1 1>;
+			clock-names = "core", "clk_high", "clk_low";
+			resets = <&chip 0x378 1 1 0>;
+			reset-names = "core_rst";
+			interrupts = <0 52 IRQ_TYPE_LEVEL_HIGH>, <0 207 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "job", "fault";
+			iommus = <&smmu 0x1>, <&smmu 0x2>, <&smmu 0x3>, <&smmu 0x4>;
+			operating-points-v2 = <&npu_opp_table>;
+			status = "disabled";
+		};
+
+		npu_opp_table: npu_opp_table {
+			compatible = "operating-points-v2";
+
+			opp@800000000 {
+				opp-hz = /bits/ 64 <800000000>;
+				opp-microvolt = <800000 800000 850000>;
+			};
+
+			opp@1000000000 {
+				opp-hz = /bits/ 64 <1000000000>;
+				opp-microvolt = <850000 850000 850000>;
+			};
+		};
+
+		gpu: gpu@f7980000 {
+			compatible = "arm,mali-midgard";
+			reg = <0xf7980000 0x4000>;
+			clocks = <&clk CLK_GPU>, <&syspll1 1>, <&syspll0 0>;
+			clock-names = "core", "clk_high", "clk_low";
+			resets = <&chip 0x378 0 1 0>;
+			reset-names = "core_rst";
+			interrupts = <0 50 IRQ_TYPE_LEVEL_HIGH>, <0 51 IRQ_TYPE_LEVEL_HIGH>, <0 48 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "JOB", "MMU", "GPU";
+			iommus = <&smmu 0x0>;
+			iommu-passthrough;
+			system-coherency = <31>;
+			operating-points-v2 = <&gpu_opp_table>;
+			status = "disabled";
+		};
+
+		gpu_opp_table: gpu_opp_table {
+			compatible = "operating-points-v2-mali";
+
+			opp@700000000 {
+				opp-hz = /bits/ 64 <700000000>;
+				opp-hz-real = /bits/ 64 <700000000>;
+				opp-microvolt = <800000 800000 850000>;
+			};
+
+			opp@800000000 {
+				opp-hz = /bits/ 64 <800000000>;
+				opp-hz-real = /bits/ 64 <800000000>;
+				opp-microvolt = <850000 850000 850000>;
+			};
+		};
+
+		vpp: vpp {
+			status = "disabled";
+			compatible = "syna,vpp-drv";
+			clocks = <&vpll1 0>, <&vpll1 0>;
+			clock-names = "avio_vclk0", "avio_dpiclk";
+		};
+
+		lcdc: lcdc {
+			compatible = "syna,lcdc";
+			status = "disabled";
+		};
+
+		drm: drm {
+			compatible = "syna,berlin-drm";
+			status = "disabled";
+
+			dsi_panel {
+				compatible = "syna,drm-dsi";
+				status= "disabled";
+			};
+		};
+
+		waveshare_panel: waveshare-panel {
+			 status = "disabled";
+		 };
+	};
+};

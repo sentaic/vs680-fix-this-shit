@@ -1,0 +1,265 @@
+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+/*
+ * Copyright (C) 2024 Synaptics Incorporated
+ *
+ * Author: Jisheng Zhang <jszhang@kernel.org>
+ */
+
+/dts-v1/;
+
+#include <dt-bindings/gpio/gpio.h>
+
+#include "sl2619.dtsi"
+
+/ {
+	model = "Synaptics SL261X FPGA";
+	compatible = "syna,sl261x-fpga", "syna,sl261x";
+
+	chosen {
+		bootargs = "maxcpus=1 earlycon";
+		stdout-path = "serial0:57600n8";
+		linux,initrd-start = <0x08000000>;
+		linux,initrd-end = <0x0805a9ec>;
+	};
+
+	memory {
+		device_type = "memory";
+		reg = <0 0x1000000 0 0x3f000000>;
+	};
+
+	reserved-memory {
+		#address-cells = <2>;
+		#size-cells = <2>;
+		ranges;
+
+		vdev0vring0: vdev0vring0@7f00000 {
+			compatible = "shared-dma-pool";
+			reg = <0 0x7f00000 0 0x8000>;
+			no-map;
+		};
+
+		vdev0vring1: vdev0vring1@7f08000 {
+			compatible = "shared-dma-pool";
+			reg = <0 0x7f08000 0 0x8000>;
+			no-map;
+		};
+
+		vdevbuffer: vdevbuffer {
+			compatible = "shared-dma-pool";
+			reg = <0 0x7f10000 0 0xf0000>;
+			no-map;
+		};
+	};
+
+	rpmsg {
+		compatible = "syna,rpmsg";
+		mbox-names = "rpmsg";
+		mboxes = <&ipc 0>;
+		syna,vdev-nums = <1>;
+		reg = <0x0 0x7f00000 0x0 0x10000>;
+		memory-region = <&vdevbuffer>;
+	};
+};
+
+&pinctrl {
+	mdio_pmux: mdio-pmux {
+		groups = "GPIO31", "GPIO32";
+		function = "rgmii";
+	};
+
+	eth0_pmux: eth0-pmux {
+		groups = "GPIO33", "GPIO34", "GPIO37", "GPIO38", "GPIO41", "GPIO43", "GPIO45";
+		function = "rmii1";
+	};
+
+	sd0_pmux: sd0-pmux {
+		groups = "GPIO12", "GPIO22", "GPIO46", "GPIO47";
+		function = "sdio1";
+	};
+
+	i2s1_pmux: i2s1-pmux {
+		groups = "GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4";
+		function = "i2s1";
+	};
+
+	i2s2_pmux: i2s2-pmux {
+		groups = "GPIO5", "GPIO6", "GPIO7", "GPIO8", "GPIO11";
+		function = "i2s2";
+	};
+
+	i2s3_pmux: i2s3-pmux {
+		groups = "GPIO12", "GPIO13", "GPIO14", "GPIO15";
+		function = "i2s3";
+	};
+};
+
+&sm_pinctrl {
+	eth_phy0_pmux: eth_phy0-pmux {
+		groups = "SM_GPIO0";
+		function = "gpio";
+	};
+
+	xspi0_pmux: xspi0-pmux {
+		groups = "SM_GPIO18", "SM_GPIO19", "SM_GPIO20", "SM_GPIO21", "SM_GPIO22", "SM_GPIO23", "SM_GPIO24",
+			 "SM_GPIO25","SM_GPIO26", "SM_GPIO27", "SM_GPIO28", "SM_GPIO29", "SM_GPIO30";
+		function = "xspi";
+	};
+};
+
+&uart0 {
+	status = "okay";
+};
+
+&ethernet0 {
+	status = "okay";
+	pinctrl-0 = <&eth0_pmux>, <&mdio_pmux>, <&eth_phy0_pmux>;
+	pinctrl-names = "default";
+	phy-handle = <&ethernet_phy0>;
+	phy-mode = "rmii";
+	snps,clk-csr = <0>;
+	snps,reset-gpio = <&portc 0 GPIO_ACTIVE_LOW>;
+	snps,reset-delays-us = <0 10000 50000>;
+
+	mdio {
+		compatible = "snps,dwmac-mdio";
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		ethernet_phy0: ethernet-phy@0 {
+			reg = <0>;
+			max-speed = <100>;
+		};
+	};
+};
+
+&ipc {
+	status = "okay";
+};
+
+&sdhci0 {
+	status = "okay";
+	no-1-8-v;
+};
+
+&sdhci1 {
+	status = "okay";
+	pinctrl-0 = <&sd0_pmux>;
+	pinctrl-names = "default";
+	broken-cd;
+	no-mmc;
+	no-sdio;
+	no-1-8-v;
+};
+
+&xspi0 {
+	status = "okay";
+	pinctrl-0 = <&xspi0_pmux>;
+	pinctrl-names = "default";
+
+	flash@0 {
+		compatible = "jedec,spi-nor";
+		reg = <0>;
+		status = "okay";
+
+		partitions {
+			compatible = "fixed-partitions";
+			#address-cells = <1>;
+			#size-cells = <1>;
+
+			partition@0 {
+				label = "bootloader";
+				reg = <0x00000000 0x00020000>; // 128KB
+			};
+			partition@10000 {
+				label = "kernel";
+				reg = <0x00020000 0x007E0000>; // 8064KB
+			};
+			partition@800000 {
+				label = "rootfs";
+				reg = <0x00800000 0x00800000>; // 8192KB
+			};
+		};
+	};
+};
+
+&gpu {
+	status = "okay";
+};
+
+&smmu {
+	status = "okay";
+};
+
+&synpu {
+	status = "okay";
+};
+
+&avio {
+	status = "okay";
+};
+
+&klamath_pcm {
+	status = "okay";
+};
+
+&i2s1_dai {
+	status = "okay";
+	pinctrl-0 = <&i2s1_pmux>;
+	pinctrl-names = "default";
+	clk_src = "APLL";
+	clk_feed = "I2S1_DI";
+	output-mclk;
+};
+
+&i2s2_dai {
+	status = "okay";
+	pinctrl-0 = <&i2s2_pmux>;
+	pinctrl-names = "default";
+	clk_src = "APLL";
+	clk_feed = "I2S3_DI";
+};
+
+&i2s3_dai {
+	status = "okay";
+	pinctrl-0 = <&i2s3_pmux>;
+	pinctrl-names = "default";
+	clk_src = "APLL";
+	clk_feed = "I2S3_DI";
+};
+
+&klamath_asoc {
+	status = "okay";
+
+	asoc_i2s1: asoc-i2s1 {
+		status = "okay";
+		stream-name = "asoc-i2s1";
+		link-name = "asoc-i2s1";
+		format = "i2s";
+		cpu-node = <&i2s1_dai>;
+		codec-name = "snd-soc-dummy";
+		codec-dai-name = "snd-soc-dummy-dai";
+		platform-node = <&klamath_pcm>;
+	};
+
+	asoc_i2s2: asoc-i2s2 {
+		status = "okay";
+		stream-name = "asoc-i2s2";
+		link-name = "asoc-i2s2";
+		format = "i2s";
+		cpu-node = <&i2s2_dai>;
+		codec-name = "snd-soc-dummy";
+		codec-dai-name = "snd-soc-dummy-dai";
+		platform-node = <&klamath_pcm>;
+	};
+
+	asoc_i2s3: asoc-i2s3 {
+		status = "okay";
+		stream-name = "asoc-i2s3";
+		link-name = "asoc-i2s3";
+		format = "i2s";
+		cpu-node = <&i2s3_dai>;
+		codec-name = "snd-soc-dummy";
+		codec-dai-name = "snd-soc-dummy-dai";
+		platform-node = <&klamath_pcm>;
+	};
+};

@@ -1,0 +1,5 @@
+#include "../../../../../../../../../tools/optee-port/hardware-capabilities/display-dma.c"
+#include "../../../../../../../../../tools/optee-port/hardware-capabilities/display-graphics.c"
+#include "../../../../../../../../../tools/optee-port/hardware-capabilities/rx-capture-ta.c"
+#include "../../../../../../../../../tools/optee-port/hardware-capabilities/rx-dma-credit.c"
+#include "../../../../../../../../../tools/optee-port/hardware-capabilities/aio-payload.c"

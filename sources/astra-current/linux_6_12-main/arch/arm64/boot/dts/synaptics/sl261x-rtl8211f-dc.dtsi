@@ -1,0 +1,80 @@
+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+/*
+ * Copyright (C) 2026 Synaptics Incorporated
+ *
+ * Author: Jisheng Zhang <jszhang@kernel.org>
+ */
+
+/ {
+	mdio-demux {
+		compatible = "mdio-demux";
+		mux-controls = <&mux1 0>;
+		mdio-parent-bus = <&mdio0>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		mdio@0 {
+			reg = <0x0>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			ethernet_phy0: ethernet-phy@1 {
+				compatible = "ethernet-phy-id001c.c916";
+				reg = <1>;
+				realtek,clkout-disable;
+				reset-assert-us = <20000>;
+				reset-deassert-us = <100000>;
+				reset-gpios = <&expander1 6 GPIO_ACTIVE_LOW>;
+			};
+		};
+	};
+};
+
+&mux1 {
+	status = "okay";
+};
+
+&pinctrl {
+	eth_mdio_pmux: eth-mdio-pmux {
+		groups = "GPIO31", "GPIO32";
+		function = "rgmii";
+		drive-strength = <7>;
+	};
+
+	eth0_txc_pmux: eth0_txc_pmux {
+		groups = "GPIO42";
+		function = "rgmii1";
+		drive-strength = <10>;
+		input-disable;
+		bias-disable;
+	};
+
+	eth0_tx_pmux: eth0_tx-pmux {
+		groups = "GPIO33", "GPIO34", "GPIO35", "GPIO36", "GPIO43";
+		function = "rgmii1";
+		drive-strength = <11>;
+		input-disable;
+		bias-disable;
+	};
+
+	eth0_rx_pmux: eth0_rx-pmux {
+		groups = "GPIO37", "GPIO38", "GPIO39", "GPIO40", "GPIO41", "GPIO44";
+		function = "rgmii1";
+		drive-strength = <7>;
+	};
+};
+
+&ethernet0 {
+	status = "okay";
+	pinctrl-0 = <&eth_mdio_pmux>, <&eth0_txc_pmux>, <&eth0_tx_pmux>, <&eth0_rx_pmux>;
+	pinctrl-names = "default";
+	phy-handle = <&ethernet_phy0>;
+	phy-mode = "rgmii-id";
+	snps,no-mac-wol;
+
+	mdio0: mdio {
+		compatible = "snps,dwmac-mdio";
+		#address-cells = <1>;
+		#size-cells = <0>;
+	};
+};

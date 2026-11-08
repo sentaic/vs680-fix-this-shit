@@ -1,0 +1,2526 @@
+// SPDX-License-Identifier: BSD-2-Clause
+/*
+ * Copyright (c) 2024, Synaptics Incorporated.
+ */
+
+#ifndef SZC_h
+#define SZC_h (){}
+
+
+#include "ctypes.h"
+
+#pragma pack(1)
+#ifdef __cplusplus
+  extern "C" {
+#endif
+
+#ifndef _DOCC_H_BITOPS_
+#define _DOCC_H_BITOPS_ (){}
+
+    #define _bSETMASK_(b)                                      ((b)<32 ? (1<<((b)&31)) : 0)
+    #define _NSETMASK_(msb,lsb)                                (_bSETMASK_((msb)+1)-_bSETMASK_(lsb))
+    #define _bCLRMASK_(b)                                      (~_bSETMASK_(b))
+    #define _NCLRMASK_(msb,lsb)                                (~_NSETMASK_(msb,lsb))
+    #define _BFGET_(r,msb,lsb)                                 (_NSETMASK_((msb)-(lsb),0)&((r)>>(lsb)))
+    #define _BFSET_(r,msb,lsb,v)                               do{ (r)&=_NCLRMASK_(msb,lsb); (r)|=_NSETMASK_(msb,lsb)&((v)<<(lsb)); }while(0)
+
+#endif
+
+
+
+//////
+/// 
+/// $INTERFACE OneReg                                   (4,4)
+///     # # ----------------------------------------------------------
+///     @ 0x00000 OneReg               (RW)
+///               %unsigned 8  Byte0                     0x0
+///               %unsigned 8  Byte1                     0x0
+///               %unsigned 8  Byte2                     0x0
+///               %unsigned 8  Byte3                     0x0
+///     # # ----------------------------------------------------------
+/// $ENDOFINTERFACE  # size:       4B, bits:      32b, padding:     0B
+////////////////////////////////////////////////////////////
+#ifndef h_OneReg
+#define h_OneReg (){}
+
+    #define     RA_OneReg_OneReg                               0x0000
+
+    #define     BA_OneReg_OneReg_Byte0                         0x0000
+    #define     B16OneReg_OneReg_Byte0                         0x0000
+    #define   LSb32OneReg_OneReg_Byte0                            0
+    #define   LSb16OneReg_OneReg_Byte0                            0
+    #define       bOneReg_OneReg_Byte0                         8
+    #define   MSK32OneReg_OneReg_Byte0                            0x000000FF
+
+    #define     BA_OneReg_OneReg_Byte1                         0x0001
+    #define     B16OneReg_OneReg_Byte1                         0x0000
+    #define   LSb32OneReg_OneReg_Byte1                            8
+    #define   LSb16OneReg_OneReg_Byte1                            8
+    #define       bOneReg_OneReg_Byte1                         8
+    #define   MSK32OneReg_OneReg_Byte1                            0x0000FF00
+
+    #define     BA_OneReg_OneReg_Byte2                         0x0002
+    #define     B16OneReg_OneReg_Byte2                         0x0002
+    #define   LSb32OneReg_OneReg_Byte2                            16
+    #define   LSb16OneReg_OneReg_Byte2                            0
+    #define       bOneReg_OneReg_Byte2                         8
+    #define   MSK32OneReg_OneReg_Byte2                            0x00FF0000
+
+    #define     BA_OneReg_OneReg_Byte3                         0x0003
+    #define     B16OneReg_OneReg_Byte3                         0x0002
+    #define   LSb32OneReg_OneReg_Byte3                            24
+    #define   LSb16OneReg_OneReg_Byte3                            8
+    #define       bOneReg_OneReg_Byte3                         8
+    #define   MSK32OneReg_OneReg_Byte3                            0xFF000000
+    ///////////////////////////////////////////////////////////
+
+    typedef struct SIE_OneReg {
+    ///////////////////////////////////////////////////////////
+    #define   GET32OneReg_OneReg_Byte0(r32)                    _BFGET_(r32, 7, 0)
+    #define   SET32OneReg_OneReg_Byte0(r32,v)                  _BFSET_(r32, 7, 0,v)
+    #define   GET16OneReg_OneReg_Byte0(r16)                    _BFGET_(r16, 7, 0)
+    #define   SET16OneReg_OneReg_Byte0(r16,v)                  _BFSET_(r16, 7, 0,v)
+
+    #define   GET32OneReg_OneReg_Byte1(r32)                    _BFGET_(r32,15, 8)
+    #define   SET32OneReg_OneReg_Byte1(r32,v)                  _BFSET_(r32,15, 8,v)
+    #define   GET16OneReg_OneReg_Byte1(r16)                    _BFGET_(r16,15, 8)
+    #define   SET16OneReg_OneReg_Byte1(r16,v)                  _BFSET_(r16,15, 8,v)
+
+    #define   GET32OneReg_OneReg_Byte2(r32)                    _BFGET_(r32,23,16)
+    #define   SET32OneReg_OneReg_Byte2(r32,v)                  _BFSET_(r32,23,16,v)
+    #define   GET16OneReg_OneReg_Byte2(r16)                    _BFGET_(r16, 7, 0)
+    #define   SET16OneReg_OneReg_Byte2(r16,v)                  _BFSET_(r16, 7, 0,v)
+
+    #define   GET32OneReg_OneReg_Byte3(r32)                    _BFGET_(r32,31,24)
+    #define   SET32OneReg_OneReg_Byte3(r32,v)                  _BFSET_(r32,31,24,v)
+    #define   GET16OneReg_OneReg_Byte3(r16)                    _BFGET_(r16,15, 8)
+    #define   SET16OneReg_OneReg_Byte3(r16,v)                  _BFSET_(r16,15, 8,v)
+
+    #define     w32OneReg_OneReg                               {\
+            UNSG32 uOneReg_Byte0                               :  8;\
+            UNSG32 uOneReg_Byte1                               :  8;\
+            UNSG32 uOneReg_Byte2                               :  8;\
+            UNSG32 uOneReg_Byte3                               :  8;\
+          }
+    union { UNSG32 u32OneReg_OneReg;
+            struct w32OneReg_OneReg;
+          };
+    ///////////////////////////////////////////////////////////
+    } SIE_OneReg;
+
+    typedef union  T32OneReg_OneReg
+          { UNSG32 u32;
+            struct w32OneReg_OneReg;
+                 } T32OneReg_OneReg;
+    ///////////////////////////////////////////////////////////
+
+    typedef union  TOneReg_OneReg
+          { UNSG32 u32[1];
+            struct {
+            struct w32OneReg_OneReg;
+                   };
+                 } TOneReg_OneReg;
+
+    ///////////////////////////////////////////////////////////
+     SIGN32 OneReg_drvrd(SIE_OneReg *p, UNSG32 base, SIGN32 mem, SIGN32 tst);
+     SIGN32 OneReg_drvwr(SIE_OneReg *p, UNSG32 base, SIGN32 mem, SIGN32 tst, UNSG32 *pcmd);
+       void OneReg_reset(SIE_OneReg *p);
+     SIGN32 OneReg_cmp  (SIE_OneReg *p, SIE_OneReg *pie, char *pfx, void *hLOG, SIGN32 mem, SIGN32 tst);
+    #define OneReg_check(p,pie,pfx,hLOG) OneReg_cmp(p,pie,pfx,(void*)(hLOG),0,0)
+    #define OneReg_print(p,    pfx,hLOG) OneReg_cmp(p,0,  pfx,(void*)(hLOG),0,0)
+
+#endif
+//////
+/// ENDOFINTERFACE: OneReg
+////////////////////////////////////////////////////////////
+
+//////
+/// 
+/// $INTERFACE OneReg_RO                                (4,4)
+///     # # ----------------------------------------------------------
+///     @ 0x00000 OneReg_RO            (R-)
+///               %unsigned 8  Byte0                     0x0
+///               %unsigned 8  Byte1                     0x0
+///               %unsigned 8  Byte2                     0x0
+///               %unsigned 8  Byte3                     0x0
+///     # # ----------------------------------------------------------
+/// $ENDOFINTERFACE  # size:       4B, bits:      32b, padding:     0B
+////////////////////////////////////////////////////////////
+#ifndef h_OneReg_RO
+#define h_OneReg_RO (){}
+
+    #define     RA_OneReg_RO_OneReg_RO                         0x0000
+
+    #define     BA_OneReg_RO_OneReg_RO_Byte0                   0x0000
+    #define     B16OneReg_RO_OneReg_RO_Byte0                   0x0000
+    #define   LSb32OneReg_RO_OneReg_RO_Byte0                      0
+    #define   LSb16OneReg_RO_OneReg_RO_Byte0                      0
+    #define       bOneReg_RO_OneReg_RO_Byte0                   8
+    #define   MSK32OneReg_RO_OneReg_RO_Byte0                      0x000000FF
+
+    #define     BA_OneReg_RO_OneReg_RO_Byte1                   0x0001
+    #define     B16OneReg_RO_OneReg_RO_Byte1                   0x0000
+    #define   LSb32OneReg_RO_OneReg_RO_Byte1                      8
+    #define   LSb16OneReg_RO_OneReg_RO_Byte1                      8
+    #define       bOneReg_RO_OneReg_RO_Byte1                   8
+    #define   MSK32OneReg_RO_OneReg_RO_Byte1                      0x0000FF00
+
+    #define     BA_OneReg_RO_OneReg_RO_Byte2                   0x0002
+    #define     B16OneReg_RO_OneReg_RO_Byte2                   0x0002
+    #define   LSb32OneReg_RO_OneReg_RO_Byte2                      16
+    #define   LSb16OneReg_RO_OneReg_RO_Byte2                      0
+    #define       bOneReg_RO_OneReg_RO_Byte2                   8
+    #define   MSK32OneReg_RO_OneReg_RO_Byte2                      0x00FF0000
+
+    #define     BA_OneReg_RO_OneReg_RO_Byte3                   0x0003
+    #define     B16OneReg_RO_OneReg_RO_Byte3                   0x0002
+    #define   LSb32OneReg_RO_OneReg_RO_Byte3                      24
+    #define   LSb16OneReg_RO_OneReg_RO_Byte3                      8
+    #define       bOneReg_RO_OneReg_RO_Byte3                   8
+    #define   MSK32OneReg_RO_OneReg_RO_Byte3                      0xFF000000
+    ///////////////////////////////////////////////////////////
+
+    typedef struct SIE_OneReg_RO {
+    ///////////////////////////////////////////////////////////
+    #define   GET32OneReg_RO_OneReg_RO_Byte0(r32)              _BFGET_(r32, 7, 0)
+    #define   SET32OneReg_RO_OneReg_RO_Byte0(r32,v)            _BFSET_(r32, 7, 0,v)
+    #define   GET16OneReg_RO_OneReg_RO_Byte0(r16)              _BFGET_(r16, 7, 0)
+    #define   SET16OneReg_RO_OneReg_RO_Byte0(r16,v)            _BFSET_(r16, 7, 0,v)
+
+    #define   GET32OneReg_RO_OneReg_RO_Byte1(r32)              _BFGET_(r32,15, 8)
+    #define   SET32OneReg_RO_OneReg_RO_Byte1(r32,v)            _BFSET_(r32,15, 8,v)
+    #define   GET16OneReg_RO_OneReg_RO_Byte1(r16)              _BFGET_(r16,15, 8)
+    #define   SET16OneReg_RO_OneReg_RO_Byte1(r16,v)            _BFSET_(r16,15, 8,v)
+
+    #define   GET32OneReg_RO_OneReg_RO_Byte2(r32)              _BFGET_(r32,23,16)
+    #define   SET32OneReg_RO_OneReg_RO_Byte2(r32,v)            _BFSET_(r32,23,16,v)
+    #define   GET16OneReg_RO_OneReg_RO_Byte2(r16)              _BFGET_(r16, 7, 0)
+    #define   SET16OneReg_RO_OneReg_RO_Byte2(r16,v)            _BFSET_(r16, 7, 0,v)
+
+    #define   GET32OneReg_RO_OneReg_RO_Byte3(r32)              _BFGET_(r32,31,24)
+    #define   SET32OneReg_RO_OneReg_RO_Byte3(r32,v)            _BFSET_(r32,31,24,v)
+    #define   GET16OneReg_RO_OneReg_RO_Byte3(r16)              _BFGET_(r16,15, 8)
+    #define   SET16OneReg_RO_OneReg_RO_Byte3(r16,v)            _BFSET_(r16,15, 8,v)
+
+    #define     w32OneReg_RO_OneReg_RO                         {\
+            UNSG32 uOneReg_RO_Byte0                            :  8;\
+            UNSG32 uOneReg_RO_Byte1                            :  8;\
+            UNSG32 uOneReg_RO_Byte2                            :  8;\
+            UNSG32 uOneReg_RO_Byte3                            :  8;\
+          }
+    union { UNSG32 u32OneReg_RO_OneReg_RO;
+            struct w32OneReg_RO_OneReg_RO;
+          };
+    ///////////////////////////////////////////////////////////
+    } SIE_OneReg_RO;
+
+    typedef union  T32OneReg_RO_OneReg_RO
+          { UNSG32 u32;
+            struct w32OneReg_RO_OneReg_RO;
+                 } T32OneReg_RO_OneReg_RO;
+    ///////////////////////////////////////////////////////////
+
+    typedef union  TOneReg_RO_OneReg_RO
+          { UNSG32 u32[1];
+            struct {
+            struct w32OneReg_RO_OneReg_RO;
+                   };
+                 } TOneReg_RO_OneReg_RO;
+
+    ///////////////////////////////////////////////////////////
+     SIGN32 OneReg_RO_drvrd(SIE_OneReg_RO *p, UNSG32 base, SIGN32 mem, SIGN32 tst);
+     SIGN32 OneReg_RO_drvwr(SIE_OneReg_RO *p, UNSG32 base, SIGN32 mem, SIGN32 tst, UNSG32 *pcmd);
+       void OneReg_RO_reset(SIE_OneReg_RO *p);
+     SIGN32 OneReg_RO_cmp  (SIE_OneReg_RO *p, SIE_OneReg_RO *pie, char *pfx, void *hLOG, SIGN32 mem, SIGN32 tst);
+    #define OneReg_RO_check(p,pie,pfx,hLOG) OneReg_RO_cmp(p,pie,pfx,(void*)(hLOG),0,0)
+    #define OneReg_RO_print(p,    pfx,hLOG) OneReg_RO_cmp(p,0,  pfx,(void*)(hLOG),0,0)
+
+#endif
+//////
+/// ENDOFINTERFACE: OneReg_RO
+////////////////////////////////////////////////////////////
+
+//////
+/// 
+/// $INTERFACE SRAM                                     (4,4)
+///     # # ----------------------------------------------------------
+///     @ 0x00000                      (RW)
+///               %unsigned 32 Data                      0x0
+///     # # ----------------------------------------------------------
+/// $ENDOFINTERFACE  # size:       4B, bits:      32b, padding:     0B
+////////////////////////////////////////////////////////////
+#ifndef h_SRAM
+#define h_SRAM (){}
+
+    #define     BA_SRAM_Data                                   0x0000
+    #define     B16SRAM_Data                                   0x0000
+    #define   LSb32SRAM_Data                                      0
+    #define   LSb16SRAM_Data                                      0
+    #define       bSRAM_Data                                   32
+    #define   MSK32SRAM_Data                                      0xFFFFFFFF
+    ///////////////////////////////////////////////////////////
+
+    typedef struct SIE_SRAM {
+    ///////////////////////////////////////////////////////////
+    #define   GET32SRAM_Data(r32)                              _BFGET_(r32,31, 0)
+    #define   SET32SRAM_Data(r32,v)                            _BFSET_(r32,31, 0,v)
+
+            UNSG32 u_Data                                      : 32;
+    ///////////////////////////////////////////////////////////
+    } SIE_SRAM;
+
+    ///////////////////////////////////////////////////////////
+     SIGN32 SRAM_drvrd(SIE_SRAM *p, UNSG32 base, SIGN32 mem, SIGN32 tst);
+     SIGN32 SRAM_drvwr(SIE_SRAM *p, UNSG32 base, SIGN32 mem, SIGN32 tst, UNSG32 *pcmd);
+       void SRAM_reset(SIE_SRAM *p);
+     SIGN32 SRAM_cmp  (SIE_SRAM *p, SIE_SRAM *pie, char *pfx, void *hLOG, SIGN32 mem, SIGN32 tst);
+    #define SRAM_check(p,pie,pfx,hLOG) SRAM_cmp(p,pie,pfx,(void*)(hLOG),0,0)
+    #define SRAM_print(p,    pfx,hLOG) SRAM_cmp(p,0,  pfx,(void*)(hLOG),0,0)
+
+#endif
+//////
+/// ENDOFINTERFACE: SRAM
+////////////////////////////////////////////////////////////
+
+//////
+/// 
+/// $INTERFACE MPT                                      (4,4)
+///     # # ----------------------------------------------------------
+///     @ 0x00000                      (P)
+///     # 0x00000 Bank                 
+///               $SRAM                Bank              MEM   [32768]
+///                                    ###
+///                                    * 1M-bit SRAM
+///                                    ###
+///     # # ----------------------------------------------------------
+/// $ENDOFINTERFACE  # size:  131072B, bits:      32b, padding:     0B
+////////////////////////////////////////////////////////////
+#ifndef h_MPT
+#define h_MPT (){}
+
+    #define     RA_MPT_Bank                                    0x0000
+    ///////////////////////////////////////////////////////////
+
+    typedef struct SIE_MPT {
+    ///////////////////////////////////////////////////////////
+              SIE_SRAM                                         ie_Bank[32768];
+    ///////////////////////////////////////////////////////////
+    } SIE_MPT;
+
+    ///////////////////////////////////////////////////////////
+     SIGN32 MPT_drvrd(SIE_MPT *p, UNSG32 base, SIGN32 mem, SIGN32 tst);
+     SIGN32 MPT_drvwr(SIE_MPT *p, UNSG32 base, SIGN32 mem, SIGN32 tst, UNSG32 *pcmd);
+       void MPT_reset(SIE_MPT *p);
+     SIGN32 MPT_cmp  (SIE_MPT *p, SIE_MPT *pie, char *pfx, void *hLOG, SIGN32 mem, SIGN32 tst);
+    #define MPT_check(p,pie,pfx,hLOG) MPT_cmp(p,pie,pfx,(void*)(hLOG),0,0)
+    #define MPT_print(p,    pfx,hLOG) MPT_cmp(p,0,  pfx,(void*)(hLOG),0,0)
+
+#endif
+//////
+/// ENDOFINTERFACE: MPT
+////////////////////////////////////////////////////////////
+
+//////
+/// 
+/// $INTERFACE MPT_CTRL                                 (4,4)
+///     # # ----------------------------------------------------------
+///     @ 0x00000 ED_CTRL              (P)
+///               %unsigned 1  En                        0x0
+///                                    ###
+///                                    * 0: Error detection disabled
+///                                    * 1: Error detection enabled
+///                                    ###
+///               %%        31         # Stuffing bits...
+///     @ 0x00004 ED_TST               (P)
+///               %unsigned 32 Flip                      0x0
+///                                    ###
+///                                    * A ‘1’ in any of the 32-bits in this field will flip the associated written bit into the SRAM.
+///                                    * Use this register to test the error detection logic.
+///                                    ###
+///     @ 0x00008 ED_STS               (WOC-)
+///               %unsigned 1  Error                     0x0
+///                                    ###
+///                                    * 0 : No bit errors detected
+///                                    * 1: Bit error detected
+///                                    * Writing a 1 to this register will clear the error.
+///                                    ###
+///               %%        31         # Stuffing bits...
+///     @ 0x0000C ED_ERR_LOG           (RW)
+///               %unsigned 15 Addr                      0x0
+///                                    ###
+///                                    * This register logs the address of the first error detected.
+///                                    * When ED_STS.Error is cleared, this register will log the next error detected after the clear.
+///                                    ###
+///               %%        17         # Stuffing bits...
+///     @ 0x00010 cache_flush          (P)
+///               %unsigned 32 cache_flush               0x0
+///                                    ###
+///                                    * Flush cache of each SZC
+///                                    ###
+///     @ 0x00014 cache_enable         (P)
+///               %unsigned 32 cache_enable              0x0
+///                                    ###
+///                                    * Enable MPT cache for each SZC
+///                                    ###
+///     @ 0x00018 MPT_Page             (P)
+///               %unsigned 2  size                      0x0
+///                                    ###
+///                                    * 0: 4KB page, each page has 1-bit of rule in MPT
+///                                    * 1: 8KB page, each page has 2-bit of rule in MPT
+///                                    * 2: 16KB page, each page has 4-bit of rule in MPT
+///                                    * 3: same as 0 case.
+///                                    ###
+///               %%        30         # Stuffing bits...
+///     @ 0x0001C MPT_Arb              (P)
+///               %unsigned 1  Sel                       0x0
+///                                    ###
+///                                    * 0: select the regular round-robin arbitration.
+///                                    * 1: select the weighted round-robin arbitration.
+///                                    * Doesn’t support dynamic change, but be set during system initialization
+///                                    ###
+///               %%        31         # Stuffing bits...
+///     @ 0x00020 MPT_Hold_R           (P)
+///               ###
+///               * 0: not hold
+///               * 1: hold the port ( this port won’t be granted for MPT access)
+///               ###
+///               %unsigned 1  SZC_0                     0x0
+///                                    ###
+///                                    * Hold for SZC 0 R channel
+///                                    ###
+///               %unsigned 1  SZC_1                     0x0
+///                                    ###
+///                                    * Hold for SZC 1 R channel
+///                                    ###
+///               %unsigned 1  SZC_2                     0x0
+///                                    ###
+///                                    * Hold for SZC 2 R channel
+///                                    ###
+///               %unsigned 1  SZC_3                     0x0
+///                                    ###
+///                                    * Hold for SZC 3 R channel
+///                                    ###
+///               %unsigned 1  SZC_4_R                   0x0
+///                                    ###
+///                                    * Hold for SZC 4 R channel
+///                                    ###
+///               %%        27         # Stuffing bits...
+///     @ 0x00024 MPT_Hold_W           (P)
+///               ###
+///               * 0: not hold
+///               * 1: hold the port ( this port won’t be granted for MPT access)
+///               ###
+///               %unsigned 1  SZC_0                     0x0
+///                                    ###
+///                                    * Hold for SZC 0 W channel
+///                                    ###
+///               %unsigned 1  SZC_1                     0x0
+///                                    ###
+///                                    * Hold for SZC 1 W channel
+///                                    ###
+///               %unsigned 1  SZC_2                     0x0
+///                                    ###
+///                                    * Hold for SZC 2 W channel
+///                                    ###
+///               %unsigned 1  SZC_3                     0x0
+///                                    ###
+///                                    * Hold for SZC 3 W channel
+///                                    ###
+///               %unsigned 1  SZC_4_R                   0x0
+///                                    ###
+///                                    * Hold for SZC 4 W channel
+///                                    ###
+///               %%        27         # Stuffing bits...
+///     @ 0x00028 MPT_QoS              (RW)
+///               %unsigned 1  Reload                    0x0
+///               %%        31         # Stuffing bits...
+///     @ 0x0002C MPT_QoS_R            (P)
+///               %unsigned 4  SZC_0                     0xF
+///                                    ###
+///                                    * QoS value for SZC 0 R channel
+///                                    ###
+///               %unsigned 4  SZC_1                     0xF
+///                                    ###
+///                                    * QoS value for SZC 1 R channel
+///                                    ###
+///               %unsigned 4  SZC_2                     0xF
+///                                    ###
+///                                    * QoS value for SZC 2 R channel
+///                                    ###
+///               %unsigned 4  SZC_3                     0xF
+///                                    ###
+///                                    * QoS value for SZC 3 R channel
+///                                    ###
+///               %unsigned 4  SZC_4_R                   0xF
+///                                    ###
+///                                    * QoS value for SZC 4 R channel
+///                                    ###
+///               %%        12         # Stuffing bits...
+///     @ 0x00030 MPT_QoS_W            (P)
+///               %unsigned 4  SZC_0                     0xF
+///                                    ###
+///                                    * QoS value for SZC 0 W channel
+///                                    ###
+///               %unsigned 4  SZC_1                     0xF
+///                                    ###
+///                                    * QoS value for SZC 1 W channel
+///                                    ###
+///               %unsigned 4  SZC_2                     0xF
+///                                    ###
+///                                    * QoS value for SZC 2 W channel
+///                                    ###
+///               %unsigned 4  SZC_3                     0xF
+///                                    ###
+///                                    * QoS value for SZC 3 W channel
+///                                    ###
+///               %unsigned 4  SZC_4_R                   0xF
+///                                    ###
+///                                    * QoS value for SZC 4 W channel
+///                                    ###
+///               %%        12         # Stuffing bits...
+///     # # ----------------------------------------------------------
+/// $ENDOFINTERFACE  # size:      52B, bits:     167b, padding:     0B
+////////////////////////////////////////////////////////////
+#ifndef h_MPT_CTRL
+#define h_MPT_CTRL (){}
+
+    #define     RA_MPT_CTRL_ED_CTRL                            0x0000
+
+    #define     BA_MPT_CTRL_ED_CTRL_En                         0x0000
+    #define     B16MPT_CTRL_ED_CTRL_En                         0x0000
+    #define   LSb32MPT_CTRL_ED_CTRL_En                            0
+    #define   LSb16MPT_CTRL_ED_CTRL_En                            0
+    #define       bMPT_CTRL_ED_CTRL_En                         1
+    #define   MSK32MPT_CTRL_ED_CTRL_En                            0x00000001
+    ///////////////////////////////////////////////////////////
+    #define     RA_MPT_CTRL_ED_TST                             0x0004
+
+    #define     BA_MPT_CTRL_ED_TST_Flip                        0x0004
+    #define     B16MPT_CTRL_ED_TST_Flip                        0x0004
+    #define   LSb32MPT_CTRL_ED_TST_Flip                           0
+    #define   LSb16MPT_CTRL_ED_TST_Flip                           0
+    #define       bMPT_CTRL_ED_TST_Flip                        32
+    #define   MSK32MPT_CTRL_ED_TST_Flip                           0xFFFFFFFF
+    ///////////////////////////////////////////////////////////
+    #define     RA_MPT_CTRL_ED_STS                             0x0008
+
+    #define     BA_MPT_CTRL_ED_STS_Error                       0x0008
+    #define     B16MPT_CTRL_ED_STS_Error                       0x0008
+    #define   LSb32MPT_CTRL_ED_STS_Error                          0
+    #define   LSb16MPT_CTRL_ED_STS_Error                          0
+    #define       bMPT_CTRL_ED_STS_Error                       1
+    #define   MSK32MPT_CTRL_ED_STS_Error                          0x00000001
+    ///////////////////////////////////////////////////////////
+    #define     RA_MPT_CTRL_ED_ERR_LOG                         0x000C
+
+    #define     BA_MPT_CTRL_ED_ERR_LOG_Addr                    0x000C
+    #define     B16MPT_CTRL_ED_ERR_LOG_Addr                    0x000C
+    #define   LSb32MPT_CTRL_ED_ERR_LOG_Addr                       0
+    #define   LSb16MPT_CTRL_ED_ERR_LOG_Addr                       0
+    #define       bMPT_CTRL_ED_ERR_LOG_Addr                    15
+    #define   MSK32MPT_CTRL_ED_ERR_LOG_Addr                       0x00007FFF
+    ///////////////////////////////////////////////////////////
+    #define     RA_MPT_CTRL_cache_flush                        0x0010
+
+    #define     BA_MPT_CTRL_cache_flush_cache_flush            0x0010
+    #define     B16MPT_CTRL_cache_flush_cache_flush            0x0010
+    #define   LSb32MPT_CTRL_cache_flush_cache_flush               0
+    #define   LSb16MPT_CTRL_cache_flush_cache_flush               0
+    #define       bMPT_CTRL_cache_flush_cache_flush            32
+    #define   MSK32MPT_CTRL_cache_flush_cache_flush               0xFFFFFFFF
+    ///////////////////////////////////////////////////////////
+    #define     RA_MPT_CTRL_cache_enable                       0x0014
+
+    #define     BA_MPT_CTRL_cache_enable_cache_enable          0x0014
+    #define     B16MPT_CTRL_cache_enable_cache_enable          0x0014
+    #define   LSb32MPT_CTRL_cache_enable_cache_enable             0
+    #define   LSb16MPT_CTRL_cache_enable_cache_enable             0
+    #define       bMPT_CTRL_cache_enable_cache_enable          32
+    #define   MSK32MPT_CTRL_cache_enable_cache_enable             0xFFFFFFFF
+    ///////////////////////////////////////////////////////////
+    #define     RA_MPT_CTRL_MPT_Page                           0x0018
+
+    #define     BA_MPT_CTRL_MPT_Page_size                      0x0018
+    #define     B16MPT_CTRL_MPT_Page_size                      0x0018
+    #define   LSb32MPT_CTRL_MPT_Page_size                         0
+    #define   LSb16MPT_CTRL_MPT_Page_size                         0
+    #define       bMPT_CTRL_MPT_Page_size                      2
+    #define   MSK32MPT_CTRL_MPT_Page_size                         0x00000003
+    ///////////////////////////////////////////////////////////
+    #define     RA_MPT_CTRL_MPT_Arb                            0x001C
+
+    #define     BA_MPT_CTRL_MPT_Arb_Sel                        0x001C
+    #define     B16MPT_CTRL_MPT_Arb_Sel                        0x001C
+    #define   LSb32MPT_CTRL_MPT_Arb_Sel                           0
+    #define   LSb16MPT_CTRL_MPT_Arb_Sel                           0
+    #define       bMPT_CTRL_MPT_Arb_Sel                        1
+    #define   MSK32MPT_CTRL_MPT_Arb_Sel                           0x00000001
+    ///////////////////////////////////////////////////////////
+    #define     RA_MPT_CTRL_MPT_Hold_R                         0x0020
+
+    #define     BA_MPT_CTRL_MPT_Hold_R_SZC_0                   0x0020
+    #define     B16MPT_CTRL_MPT_Hold_R_SZC_0                   0x0020
+    #define   LSb32MPT_CTRL_MPT_Hold_R_SZC_0                      0
+    #define   LSb16MPT_CTRL_MPT_Hold_R_SZC_0                      0
+    #define       bMPT_CTRL_MPT_Hold_R_SZC_0                   1
+    #define   MSK32MPT_CTRL_MPT_Hold_R_SZC_0                      0x00000001
+
+    #define     BA_MPT_CTRL_MPT_Hold_R_SZC_1                   0x0020
+    #define     B16MPT_CTRL_MPT_Hold_R_SZC_1                   0x0020
+    #define   LSb32MPT_CTRL_MPT_Hold_R_SZC_1                      1
+    #define   LSb16MPT_CTRL_MPT_Hold_R_SZC_1                      1
+    #define       bMPT_CTRL_MPT_Hold_R_SZC_1                   1
+    #define   MSK32MPT_CTRL_MPT_Hold_R_SZC_1                      0x00000002
+
+    #define     BA_MPT_CTRL_MPT_Hold_R_SZC_2                   0x0020
+    #define     B16MPT_CTRL_MPT_Hold_R_SZC_2                   0x0020
+    #define   LSb32MPT_CTRL_MPT_Hold_R_SZC_2                      2
+    #define   LSb16MPT_CTRL_MPT_Hold_R_SZC_2                      2
+    #define       bMPT_CTRL_MPT_Hold_R_SZC_2                   1
+    #define   MSK32MPT_CTRL_MPT_Hold_R_SZC_2                      0x00000004
+
+    #define     BA_MPT_CTRL_MPT_Hold_R_SZC_3                   0x0020
+    #define     B16MPT_CTRL_MPT_Hold_R_SZC_3                   0x0020
+    #define   LSb32MPT_CTRL_MPT_Hold_R_SZC_3                      3
+    #define   LSb16MPT_CTRL_MPT_Hold_R_SZC_3                      3
+    #define       bMPT_CTRL_MPT_Hold_R_SZC_3                   1
+    #define   MSK32MPT_CTRL_MPT_Hold_R_SZC_3                      0x00000008
+
+    #define     BA_MPT_CTRL_MPT_Hold_R_SZC_4_R                 0x0020
+    #define     B16MPT_CTRL_MPT_Hold_R_SZC_4_R                 0x0020
+    #define   LSb32MPT_CTRL_MPT_Hold_R_SZC_4_R                    4
+    #define   LSb16MPT_CTRL_MPT_Hold_R_SZC_4_R                    4
+    #define       bMPT_CTRL_MPT_Hold_R_SZC_4_R                 1
+    #define   MSK32MPT_CTRL_MPT_Hold_R_SZC_4_R                    0x00000010
+    ///////////////////////////////////////////////////////////
+    #define     RA_MPT_CTRL_MPT_Hold_W                         0x0024
+
+    #define     BA_MPT_CTRL_MPT_Hold_W_SZC_0                   0x0024
+    #define     B16MPT_CTRL_MPT_Hold_W_SZC_0                   0x0024
+    #define   LSb32MPT_CTRL_MPT_Hold_W_SZC_0                      0
+    #define   LSb16MPT_CTRL_MPT_Hold_W_SZC_0                      0
+    #define       bMPT_CTRL_MPT_Hold_W_SZC_0                   1
+    #define   MSK32MPT_CTRL_MPT_Hold_W_SZC_0                      0x00000001
+
+    #define     BA_MPT_CTRL_MPT_Hold_W_SZC_1                   0x0024
+    #define     B16MPT_CTRL_MPT_Hold_W_SZC_1                   0x0024
+    #define   LSb32MPT_CTRL_MPT_Hold_W_SZC_1                      1
+    #define   LSb16MPT_CTRL_MPT_Hold_W_SZC_1                      1
+    #define       bMPT_CTRL_MPT_Hold_W_SZC_1                   1
+    #define   MSK32MPT_CTRL_MPT_Hold_W_SZC_1                      0x00000002
+
+    #define     BA_MPT_CTRL_MPT_Hold_W_SZC_2                   0x0024
+    #define     B16MPT_CTRL_MPT_Hold_W_SZC_2                   0x0024
+    #define   LSb32MPT_CTRL_MPT_Hold_W_SZC_2                      2
+    #define   LSb16MPT_CTRL_MPT_Hold_W_SZC_2                      2
+    #define       bMPT_CTRL_MPT_Hold_W_SZC_2                   1
+    #define   MSK32MPT_CTRL_MPT_Hold_W_SZC_2                      0x00000004
+
+    #define     BA_MPT_CTRL_MPT_Hold_W_SZC_3                   0x0024
+    #define     B16MPT_CTRL_MPT_Hold_W_SZC_3                   0x0024
+    #define   LSb32MPT_CTRL_MPT_Hold_W_SZC_3                      3
+    #define   LSb16MPT_CTRL_MPT_Hold_W_SZC_3                      3
+    #define       bMPT_CTRL_MPT_Hold_W_SZC_3                   1
+    #define   MSK32MPT_CTRL_MPT_Hold_W_SZC_3                      0x00000008
+
+    #define     BA_MPT_CTRL_MPT_Hold_W_SZC_4_R                 0x0024
+    #define     B16MPT_CTRL_MPT_Hold_W_SZC_4_R                 0x0024
+    #define   LSb32MPT_CTRL_MPT_Hold_W_SZC_4_R                    4
+    #define   LSb16MPT_CTRL_MPT_Hold_W_SZC_4_R                    4
+    #define       bMPT_CTRL_MPT_Hold_W_SZC_4_R                 1
+    #define   MSK32MPT_CTRL_MPT_Hold_W_SZC_4_R                    0x00000010
+    ///////////////////////////////////////////////////////////
+    #define     RA_MPT_CTRL_MPT_QoS                            0x0028
+
+    #define     BA_MPT_CTRL_MPT_QoS_Reload                     0x0028
+    #define     B16MPT_CTRL_MPT_QoS_Reload                     0x0028
+    #define   LSb32MPT_CTRL_MPT_QoS_Reload                        0
+    #define   LSb16MPT_CTRL_MPT_QoS_Reload                        0
+    #define       bMPT_CTRL_MPT_QoS_Reload                     1
+    #define   MSK32MPT_CTRL_MPT_QoS_Reload                        0x00000001
+    ///////////////////////////////////////////////////////////
+    #define     RA_MPT_CTRL_MPT_QoS_R                          0x002C
+
+    #define     BA_MPT_CTRL_MPT_QoS_R_SZC_0                    0x002C
+    #define     B16MPT_CTRL_MPT_QoS_R_SZC_0                    0x002C
+    #define   LSb32MPT_CTRL_MPT_QoS_R_SZC_0                       0
+    #define   LSb16MPT_CTRL_MPT_QoS_R_SZC_0                       0
+    #define       bMPT_CTRL_MPT_QoS_R_SZC_0                    4
+    #define   MSK32MPT_CTRL_MPT_QoS_R_SZC_0                       0x0000000F
+
+    #define     BA_MPT_CTRL_MPT_QoS_R_SZC_1                    0x002C
+    #define     B16MPT_CTRL_MPT_QoS_R_SZC_1                    0x002C
+    #define   LSb32MPT_CTRL_MPT_QoS_R_SZC_1                       4
+    #define   LSb16MPT_CTRL_MPT_QoS_R_SZC_1                       4
+    #define       bMPT_CTRL_MPT_QoS_R_SZC_1                    4
+    #define   MSK32MPT_CTRL_MPT_QoS_R_SZC_1                       0x000000F0
+
+    #define     BA_MPT_CTRL_MPT_QoS_R_SZC_2                    0x002D
+    #define     B16MPT_CTRL_MPT_QoS_R_SZC_2                    0x002C
+    #define   LSb32MPT_CTRL_MPT_QoS_R_SZC_2                       8
+    #define   LSb16MPT_CTRL_MPT_QoS_R_SZC_2                       8
+    #define       bMPT_CTRL_MPT_QoS_R_SZC_2                    4
+    #define   MSK32MPT_CTRL_MPT_QoS_R_SZC_2                       0x00000F00
+
+    #define     BA_MPT_CTRL_MPT_QoS_R_SZC_3                    0x002D
+    #define     B16MPT_CTRL_MPT_QoS_R_SZC_3                    0x002C
+    #define   LSb32MPT_CTRL_MPT_QoS_R_SZC_3                       12
+    #define   LSb16MPT_CTRL_MPT_QoS_R_SZC_3                       12
+    #define       bMPT_CTRL_MPT_QoS_R_SZC_3                    4
+    #define   MSK32MPT_CTRL_MPT_QoS_R_SZC_3                       0x0000F000
+
+    #define     BA_MPT_CTRL_MPT_QoS_R_SZC_4_R                  0x002E
+    #define     B16MPT_CTRL_MPT_QoS_R_SZC_4_R                  0x002E
+    #define   LSb32MPT_CTRL_MPT_QoS_R_SZC_4_R                     16
+    #define   LSb16MPT_CTRL_MPT_QoS_R_SZC_4_R                     0
+    #define       bMPT_CTRL_MPT_QoS_R_SZC_4_R                  4
+    #define   MSK32MPT_CTRL_MPT_QoS_R_SZC_4_R                     0x000F0000
+    ///////////////////////////////////////////////////////////
+    #define     RA_MPT_CTRL_MPT_QoS_W                          0x0030
+
+    #define     BA_MPT_CTRL_MPT_QoS_W_SZC_0                    0x0030
+    #define     B16MPT_CTRL_MPT_QoS_W_SZC_0                    0x0030
+    #define   LSb32MPT_CTRL_MPT_QoS_W_SZC_0                       0
+    #define   LSb16MPT_CTRL_MPT_QoS_W_SZC_0                       0
+    #define       bMPT_CTRL_MPT_QoS_W_SZC_0                    4
+    #define   MSK32MPT_CTRL_MPT_QoS_W_SZC_0                       0x0000000F
+
+    #define     BA_MPT_CTRL_MPT_QoS_W_SZC_1                    0x0030
+    #define     B16MPT_CTRL_MPT_QoS_W_SZC_1                    0x0030
+    #define   LSb32MPT_CTRL_MPT_QoS_W_SZC_1                       4
+    #define   LSb16MPT_CTRL_MPT_QoS_W_SZC_1                       4
+    #define       bMPT_CTRL_MPT_QoS_W_SZC_1                    4
+    #define   MSK32MPT_CTRL_MPT_QoS_W_SZC_1                       0x000000F0
+
+    #define     BA_MPT_CTRL_MPT_QoS_W_SZC_2                    0x0031
+    #define     B16MPT_CTRL_MPT_QoS_W_SZC_2                    0x0030
+    #define   LSb32MPT_CTRL_MPT_QoS_W_SZC_2                       8
+    #define   LSb16MPT_CTRL_MPT_QoS_W_SZC_2                       8
+    #define       bMPT_CTRL_MPT_QoS_W_SZC_2                    4
+    #define   MSK32MPT_CTRL_MPT_QoS_W_SZC_2                       0x00000F00
+
+    #define     BA_MPT_CTRL_MPT_QoS_W_SZC_3                    0x0031
+    #define     B16MPT_CTRL_MPT_QoS_W_SZC_3                    0x0030
+    #define   LSb32MPT_CTRL_MPT_QoS_W_SZC_3                       12
+    #define   LSb16MPT_CTRL_MPT_QoS_W_SZC_3                       12
+    #define       bMPT_CTRL_MPT_QoS_W_SZC_3                    4
+    #define   MSK32MPT_CTRL_MPT_QoS_W_SZC_3                       0x0000F000
+
+    #define     BA_MPT_CTRL_MPT_QoS_W_SZC_4_R                  0x0032
+    #define     B16MPT_CTRL_MPT_QoS_W_SZC_4_R                  0x0032
+    #define   LSb32MPT_CTRL_MPT_QoS_W_SZC_4_R                     16
+    #define   LSb16MPT_CTRL_MPT_QoS_W_SZC_4_R                     0
+    #define       bMPT_CTRL_MPT_QoS_W_SZC_4_R                  4
+    #define   MSK32MPT_CTRL_MPT_QoS_W_SZC_4_R                     0x000F0000
+    ///////////////////////////////////////////////////////////
+
+    typedef struct SIE_MPT_CTRL {
+    ///////////////////////////////////////////////////////////
+    #define   GET32MPT_CTRL_ED_CTRL_En(r32)                    _BFGET_(r32, 0, 0)
+    #define   SET32MPT_CTRL_ED_CTRL_En(r32,v)                  _BFSET_(r32, 0, 0,v)
+    #define   GET16MPT_CTRL_ED_CTRL_En(r16)                    _BFGET_(r16, 0, 0)
+    #define   SET16MPT_CTRL_ED_CTRL_En(r16,v)                  _BFSET_(r16, 0, 0,v)
+
+    #define     w32MPT_CTRL_ED_CTRL                            {\
+            UNSG32 uED_CTRL_En                                 :  1;\
+            UNSG32 RSVDx0_b1                                   : 31;\
+          }
+    union { UNSG32 u32MPT_CTRL_ED_CTRL;
+            struct w32MPT_CTRL_ED_CTRL;
+          };
+    ///////////////////////////////////////////////////////////
+    #define   GET32MPT_CTRL_ED_TST_Flip(r32)                   _BFGET_(r32,31, 0)
+    #define   SET32MPT_CTRL_ED_TST_Flip(r32,v)                 _BFSET_(r32,31, 0,v)
+
+    #define     w32MPT_CTRL_ED_TST                             {\
+            UNSG32 uED_TST_Flip                                : 32;\
+          }
+    union { UNSG32 u32MPT_CTRL_ED_TST;
+            struct w32MPT_CTRL_ED_TST;
+          };
+    ///////////////////////////////////////////////////////////
+    #define   GET32MPT_CTRL_ED_STS_Error(r32)                  _BFGET_(r32, 0, 0)
+    #define   SET32MPT_CTRL_ED_STS_Error(r32,v)                _BFSET_(r32, 0, 0,v)
+    #define   GET16MPT_CTRL_ED_STS_Error(r16)                  _BFGET_(r16, 0, 0)
+    #define   SET16MPT_CTRL_ED_STS_Error(r16,v)                _BFSET_(r16, 0, 0,v)
+
+    #define     w32MPT_CTRL_ED_STS                             {\
+            UNSG32 uED_STS_Error                               :  1;\
+            UNSG32 RSVDx8_b1                                   : 31;\
+          }
+    union { UNSG32 u32MPT_CTRL_ED_STS;
+            struct w32MPT_CTRL_ED_STS;
+          };
+    ///////////////////////////////////////////////////////////
+    #define   GET32MPT_CTRL_ED_ERR_LOG_Addr(r32)               _BFGET_(r32,14, 0)
+    #define   SET32MPT_CTRL_ED_ERR_LOG_Addr(r32,v)             _BFSET_(r32,14, 0,v)
+    #define   GET16MPT_CTRL_ED_ERR_LOG_Addr(r16)               _BFGET_(r16,14, 0)
+    #define   SET16MPT_CTRL_ED_ERR_LOG_Addr(r16,v)             _BFSET_(r16,14, 0,v)
+
+    #define     w32MPT_CTRL_ED_ERR_LOG                         {\
+            UNSG32 uED_ERR_LOG_Addr                            : 15;\
+            UNSG32 RSVDxC_b15                                  : 17;\
+          }
+    union { UNSG32 u32MPT_CTRL_ED_ERR_LOG;
+            struct w32MPT_CTRL_ED_ERR_LOG;
+          };
+    ///////////////////////////////////////////////////////////
+    #define   GET32MPT_CTRL_cache_flush_cache_flush(r32)       _BFGET_(r32,31, 0)
+    #define   SET32MPT_CTRL_cache_flush_cache_flush(r32,v)     _BFSET_(r32,31, 0,v)
+
+    #define     w32MPT_CTRL_cache_flush                        {\
+            UNSG32 ucache_flush_cache_flush                    : 32;\
+          }
+    union { UNSG32 u32MPT_CTRL_cache_flush;
+            struct w32MPT_CTRL_cache_flush;
+          };
+    ///////////////////////////////////////////////////////////
+    #define   GET32MPT_CTRL_cache_enable_cache_enable(r32)     _BFGET_(r32,31, 0)
+    #define   SET32MPT_CTRL_cache_enable_cache_enable(r32,v)   _BFSET_(r32,31, 0,v)
+
+    #define     w32MPT_CTRL_cache_enable                       {\
+            UNSG32 ucache_enable_cache_enable                  : 32;\
+          }
+    union { UNSG32 u32MPT_CTRL_cache_enable;
+            struct w32MPT_CTRL_cache_enable;
+          };
+    ///////////////////////////////////////////////////////////
+    #define   GET32MPT_CTRL_MPT_Page_size(r32)                 _BFGET_(r32, 1, 0)
+    #define   SET32MPT_CTRL_MPT_Page_size(r32,v)               _BFSET_(r32, 1, 0,v)
+    #define   GET16MPT_CTRL_MPT_Page_size(r16)                 _BFGET_(r16, 1, 0)
+    #define   SET16MPT_CTRL_MPT_Page_size(r16,v)               _BFSET_(r16, 1, 0,v)
+
+    #define     w32MPT_CTRL_MPT_Page                           {\
+            UNSG32 uMPT_Page_size                              :  2;\
+            UNSG32 RSVDx18_b2                                  : 30;\
+          }
+    union { UNSG32 u32MPT_CTRL_MPT_Page;
+            struct w32MPT_CTRL_MPT_Page;
+          };
+    ///////////////////////////////////////////////////////////
+    #define   GET32MPT_CTRL_MPT_Arb_Sel(r32)                   _BFGET_(r32, 0, 0)
+    #define   SET32MPT_CTRL_MPT_Arb_Sel(r32,v)                 _BFSET_(r32, 0, 0,v)
+    #define   GET16MPT_CTRL_MPT_Arb_Sel(r16)                   _BFGET_(r16, 0, 0)
+    #define   SET16MPT_CTRL_MPT_Arb_Sel(r16,v)                 _BFSET_(r16, 0, 0,v)
+
+    #define     w32MPT_CTRL_MPT_Arb                            {\
+            UNSG32 uMPT_Arb_Sel                                :  1;\
+            UNSG32 RSVDx1C_b1                                  : 31;\
+          }
+    union { UNSG32 u32MPT_CTRL_MPT_Arb;
+            struct w32MPT_CTRL_MPT_Arb;
+          };
+    ///////////////////////////////////////////////////////////
+    #define   GET32MPT_CTRL_MPT_Hold_R_SZC_0(r32)              _BFGET_(r32, 0, 0)
+    #define   SET32MPT_CTRL_MPT_Hold_R_SZC_0(r32,v)            _BFSET_(r32, 0, 0,v)
+    #define   GET16MPT_CTRL_MPT_Hold_R_SZC_0(r16)              _BFGET_(r16, 0, 0)
+    #define   SET16MPT_CTRL_MPT_Hold_R_SZC_0(r16,v)            _BFSET_(r16, 0, 0,v)
+
+    #define   GET32MPT_CTRL_MPT_Hold_R_SZC_1(r32)              _BFGET_(r32, 1, 1)
+    #define   SET32MPT_CTRL_MPT_Hold_R_SZC_1(r32,v)            _BFSET_(r32, 1, 1,v)
+    #define   GET16MPT_CTRL_MPT_Hold_R_SZC_1(r16)              _BFGET_(r16, 1, 1)
+    #define   SET16MPT_CTRL_MPT_Hold_R_SZC_1(r16,v)            _BFSET_(r16, 1, 1,v)
+
+    #define   GET32MPT_CTRL_MPT_Hold_R_SZC_2(r32)              _BFGET_(r32, 2, 2)
+    #define   SET32MPT_CTRL_MPT_Hold_R_SZC_2(r32,v)            _BFSET_(r32, 2, 2,v)
+    #define   GET16MPT_CTRL_MPT_Hold_R_SZC_2(r16)              _BFGET_(r16, 2, 2)
+    #define   SET16MPT_CTRL_MPT_Hold_R_SZC_2(r16,v)            _BFSET_(r16, 2, 2,v)
+
+    #define   GET32MPT_CTRL_MPT_Hold_R_SZC_3(r32)              _BFGET_(r32, 3, 3)
+    #define   SET32MPT_CTRL_MPT_Hold_R_SZC_3(r32,v)            _BFSET_(r32, 3, 3,v)
+    #define   GET16MPT_CTRL_MPT_Hold_R_SZC_3(r16)              _BFGET_(r16, 3, 3)
+    #define   SET16MPT_CTRL_MPT_Hold_R_SZC_3(r16,v)            _BFSET_(r16, 3, 3,v)
+
+    #define   GET32MPT_CTRL_MPT_Hold_R_SZC_4_R(r32)            _BFGET_(r32, 4, 4)
+    #define   SET32MPT_CTRL_MPT_Hold_R_SZC_4_R(r32,v)          _BFSET_(r32, 4, 4,v)
+    #define   GET16MPT_CTRL_MPT_Hold_R_SZC_4_R(r16)            _BFGET_(r16, 4, 4)
+    #define   SET16MPT_CTRL_MPT_Hold_R_SZC_4_R(r16,v)          _BFSET_(r16, 4, 4,v)
+
+    #define     w32MPT_CTRL_MPT_Hold_R                         {\
+            UNSG32 uMPT_Hold_R_SZC_0                           :  1;\
+            UNSG32 uMPT_Hold_R_SZC_1                           :  1;\
+            UNSG32 uMPT_Hold_R_SZC_2                           :  1;\
+            UNSG32 uMPT_Hold_R_SZC_3                           :  1;\
+            UNSG32 uMPT_Hold_R_SZC_4_R                         :  1;\
+            UNSG32 RSVDx20_b5                                  : 27;\
+          }
+    union { UNSG32 u32MPT_CTRL_MPT_Hold_R;
+            struct w32MPT_CTRL_MPT_Hold_R;
+          };
+    ///////////////////////////////////////////////////////////
+    #define   GET32MPT_CTRL_MPT_Hold_W_SZC_0(r32)              _BFGET_(r32, 0, 0)
+    #define   SET32MPT_CTRL_MPT_Hold_W_SZC_0(r32,v)            _BFSET_(r32, 0, 0,v)
+    #define   GET16MPT_CTRL_MPT_Hold_W_SZC_0(r16)              _BFGET_(r16, 0, 0)
+    #define   SET16MPT_CTRL_MPT_Hold_W_SZC_0(r16,v)            _BFSET_(r16, 0, 0,v)
+
+    #define   GET32MPT_CTRL_MPT_Hold_W_SZC_1(r32)              _BFGET_(r32, 1, 1)
+    #define   SET32MPT_CTRL_MPT_Hold_W_SZC_1(r32,v)            _BFSET_(r32, 1, 1,v)
+    #define   GET16MPT_CTRL_MPT_Hold_W_SZC_1(r16)              _BFGET_(r16, 1, 1)
+    #define   SET16MPT_CTRL_MPT_Hold_W_SZC_1(r16,v)            _BFSET_(r16, 1, 1,v)
+
+    #define   GET32MPT_CTRL_MPT_Hold_W_SZC_2(r32)              _BFGET_(r32, 2, 2)
+    #define   SET32MPT_CTRL_MPT_Hold_W_SZC_2(r32,v)            _BFSET_(r32, 2, 2,v)
+    #define   GET16MPT_CTRL_MPT_Hold_W_SZC_2(r16)              _BFGET_(r16, 2, 2)
+    #define   SET16MPT_CTRL_MPT_Hold_W_SZC_2(r16,v)            _BFSET_(r16, 2, 2,v)
+
+    #define   GET32MPT_CTRL_MPT_Hold_W_SZC_3(r32)              _BFGET_(r32, 3, 3)
+    #define   SET32MPT_CTRL_MPT_Hold_W_SZC_3(r32,v)            _BFSET_(r32, 3, 3,v)
+    #define   GET16MPT_CTRL_MPT_Hold_W_SZC_3(r16)              _BFGET_(r16, 3, 3)
+    #define   SET16MPT_CTRL_MPT_Hold_W_SZC_3(r16,v)            _BFSET_(r16, 3, 3,v)
+
+    #define   GET32MPT_CTRL_MPT_Hold_W_SZC_4_R(r32)            _BFGET_(r32, 4, 4)
+    #define   SET32MPT_CTRL_MPT_Hold_W_SZC_4_R(r32,v)          _BFSET_(r32, 4, 4,v)
+    #define   GET16MPT_CTRL_MPT_Hold_W_SZC_4_R(r16)            _BFGET_(r16, 4, 4)
+    #define   SET16MPT_CTRL_MPT_Hold_W_SZC_4_R(r16,v)          _BFSET_(r16, 4, 4,v)
+
+    #define     w32MPT_CTRL_MPT_Hold_W                         {\
+            UNSG32 uMPT_Hold_W_SZC_0                           :  1;\
+            UNSG32 uMPT_Hold_W_SZC_1                           :  1;\
+            UNSG32 uMPT_Hold_W_SZC_2                           :  1;\
+            UNSG32 uMPT_Hold_W_SZC_3                           :  1;\
+            UNSG32 uMPT_Hold_W_SZC_4_R                         :  1;\
+            UNSG32 RSVDx24_b5                                  : 27;\
+          }
+    union { UNSG32 u32MPT_CTRL_MPT_Hold_W;
+            struct w32MPT_CTRL_MPT_Hold_W;
+          };
+    ///////////////////////////////////////////////////////////
+    #define   GET32MPT_CTRL_MPT_QoS_Reload(r32)                _BFGET_(r32, 0, 0)
+    #define   SET32MPT_CTRL_MPT_QoS_Reload(r32,v)              _BFSET_(r32, 0, 0,v)
+    #define   GET16MPT_CTRL_MPT_QoS_Reload(r16)                _BFGET_(r16, 0, 0)
+    #define   SET16MPT_CTRL_MPT_QoS_Reload(r16,v)              _BFSET_(r16, 0, 0,v)
+
+    #define     w32MPT_CTRL_MPT_QoS                            {\
+            UNSG32 uMPT_QoS_Reload                             :  1;\
+            UNSG32 RSVDx28_b1                                  : 31;\
+          }
+    union { UNSG32 u32MPT_CTRL_MPT_QoS;
+            struct w32MPT_CTRL_MPT_QoS;
+          };
+    ///////////////////////////////////////////////////////////
+    #define   GET32MPT_CTRL_MPT_QoS_R_SZC_0(r32)               _BFGET_(r32, 3, 0)
+    #define   SET32MPT_CTRL_MPT_QoS_R_SZC_0(r32,v)             _BFSET_(r32, 3, 0,v)
+    #define   GET16MPT_CTRL_MPT_QoS_R_SZC_0(r16)               _BFGET_(r16, 3, 0)
+    #define   SET16MPT_CTRL_MPT_QoS_R_SZC_0(r16,v)             _BFSET_(r16, 3, 0,v)
+
+    #define   GET32MPT_CTRL_MPT_QoS_R_SZC_1(r32)               _BFGET_(r32, 7, 4)
+    #define   SET32MPT_CTRL_MPT_QoS_R_SZC_1(r32,v)             _BFSET_(r32, 7, 4,v)
+    #define   GET16MPT_CTRL_MPT_QoS_R_SZC_1(r16)               _BFGET_(r16, 7, 4)
+    #define   SET16MPT_CTRL_MPT_QoS_R_SZC_1(r16,v)             _BFSET_(r16, 7, 4,v)
+
+    #define   GET32MPT_CTRL_MPT_QoS_R_SZC_2(r32)               _BFGET_(r32,11, 8)
+    #define   SET32MPT_CTRL_MPT_QoS_R_SZC_2(r32,v)             _BFSET_(r32,11, 8,v)
+    #define   GET16MPT_CTRL_MPT_QoS_R_SZC_2(r16)               _BFGET_(r16,11, 8)
+    #define   SET16MPT_CTRL_MPT_QoS_R_SZC_2(r16,v)             _BFSET_(r16,11, 8,v)
+
+    #define   GET32MPT_CTRL_MPT_QoS_R_SZC_3(r32)               _BFGET_(r32,15,12)
+    #define   SET32MPT_CTRL_MPT_QoS_R_SZC_3(r32,v)             _BFSET_(r32,15,12,v)
+    #define   GET16MPT_CTRL_MPT_QoS_R_SZC_3(r16)               _BFGET_(r16,15,12)
+    #define   SET16MPT_CTRL_MPT_QoS_R_SZC_3(r16,v)             _BFSET_(r16,15,12,v)
+
+    #define   GET32MPT_CTRL_MPT_QoS_R_SZC_4_R(r32)             _BFGET_(r32,19,16)
+    #define   SET32MPT_CTRL_MPT_QoS_R_SZC_4_R(r32,v)           _BFSET_(r32,19,16,v)
+    #define   GET16MPT_CTRL_MPT_QoS_R_SZC_4_R(r16)             _BFGET_(r16, 3, 0)
+    #define   SET16MPT_CTRL_MPT_QoS_R_SZC_4_R(r16,v)           _BFSET_(r16, 3, 0,v)
+
+    #define     w32MPT_CTRL_MPT_QoS_R                          {\
+            UNSG32 uMPT_QoS_R_SZC_0                            :  4;\
+            UNSG32 uMPT_QoS_R_SZC_1                            :  4;\
+            UNSG32 uMPT_QoS_R_SZC_2                            :  4;\
+            UNSG32 uMPT_QoS_R_SZC_3                            :  4;\
+            UNSG32 uMPT_QoS_R_SZC_4_R                          :  4;\
+            UNSG32 RSVDx2C_b20                                 : 12;\
+          }
+    union { UNSG32 u32MPT_CTRL_MPT_QoS_R;
+            struct w32MPT_CTRL_MPT_QoS_R;
+          };
+    ///////////////////////////////////////////////////////////
+    #define   GET32MPT_CTRL_MPT_QoS_W_SZC_0(r32)               _BFGET_(r32, 3, 0)
+    #define   SET32MPT_CTRL_MPT_QoS_W_SZC_0(r32,v)             _BFSET_(r32, 3, 0,v)
+    #define   GET16MPT_CTRL_MPT_QoS_W_SZC_0(r16)               _BFGET_(r16, 3, 0)
+    #define   SET16MPT_CTRL_MPT_QoS_W_SZC_0(r16,v)             _BFSET_(r16, 3, 0,v)
+
+    #define   GET32MPT_CTRL_MPT_QoS_W_SZC_1(r32)               _BFGET_(r32, 7, 4)
+    #define   SET32MPT_CTRL_MPT_QoS_W_SZC_1(r32,v)             _BFSET_(r32, 7, 4,v)
+    #define   GET16MPT_CTRL_MPT_QoS_W_SZC_1(r16)               _BFGET_(r16, 7, 4)
+    #define   SET16MPT_CTRL_MPT_QoS_W_SZC_1(r16,v)             _BFSET_(r16, 7, 4,v)
+
+    #define   GET32MPT_CTRL_MPT_QoS_W_SZC_2(r32)               _BFGET_(r32,11, 8)
+    #define   SET32MPT_CTRL_MPT_QoS_W_SZC_2(r32,v)             _BFSET_(r32,11, 8,v)
+    #define   GET16MPT_CTRL_MPT_QoS_W_SZC_2(r16)               _BFGET_(r16,11, 8)
+    #define   SET16MPT_CTRL_MPT_QoS_W_SZC_2(r16,v)             _BFSET_(r16,11, 8,v)
+
+    #define   GET32MPT_CTRL_MPT_QoS_W_SZC_3(r32)               _BFGET_(r32,15,12)
+    #define   SET32MPT_CTRL_MPT_QoS_W_SZC_3(r32,v)             _BFSET_(r32,15,12,v)
+    #define   GET16MPT_CTRL_MPT_QoS_W_SZC_3(r16)               _BFGET_(r16,15,12)
+    #define   SET16MPT_CTRL_MPT_QoS_W_SZC_3(r16,v)             _BFSET_(r16,15,12,v)
+
+    #define   GET32MPT_CTRL_MPT_QoS_W_SZC_4_R(r32)             _BFGET_(r32,19,16)
+    #define   SET32MPT_CTRL_MPT_QoS_W_SZC_4_R(r32,v)           _BFSET_(r32,19,16,v)
+    #define   GET16MPT_CTRL_MPT_QoS_W_SZC_4_R(r16)             _BFGET_(r16, 3, 0)
+    #define   SET16MPT_CTRL_MPT_QoS_W_SZC_4_R(r16,v)           _BFSET_(r16, 3, 0,v)
+
+    #define     w32MPT_CTRL_MPT_QoS_W                          {\
+            UNSG32 uMPT_QoS_W_SZC_0                            :  4;\
+            UNSG32 uMPT_QoS_W_SZC_1                            :  4;\
+            UNSG32 uMPT_QoS_W_SZC_2                            :  4;\
+            UNSG32 uMPT_QoS_W_SZC_3                            :  4;\
+            UNSG32 uMPT_QoS_W_SZC_4_R                          :  4;\
+            UNSG32 RSVDx30_b20                                 : 12;\
+          }
+    union { UNSG32 u32MPT_CTRL_MPT_QoS_W;
+            struct w32MPT_CTRL_MPT_QoS_W;
+          };
+    ///////////////////////////////////////////////////////////
+    } SIE_MPT_CTRL;
+
+    typedef union  T32MPT_CTRL_ED_CTRL
+          { UNSG32 u32;
+            struct w32MPT_CTRL_ED_CTRL;
+                 } T32MPT_CTRL_ED_CTRL;
+    typedef union  T32MPT_CTRL_ED_TST
+          { UNSG32 u32;
+            struct w32MPT_CTRL_ED_TST;
+                 } T32MPT_CTRL_ED_TST;
+    typedef union  T32MPT_CTRL_ED_STS
+          { UNSG32 u32;
+            struct w32MPT_CTRL_ED_STS;
+                 } T32MPT_CTRL_ED_STS;
+    typedef union  T32MPT_CTRL_ED_ERR_LOG
+          { UNSG32 u32;
+            struct w32MPT_CTRL_ED_ERR_LOG;
+                 } T32MPT_CTRL_ED_ERR_LOG;
+    typedef union  T32MPT_CTRL_cache_flush
+          { UNSG32 u32;
+            struct w32MPT_CTRL_cache_flush;
+                 } T32MPT_CTRL_cache_flush;
+    typedef union  T32MPT_CTRL_cache_enable
+          { UNSG32 u32;
+            struct w32MPT_CTRL_cache_enable;
+                 } T32MPT_CTRL_cache_enable;
+    typedef union  T32MPT_CTRL_MPT_Page
+          { UNSG32 u32;
+            struct w32MPT_CTRL_MPT_Page;
+                 } T32MPT_CTRL_MPT_Page;
+    typedef union  T32MPT_CTRL_MPT_Arb
+          { UNSG32 u32;
+            struct w32MPT_CTRL_MPT_Arb;
+                 } T32MPT_CTRL_MPT_Arb;
+    typedef union  T32MPT_CTRL_MPT_Hold_R
+          { UNSG32 u32;
+            struct w32MPT_CTRL_MPT_Hold_R;
+                 } T32MPT_CTRL_MPT_Hold_R;
+    typedef union  T32MPT_CTRL_MPT_Hold_W
+          { UNSG32 u32;
+            struct w32MPT_CTRL_MPT_Hold_W;
+                 } T32MPT_CTRL_MPT_Hold_W;
+    typedef union  T32MPT_CTRL_MPT_QoS
+          { UNSG32 u32;
+            struct w32MPT_CTRL_MPT_QoS;
+                 } T32MPT_CTRL_MPT_QoS;
+    typedef union  T32MPT_CTRL_MPT_QoS_R
+          { UNSG32 u32;
+            struct w32MPT_CTRL_MPT_QoS_R;
+                 } T32MPT_CTRL_MPT_QoS_R;
+    typedef union  T32MPT_CTRL_MPT_QoS_W
+          { UNSG32 u32;
+            struct w32MPT_CTRL_MPT_QoS_W;
+                 } T32MPT_CTRL_MPT_QoS_W;
+    ///////////////////////////////////////////////////////////
+
+    typedef union  TMPT_CTRL_ED_CTRL
+          { UNSG32 u32[1];
+            struct {
+            struct w32MPT_CTRL_ED_CTRL;
+                   };
+                 } TMPT_CTRL_ED_CTRL;
+    typedef union  TMPT_CTRL_ED_TST
+          { UNSG32 u32[1];
+            struct {
+            struct w32MPT_CTRL_ED_TST;
+                   };
+                 } TMPT_CTRL_ED_TST;
+    typedef union  TMPT_CTRL_ED_STS
+          { UNSG32 u32[1];
+            struct {
+            struct w32MPT_CTRL_ED_STS;
+                   };
+                 } TMPT_CTRL_ED_STS;
+    typedef union  TMPT_CTRL_ED_ERR_LOG
+          { UNSG32 u32[1];
+            struct {
+            struct w32MPT_CTRL_ED_ERR_LOG;
+                   };
+                 } TMPT_CTRL_ED_ERR_LOG;
+    typedef union  TMPT_CTRL_cache_flush
+          { UNSG32 u32[1];
+            struct {
+            struct w32MPT_CTRL_cache_flush;
+                   };
+                 } TMPT_CTRL_cache_flush;
+    typedef union  TMPT_CTRL_cache_enable
+          { UNSG32 u32[1];
+            struct {
+            struct w32MPT_CTRL_cache_enable;
+                   };
+                 } TMPT_CTRL_cache_enable;
+    typedef union  TMPT_CTRL_MPT_Page
+          { UNSG32 u32[1];
+            struct {
+            struct w32MPT_CTRL_MPT_Page;
+                   };
+                 } TMPT_CTRL_MPT_Page;
+    typedef union  TMPT_CTRL_MPT_Arb
+          { UNSG32 u32[1];
+            struct {
+            struct w32MPT_CTRL_MPT_Arb;
+                   };
+                 } TMPT_CTRL_MPT_Arb;
+    typedef union  TMPT_CTRL_MPT_Hold_R
+          { UNSG32 u32[1];
+            struct {
+            struct w32MPT_CTRL_MPT_Hold_R;
+                   };
+                 } TMPT_CTRL_MPT_Hold_R;
+    typedef union  TMPT_CTRL_MPT_Hold_W
+          { UNSG32 u32[1];
+            struct {
+            struct w32MPT_CTRL_MPT_Hold_W;
+                   };
+                 } TMPT_CTRL_MPT_Hold_W;
+    typedef union  TMPT_CTRL_MPT_QoS
+          { UNSG32 u32[1];
+            struct {
+            struct w32MPT_CTRL_MPT_QoS;
+                   };
+                 } TMPT_CTRL_MPT_QoS;
+    typedef union  TMPT_CTRL_MPT_QoS_R
+          { UNSG32 u32[1];
+            struct {
+            struct w32MPT_CTRL_MPT_QoS_R;
+                   };
+                 } TMPT_CTRL_MPT_QoS_R;
+    typedef union  TMPT_CTRL_MPT_QoS_W
+          { UNSG32 u32[1];
+            struct {
+            struct w32MPT_CTRL_MPT_QoS_W;
+                   };
+                 } TMPT_CTRL_MPT_QoS_W;
+
+    ///////////////////////////////////////////////////////////
+     SIGN32 MPT_CTRL_drvrd(SIE_MPT_CTRL *p, UNSG32 base, SIGN32 mem, SIGN32 tst);
+     SIGN32 MPT_CTRL_drvwr(SIE_MPT_CTRL *p, UNSG32 base, SIGN32 mem, SIGN32 tst, UNSG32 *pcmd);
+       void MPT_CTRL_reset(SIE_MPT_CTRL *p);
+     SIGN32 MPT_CTRL_cmp  (SIE_MPT_CTRL *p, SIE_MPT_CTRL *pie, char *pfx, void *hLOG, SIGN32 mem, SIGN32 tst);
+    #define MPT_CTRL_check(p,pie,pfx,hLOG) MPT_CTRL_cmp(p,pie,pfx,(void*)(hLOG),0,0)
+    #define MPT_CTRL_print(p,    pfx,hLOG) MPT_CTRL_cmp(p,0,  pfx,(void*)(hLOG),0,0)
+
+#endif
+//////
+/// ENDOFINTERFACE: MPT_CTRL
+////////////////////////////////////////////////////////////
+
+//////
+/// 
+/// $INTERFACE Master_Rule                              (4,4)
+///     # # ----------------------------------------------------------
+///     @ 0x00000 Master_Rule          (RW)
+///               %unsigned 1  S_Read_En                 0x1
+///                                    ###
+///                                    * When set, enables secure read access by the corresponding bus master (or master group) to the target
+///                                    * 0: disable, 1: enable
+///                                    ###
+///               %unsigned 1  S_Write_En                0x1
+///                                    ###
+///                                    * When set, enables secure write access by the corresponding bus master (or master group) to the target
+///                                    * 0: disable, 1: enable
+///                                    ###
+///               %unsigned 1  NS_Read_En                0x1
+///                                    ###
+///                                    * When set, enables non-secure read access by the corresponding bus master (or master group) to the target
+///                                    * 0: disable, 1: enable
+///                                    ###
+///               %unsigned 1  NS_Write_En               0x1
+///                                    ###
+///                                    * When set, enables non-secure write access by the corresponding bus master (or master group) to the target
+///                                    * 0: disable, 1: enable
+///                                    ###
+///               %%        28         # Stuffing bits...
+///     # # ----------------------------------------------------------
+/// $ENDOFINTERFACE  # size:       4B, bits:       4b, padding:     0B
+////////////////////////////////////////////////////////////
+#ifndef h_Master_Rule
+#define h_Master_Rule (){}
+
+    #define     RA_Master_Rule_Master_Rule                     0x0000
+
+    #define     BA_Master_Rule_Master_Rule_S_Read_En           0x0000
+    #define     B16Master_Rule_Master_Rule_S_Read_En           0x0000
+    #define   LSb32Master_Rule_Master_Rule_S_Read_En              0
+    #define   LSb16Master_Rule_Master_Rule_S_Read_En              0
+    #define       bMaster_Rule_Master_Rule_S_Read_En           1
+    #define   MSK32Master_Rule_Master_Rule_S_Read_En              0x00000001
+
+    #define     BA_Master_Rule_Master_Rule_S_Write_En          0x0000
+    #define     B16Master_Rule_Master_Rule_S_Write_En          0x0000
+    #define   LSb32Master_Rule_Master_Rule_S_Write_En             1
+    #define   LSb16Master_Rule_Master_Rule_S_Write_En             1
+    #define       bMaster_Rule_Master_Rule_S_Write_En          1
+    #define   MSK32Master_Rule_Master_Rule_S_Write_En             0x00000002
+
+    #define     BA_Master_Rule_Master_Rule_NS_Read_En          0x0000
+    #define     B16Master_Rule_Master_Rule_NS_Read_En          0x0000
+    #define   LSb32Master_Rule_Master_Rule_NS_Read_En             2
+    #define   LSb16Master_Rule_Master_Rule_NS_Read_En             2
+    #define       bMaster_Rule_Master_Rule_NS_Read_En          1
+    #define   MSK32Master_Rule_Master_Rule_NS_Read_En             0x00000004
+
+    #define     BA_Master_Rule_Master_Rule_NS_Write_En         0x0000
+    #define     B16Master_Rule_Master_Rule_NS_Write_En         0x0000
+    #define   LSb32Master_Rule_Master_Rule_NS_Write_En            3
+    #define   LSb16Master_Rule_Master_Rule_NS_Write_En            3
+    #define       bMaster_Rule_Master_Rule_NS_Write_En         1
+    #define   MSK32Master_Rule_Master_Rule_NS_Write_En            0x00000008
+    ///////////////////////////////////////////////////////////
+
+    typedef struct SIE_Master_Rule {
+    ///////////////////////////////////////////////////////////
+    #define   GET32Master_Rule_Master_Rule_S_Read_En(r32)      _BFGET_(r32, 0, 0)
+    #define   SET32Master_Rule_Master_Rule_S_Read_En(r32,v)    _BFSET_(r32, 0, 0,v)
+    #define   GET16Master_Rule_Master_Rule_S_Read_En(r16)      _BFGET_(r16, 0, 0)
+    #define   SET16Master_Rule_Master_Rule_S_Read_En(r16,v)    _BFSET_(r16, 0, 0,v)
+
+    #define   GET32Master_Rule_Master_Rule_S_Write_En(r32)     _BFGET_(r32, 1, 1)
+    #define   SET32Master_Rule_Master_Rule_S_Write_En(r32,v)   _BFSET_(r32, 1, 1,v)
+    #define   GET16Master_Rule_Master_Rule_S_Write_En(r16)     _BFGET_(r16, 1, 1)
+    #define   SET16Master_Rule_Master_Rule_S_Write_En(r16,v)   _BFSET_(r16, 1, 1,v)
+
+    #define   GET32Master_Rule_Master_Rule_NS_Read_En(r32)     _BFGET_(r32, 2, 2)
+    #define   SET32Master_Rule_Master_Rule_NS_Read_En(r32,v)   _BFSET_(r32, 2, 2,v)
+    #define   GET16Master_Rule_Master_Rule_NS_Read_En(r16)     _BFGET_(r16, 2, 2)
+    #define   SET16Master_Rule_Master_Rule_NS_Read_En(r16,v)   _BFSET_(r16, 2, 2,v)
+
+    #define   GET32Master_Rule_Master_Rule_NS_Write_En(r32)    _BFGET_(r32, 3, 3)
+    #define   SET32Master_Rule_Master_Rule_NS_Write_En(r32,v)  _BFSET_(r32, 3, 3,v)
+    #define   GET16Master_Rule_Master_Rule_NS_Write_En(r16)    _BFGET_(r16, 3, 3)
+    #define   SET16Master_Rule_Master_Rule_NS_Write_En(r16,v)  _BFSET_(r16, 3, 3,v)
+
+    #define     w32Master_Rule_Master_Rule                     {\
+            UNSG32 uMaster_Rule_S_Read_En                      :  1;\
+            UNSG32 uMaster_Rule_S_Write_En                     :  1;\
+            UNSG32 uMaster_Rule_NS_Read_En                     :  1;\
+            UNSG32 uMaster_Rule_NS_Write_En                    :  1;\
+            UNSG32 RSVDx0_b4                                   : 28;\
+          }
+    union { UNSG32 u32Master_Rule_Master_Rule;
+            struct w32Master_Rule_Master_Rule;
+          };
+    ///////////////////////////////////////////////////////////
+    } SIE_Master_Rule;
+
+    typedef union  T32Master_Rule_Master_Rule
+          { UNSG32 u32;
+            struct w32Master_Rule_Master_Rule;
+                 } T32Master_Rule_Master_Rule;
+    ///////////////////////////////////////////////////////////
+
+    typedef union  TMaster_Rule_Master_Rule
+          { UNSG32 u32[1];
+            struct {
+            struct w32Master_Rule_Master_Rule;
+                   };
+                 } TMaster_Rule_Master_Rule;
+
+    ///////////////////////////////////////////////////////////
+     SIGN32 Master_Rule_drvrd(SIE_Master_Rule *p, UNSG32 base, SIGN32 mem, SIGN32 tst);
+     SIGN32 Master_Rule_drvwr(SIE_Master_Rule *p, UNSG32 base, SIGN32 mem, SIGN32 tst, UNSG32 *pcmd);
+       void Master_Rule_reset(SIE_Master_Rule *p);
+     SIGN32 Master_Rule_cmp  (SIE_Master_Rule *p, SIE_Master_Rule *pie, char *pfx, void *hLOG, SIGN32 mem, SIGN32 tst);
+    #define Master_Rule_check(p,pie,pfx,hLOG) Master_Rule_cmp(p,pie,pfx,(void*)(hLOG),0,0)
+    #define Master_Rule_print(p,    pfx,hLOG) Master_Rule_cmp(p,0,  pfx,(void*)(hLOG),0,0)
+
+#endif
+//////
+/// ENDOFINTERFACE: Master_Rule
+////////////////////////////////////////////////////////////
+
+//////
+/// 
+/// $INTERFACE OneRule                                  (4,4)
+///     # # ----------------------------------------------------------
+///     @ 0x00000 OneRule              (RW)
+///     # 0x00000 1                    
+///               $Master_Rule         1                 REG      [32]
+///                                    ###
+///                                    * Support up to 32 masters in one rule
+///                                    * Rule0: master ID 0
+///                                    * Rule 1: master ID1
+///                                    * …
+///                                    * Rule 31: master ID 31
+///                                    ###
+///     # # ----------------------------------------------------------
+/// $ENDOFINTERFACE  # size:     128B, bits:     128b, padding:     0B
+////////////////////////////////////////////////////////////
+#ifndef h_OneRule
+#define h_OneRule (){}
+
+    #define     RA_OneRule_OneRule                             0x0000
+    #define     RA_OneRule_1                                   0x0000
+    ///////////////////////////////////////////////////////////
+
+    typedef struct SIE_OneRule {
+    ///////////////////////////////////////////////////////////
+              SIE_Master_Rule                                  ie_1[32];
+    ///////////////////////////////////////////////////////////
+    } SIE_OneRule;
+
+    ///////////////////////////////////////////////////////////
+     SIGN32 OneRule_drvrd(SIE_OneRule *p, UNSG32 base, SIGN32 mem, SIGN32 tst);
+     SIGN32 OneRule_drvwr(SIE_OneRule *p, UNSG32 base, SIGN32 mem, SIGN32 tst, UNSG32 *pcmd);
+       void OneRule_reset(SIE_OneRule *p);
+     SIGN32 OneRule_cmp  (SIE_OneRule *p, SIE_OneRule *pie, char *pfx, void *hLOG, SIGN32 mem, SIGN32 tst);
+    #define OneRule_check(p,pie,pfx,hLOG) OneRule_cmp(p,pie,pfx,(void*)(hLOG),0,0)
+    #define OneRule_print(p,    pfx,hLOG) OneRule_cmp(p,0,  pfx,(void*)(hLOG),0,0)
+
+#endif
+//////
+/// ENDOFINTERFACE: OneRule
+////////////////////////////////////////////////////////////
+
+//////
+/// 
+/// $INTERFACE Rule                                     (4,4)
+///     # # ----------------------------------------------------------
+///     @ 0x00000 Rule                 (RW)
+///     # 0x00000 Rule                 
+///               $OneRule             Rule              REG      [16]
+///                                    ###
+///                                    * Support up to 16 rules
+///                                    ###
+///     @ 0x00800 Rule_lock            (RW)
+///               %unsigned 1  Rule_0                    0x0
+///                                    ###
+///                                    * Lock rule 0
+///                                    ###
+///               %unsigned 1  Rule_1                    0x0
+///                                    ###
+///                                    * Lock rule 1
+///                                    ###
+///               %unsigned 1  Rule_2                    0x0
+///                                    ###
+///                                    * Lock rule 2
+///                                    ###
+///               %unsigned 1  Rule_3                    0x0
+///                                    ###
+///                                    * Lock rule 3
+///                                    ###
+///               %unsigned 1  Rule_4                    0x0
+///                                    ###
+///                                    * Lock rule 4
+///                                    ###
+///               %unsigned 1  Rule_5                    0x0
+///                                    ###
+///                                    * Lock rule 5
+///                                    ###
+///               %unsigned 1  Rule_6                    0x0
+///                                    ###
+///                                    * Lock rule 6
+///                                    ###
+///               %unsigned 1  Rule_7                    0x0
+///                                    ###
+///                                    * Lock rule 7
+///                                    ###
+///               %unsigned 1  Rule_8                    0x0
+///                                    ###
+///                                    * Lock rule 8
+///                                    ###
+///               %unsigned 1  Rule_9                    0x0
+///                                    ###
+///                                    * Lock rule 9
+///                                    ###
+///               %unsigned 1  Rule_10                   0x0
+///                                    ###
+///                                    * Lock rule 10
+///                                    ###
+///               %unsigned 1  Rule_11                   0x0
+///                                    ###
+///                                    * Lock rule 11
+///                                    ###
+///               %unsigned 1  Rule_12                   0x0
+///                                    ###
+///                                    * Lock rule 12
+///                                    ###
+///               %unsigned 1  Rule_13                   0x0
+///                                    ###
+///                                    * Lock rule 13
+///                                    ###
+///               %unsigned 1  Rule_14                   0x0
+///                                    ###
+///                                    * Lock rule 14
+///                                    ###
+///               %unsigned 1  Rule_15                   0x0
+///                                    ###
+///                                    * Lock rule 15
+///                                    ###
+///               %unsigned 1  Rule_16                   0x0
+///                                    ###
+///                                    * Lock rule 16
+///                                    ###
+///               %%        15         # Stuffing bits...
+///     @ 0x00804 Rule_sel             (P)
+///               %unsigned 32 sel                       0x0
+///                                    ###
+///                                    * 0: select generic rule
+///                                    * 1: select mpt rule
+///                                    * Bit 0: Master ID 0
+///                                    * …
+///                                    * Bit 31: Master ID 31
+///                                    ###
+///     @ 0x00808 Rule_enable          (P)
+///               %unsigned 32 enable                    0x0
+///                                    ###
+///                                    * Bit 0: Master ID 0
+///                                    * …
+///                                    * Bit 31: Master ID 31
+///                                    ###
+///     @ 0x0080C Rule_format          (P)
+///               %unsigned 32 format                    0x0
+///                                    ###
+///                                    * 0: original format
+///                                    * MPT: {3’d0, MPT}
+///                                    * MMU:{MMU[3:0]
+///                                    * 1: hybrid format with MPT enabled
+///                                    * {MPT, MMU[2:0]}
+///                                    * Bit 0: Master ID 0
+///                                    * …
+///                                    * Bit 31: Master ID 31
+///                                    ###
+///     @ 0x00810 Rule_index_sel       (P)
+///               %unsigned 8  index                     0xF
+///                                    ###
+///                                    * Select which bits in Axuser [15:8] are used as index.
+///                                    * Only the lowest 4 enabled bit will take effect.
+///                                    ###
+///               %%        24         # Stuffing bits...
+///     # # ----------------------------------------------------------
+/// $ENDOFINTERFACE  # size:    2068B, bits:    2169b, padding:     0B
+////////////////////////////////////////////////////////////
+#ifndef h_Rule
+#define h_Rule (){}
+
+    #define     RA_Rule_Rule                                   0x0000
+    ///////////////////////////////////////////////////////////
+    #define     RA_Rule_Rule_lock                              0x0800
+
+    #define     BA_Rule_Rule_lock_Rule_0                       0x0800
+    #define     B16Rule_Rule_lock_Rule_0                       0x0800
+    #define   LSb32Rule_Rule_lock_Rule_0                          0
+    #define   LSb16Rule_Rule_lock_Rule_0                          0
+    #define       bRule_Rule_lock_Rule_0                       1
+    #define   MSK32Rule_Rule_lock_Rule_0                          0x00000001
+
+    #define     BA_Rule_Rule_lock_Rule_1                       0x0800
+    #define     B16Rule_Rule_lock_Rule_1                       0x0800
+    #define   LSb32Rule_Rule_lock_Rule_1                          1
+    #define   LSb16Rule_Rule_lock_Rule_1                          1
+    #define       bRule_Rule_lock_Rule_1                       1
+    #define   MSK32Rule_Rule_lock_Rule_1                          0x00000002
+
+    #define     BA_Rule_Rule_lock_Rule_2                       0x0800
+    #define     B16Rule_Rule_lock_Rule_2                       0x0800
+    #define   LSb32Rule_Rule_lock_Rule_2                          2
+    #define   LSb16Rule_Rule_lock_Rule_2                          2
+    #define       bRule_Rule_lock_Rule_2                       1
+    #define   MSK32Rule_Rule_lock_Rule_2                          0x00000004
+
+    #define     BA_Rule_Rule_lock_Rule_3                       0x0800
+    #define     B16Rule_Rule_lock_Rule_3                       0x0800
+    #define   LSb32Rule_Rule_lock_Rule_3                          3
+    #define   LSb16Rule_Rule_lock_Rule_3                          3
+    #define       bRule_Rule_lock_Rule_3                       1
+    #define   MSK32Rule_Rule_lock_Rule_3                          0x00000008
+
+    #define     BA_Rule_Rule_lock_Rule_4                       0x0800
+    #define     B16Rule_Rule_lock_Rule_4                       0x0800
+    #define   LSb32Rule_Rule_lock_Rule_4                          4
+    #define   LSb16Rule_Rule_lock_Rule_4                          4
+    #define       bRule_Rule_lock_Rule_4                       1
+    #define   MSK32Rule_Rule_lock_Rule_4                          0x00000010
+
+    #define     BA_Rule_Rule_lock_Rule_5                       0x0800
+    #define     B16Rule_Rule_lock_Rule_5                       0x0800
+    #define   LSb32Rule_Rule_lock_Rule_5                          5
+    #define   LSb16Rule_Rule_lock_Rule_5                          5
+    #define       bRule_Rule_lock_Rule_5                       1
+    #define   MSK32Rule_Rule_lock_Rule_5                          0x00000020
+
+    #define     BA_Rule_Rule_lock_Rule_6                       0x0800
+    #define     B16Rule_Rule_lock_Rule_6                       0x0800
+    #define   LSb32Rule_Rule_lock_Rule_6                          6
+    #define   LSb16Rule_Rule_lock_Rule_6                          6
+    #define       bRule_Rule_lock_Rule_6                       1
+    #define   MSK32Rule_Rule_lock_Rule_6                          0x00000040
+
+    #define     BA_Rule_Rule_lock_Rule_7                       0x0800
+    #define     B16Rule_Rule_lock_Rule_7                       0x0800
+    #define   LSb32Rule_Rule_lock_Rule_7                          7
+    #define   LSb16Rule_Rule_lock_Rule_7                          7
+    #define       bRule_Rule_lock_Rule_7                       1
+    #define   MSK32Rule_Rule_lock_Rule_7                          0x00000080
+
+    #define     BA_Rule_Rule_lock_Rule_8                       0x0801
+    #define     B16Rule_Rule_lock_Rule_8                       0x0800
+    #define   LSb32Rule_Rule_lock_Rule_8                          8
+    #define   LSb16Rule_Rule_lock_Rule_8                          8
+    #define       bRule_Rule_lock_Rule_8                       1
+    #define   MSK32Rule_Rule_lock_Rule_8                          0x00000100
+
+    #define     BA_Rule_Rule_lock_Rule_9                       0x0801
+    #define     B16Rule_Rule_lock_Rule_9                       0x0800
+    #define   LSb32Rule_Rule_lock_Rule_9                          9
+    #define   LSb16Rule_Rule_lock_Rule_9                          9
+    #define       bRule_Rule_lock_Rule_9                       1
+    #define   MSK32Rule_Rule_lock_Rule_9                          0x00000200
+
+    #define     BA_Rule_Rule_lock_Rule_10                      0x0801
+    #define     B16Rule_Rule_lock_Rule_10                      0x0800
+    #define   LSb32Rule_Rule_lock_Rule_10                         10
+    #define   LSb16Rule_Rule_lock_Rule_10                         10
+    #define       bRule_Rule_lock_Rule_10                      1
+    #define   MSK32Rule_Rule_lock_Rule_10                         0x00000400
+
+    #define     BA_Rule_Rule_lock_Rule_11                      0x0801
+    #define     B16Rule_Rule_lock_Rule_11                      0x0800
+    #define   LSb32Rule_Rule_lock_Rule_11                         11
+    #define   LSb16Rule_Rule_lock_Rule_11                         11
+    #define       bRule_Rule_lock_Rule_11                      1
+    #define   MSK32Rule_Rule_lock_Rule_11                         0x00000800
+
+    #define     BA_Rule_Rule_lock_Rule_12                      0x0801
+    #define     B16Rule_Rule_lock_Rule_12                      0x0800
+    #define   LSb32Rule_Rule_lock_Rule_12                         12
+    #define   LSb16Rule_Rule_lock_Rule_12                         12
+    #define       bRule_Rule_lock_Rule_12                      1
+    #define   MSK32Rule_Rule_lock_Rule_12                         0x00001000
+
+    #define     BA_Rule_Rule_lock_Rule_13                      0x0801
+    #define     B16Rule_Rule_lock_Rule_13                      0x0800
+    #define   LSb32Rule_Rule_lock_Rule_13                         13
+    #define   LSb16Rule_Rule_lock_Rule_13                         13
+    #define       bRule_Rule_lock_Rule_13                      1
+    #define   MSK32Rule_Rule_lock_Rule_13                         0x00002000
+
+    #define     BA_Rule_Rule_lock_Rule_14                      0x0801
+    #define     B16Rule_Rule_lock_Rule_14                      0x0800
+    #define   LSb32Rule_Rule_lock_Rule_14                         14
+    #define   LSb16Rule_Rule_lock_Rule_14                         14
+    #define       bRule_Rule_lock_Rule_14                      1
+    #define   MSK32Rule_Rule_lock_Rule_14                         0x00004000
+
+    #define     BA_Rule_Rule_lock_Rule_15                      0x0801
+    #define     B16Rule_Rule_lock_Rule_15                      0x0800
+    #define   LSb32Rule_Rule_lock_Rule_15                         15
+    #define   LSb16Rule_Rule_lock_Rule_15                         15
+    #define       bRule_Rule_lock_Rule_15                      1
+    #define   MSK32Rule_Rule_lock_Rule_15                         0x00008000
+
+    #define     BA_Rule_Rule_lock_Rule_16                      0x0802
+    #define     B16Rule_Rule_lock_Rule_16                      0x0802
+    #define   LSb32Rule_Rule_lock_Rule_16                         16
+    #define   LSb16Rule_Rule_lock_Rule_16                         0
+    #define       bRule_Rule_lock_Rule_16                      1
+    #define   MSK32Rule_Rule_lock_Rule_16                         0x00010000
+    ///////////////////////////////////////////////////////////
+    #define     RA_Rule_Rule_sel                               0x0804
+
+    #define     BA_Rule_Rule_sel_sel                           0x0804
+    #define     B16Rule_Rule_sel_sel                           0x0804
+    #define   LSb32Rule_Rule_sel_sel                              0
+    #define   LSb16Rule_Rule_sel_sel                              0
+    #define       bRule_Rule_sel_sel                           32
+    #define   MSK32Rule_Rule_sel_sel                              0xFFFFFFFF
+    ///////////////////////////////////////////////////////////
+    #define     RA_Rule_Rule_enable                            0x0808
+
+    #define     BA_Rule_Rule_enable_enable                     0x0808
+    #define     B16Rule_Rule_enable_enable                     0x0808
+    #define   LSb32Rule_Rule_enable_enable                        0
+    #define   LSb16Rule_Rule_enable_enable                        0
+    #define       bRule_Rule_enable_enable                     32
+    #define   MSK32Rule_Rule_enable_enable                        0xFFFFFFFF
+    ///////////////////////////////////////////////////////////
+    #define     RA_Rule_Rule_format                            0x080C
+
+    #define     BA_Rule_Rule_format_format                     0x080C
+    #define     B16Rule_Rule_format_format                     0x080C
+    #define   LSb32Rule_Rule_format_format                        0
+    #define   LSb16Rule_Rule_format_format                        0
+    #define       bRule_Rule_format_format                     32
+    #define   MSK32Rule_Rule_format_format                        0xFFFFFFFF
+    ///////////////////////////////////////////////////////////
+    #define     RA_Rule_Rule_index_sel                         0x0810
+
+    #define     BA_Rule_Rule_index_sel_index                   0x0810
+    #define     B16Rule_Rule_index_sel_index                   0x0810
+    #define   LSb32Rule_Rule_index_sel_index                      0
+    #define   LSb16Rule_Rule_index_sel_index                      0
+    #define       bRule_Rule_index_sel_index                   8
+    #define   MSK32Rule_Rule_index_sel_index                      0x000000FF
+    ///////////////////////////////////////////////////////////
+
+    typedef struct SIE_Rule {
+    ///////////////////////////////////////////////////////////
+              SIE_OneRule                                      ie_Rule[16];
+    ///////////////////////////////////////////////////////////
+    #define   GET32Rule_Rule_lock_Rule_0(r32)                  _BFGET_(r32, 0, 0)
+    #define   SET32Rule_Rule_lock_Rule_0(r32,v)                _BFSET_(r32, 0, 0,v)
+    #define   GET16Rule_Rule_lock_Rule_0(r16)                  _BFGET_(r16, 0, 0)
+    #define   SET16Rule_Rule_lock_Rule_0(r16,v)                _BFSET_(r16, 0, 0,v)
+
+    #define   GET32Rule_Rule_lock_Rule_1(r32)                  _BFGET_(r32, 1, 1)
+    #define   SET32Rule_Rule_lock_Rule_1(r32,v)                _BFSET_(r32, 1, 1,v)
+    #define   GET16Rule_Rule_lock_Rule_1(r16)                  _BFGET_(r16, 1, 1)
+    #define   SET16Rule_Rule_lock_Rule_1(r16,v)                _BFSET_(r16, 1, 1,v)
+
+    #define   GET32Rule_Rule_lock_Rule_2(r32)                  _BFGET_(r32, 2, 2)
+    #define   SET32Rule_Rule_lock_Rule_2(r32,v)                _BFSET_(r32, 2, 2,v)
+    #define   GET16Rule_Rule_lock_Rule_2(r16)                  _BFGET_(r16, 2, 2)
+    #define   SET16Rule_Rule_lock_Rule_2(r16,v)                _BFSET_(r16, 2, 2,v)
+
+    #define   GET32Rule_Rule_lock_Rule_3(r32)                  _BFGET_(r32, 3, 3)
+    #define   SET32Rule_Rule_lock_Rule_3(r32,v)                _BFSET_(r32, 3, 3,v)
+    #define   GET16Rule_Rule_lock_Rule_3(r16)                  _BFGET_(r16, 3, 3)
+    #define   SET16Rule_Rule_lock_Rule_3(r16,v)                _BFSET_(r16, 3, 3,v)
+
+    #define   GET32Rule_Rule_lock_Rule_4(r32)                  _BFGET_(r32, 4, 4)
+    #define   SET32Rule_Rule_lock_Rule_4(r32,v)                _BFSET_(r32, 4, 4,v)
+    #define   GET16Rule_Rule_lock_Rule_4(r16)                  _BFGET_(r16, 4, 4)
+    #define   SET16Rule_Rule_lock_Rule_4(r16,v)                _BFSET_(r16, 4, 4,v)
+
+    #define   GET32Rule_Rule_lock_Rule_5(r32)                  _BFGET_(r32, 5, 5)
+    #define   SET32Rule_Rule_lock_Rule_5(r32,v)                _BFSET_(r32, 5, 5,v)
+    #define   GET16Rule_Rule_lock_Rule_5(r16)                  _BFGET_(r16, 5, 5)
+    #define   SET16Rule_Rule_lock_Rule_5(r16,v)                _BFSET_(r16, 5, 5,v)
+
+    #define   GET32Rule_Rule_lock_Rule_6(r32)                  _BFGET_(r32, 6, 6)
+    #define   SET32Rule_Rule_lock_Rule_6(r32,v)                _BFSET_(r32, 6, 6,v)
+    #define   GET16Rule_Rule_lock_Rule_6(r16)                  _BFGET_(r16, 6, 6)
+    #define   SET16Rule_Rule_lock_Rule_6(r16,v)                _BFSET_(r16, 6, 6,v)
+
+    #define   GET32Rule_Rule_lock_Rule_7(r32)                  _BFGET_(r32, 7, 7)
+    #define   SET32Rule_Rule_lock_Rule_7(r32,v)                _BFSET_(r32, 7, 7,v)
+    #define   GET16Rule_Rule_lock_Rule_7(r16)                  _BFGET_(r16, 7, 7)
+    #define   SET16Rule_Rule_lock_Rule_7(r16,v)                _BFSET_(r16, 7, 7,v)
+
+    #define   GET32Rule_Rule_lock_Rule_8(r32)                  _BFGET_(r32, 8, 8)
+    #define   SET32Rule_Rule_lock_Rule_8(r32,v)                _BFSET_(r32, 8, 8,v)
+    #define   GET16Rule_Rule_lock_Rule_8(r16)                  _BFGET_(r16, 8, 8)
+    #define   SET16Rule_Rule_lock_Rule_8(r16,v)                _BFSET_(r16, 8, 8,v)
+
+    #define   GET32Rule_Rule_lock_Rule_9(r32)                  _BFGET_(r32, 9, 9)
+    #define   SET32Rule_Rule_lock_Rule_9(r32,v)                _BFSET_(r32, 9, 9,v)
+    #define   GET16Rule_Rule_lock_Rule_9(r16)                  _BFGET_(r16, 9, 9)
+    #define   SET16Rule_Rule_lock_Rule_9(r16,v)                _BFSET_(r16, 9, 9,v)
+
+    #define   GET32Rule_Rule_lock_Rule_10(r32)                 _BFGET_(r32,10,10)
+    #define   SET32Rule_Rule_lock_Rule_10(r32,v)               _BFSET_(r32,10,10,v)
+    #define   GET16Rule_Rule_lock_Rule_10(r16)                 _BFGET_(r16,10,10)
+    #define   SET16Rule_Rule_lock_Rule_10(r16,v)               _BFSET_(r16,10,10,v)
+
+    #define   GET32Rule_Rule_lock_Rule_11(r32)                 _BFGET_(r32,11,11)
+    #define   SET32Rule_Rule_lock_Rule_11(r32,v)               _BFSET_(r32,11,11,v)
+    #define   GET16Rule_Rule_lock_Rule_11(r16)                 _BFGET_(r16,11,11)
+    #define   SET16Rule_Rule_lock_Rule_11(r16,v)               _BFSET_(r16,11,11,v)
+
+    #define   GET32Rule_Rule_lock_Rule_12(r32)                 _BFGET_(r32,12,12)
+    #define   SET32Rule_Rule_lock_Rule_12(r32,v)               _BFSET_(r32,12,12,v)
+    #define   GET16Rule_Rule_lock_Rule_12(r16)                 _BFGET_(r16,12,12)
+    #define   SET16Rule_Rule_lock_Rule_12(r16,v)               _BFSET_(r16,12,12,v)
+
+    #define   GET32Rule_Rule_lock_Rule_13(r32)                 _BFGET_(r32,13,13)
+    #define   SET32Rule_Rule_lock_Rule_13(r32,v)               _BFSET_(r32,13,13,v)
+    #define   GET16Rule_Rule_lock_Rule_13(r16)                 _BFGET_(r16,13,13)
+    #define   SET16Rule_Rule_lock_Rule_13(r16,v)               _BFSET_(r16,13,13,v)
+
+    #define   GET32Rule_Rule_lock_Rule_14(r32)                 _BFGET_(r32,14,14)
+    #define   SET32Rule_Rule_lock_Rule_14(r32,v)               _BFSET_(r32,14,14,v)
+    #define   GET16Rule_Rule_lock_Rule_14(r16)                 _BFGET_(r16,14,14)
+    #define   SET16Rule_Rule_lock_Rule_14(r16,v)               _BFSET_(r16,14,14,v)
+
+    #define   GET32Rule_Rule_lock_Rule_15(r32)                 _BFGET_(r32,15,15)
+    #define   SET32Rule_Rule_lock_Rule_15(r32,v)               _BFSET_(r32,15,15,v)
+    #define   GET16Rule_Rule_lock_Rule_15(r16)                 _BFGET_(r16,15,15)
+    #define   SET16Rule_Rule_lock_Rule_15(r16,v)               _BFSET_(r16,15,15,v)
+
+    #define   GET32Rule_Rule_lock_Rule_16(r32)                 _BFGET_(r32,16,16)
+    #define   SET32Rule_Rule_lock_Rule_16(r32,v)               _BFSET_(r32,16,16,v)
+    #define   GET16Rule_Rule_lock_Rule_16(r16)                 _BFGET_(r16, 0, 0)
+    #define   SET16Rule_Rule_lock_Rule_16(r16,v)               _BFSET_(r16, 0, 0,v)
+
+    #define     w32Rule_Rule_lock                              {\
+            UNSG32 uRule_lock_Rule_0                           :  1;\
+            UNSG32 uRule_lock_Rule_1                           :  1;\
+            UNSG32 uRule_lock_Rule_2                           :  1;\
+            UNSG32 uRule_lock_Rule_3                           :  1;\
+            UNSG32 uRule_lock_Rule_4                           :  1;\
+            UNSG32 uRule_lock_Rule_5                           :  1;\
+            UNSG32 uRule_lock_Rule_6                           :  1;\
+            UNSG32 uRule_lock_Rule_7                           :  1;\
+            UNSG32 uRule_lock_Rule_8                           :  1;\
+            UNSG32 uRule_lock_Rule_9                           :  1;\
+            UNSG32 uRule_lock_Rule_10                          :  1;\
+            UNSG32 uRule_lock_Rule_11                          :  1;\
+            UNSG32 uRule_lock_Rule_12                          :  1;\
+            UNSG32 uRule_lock_Rule_13                          :  1;\
+            UNSG32 uRule_lock_Rule_14                          :  1;\
+            UNSG32 uRule_lock_Rule_15                          :  1;\
+            UNSG32 uRule_lock_Rule_16                          :  1;\
+            UNSG32 RSVDx800_b17                                : 15;\
+          }
+    union { UNSG32 u32Rule_Rule_lock;
+            struct w32Rule_Rule_lock;
+          };
+    ///////////////////////////////////////////////////////////
+    #define   GET32Rule_Rule_sel_sel(r32)                      _BFGET_(r32,31, 0)
+    #define   SET32Rule_Rule_sel_sel(r32,v)                    _BFSET_(r32,31, 0,v)
+
+    #define     w32Rule_Rule_sel                               {\
+            UNSG32 uRule_sel_sel                               : 32;\
+          }
+    union { UNSG32 u32Rule_Rule_sel;
+            struct w32Rule_Rule_sel;
+          };
+    ///////////////////////////////////////////////////////////
+    #define   GET32Rule_Rule_enable_enable(r32)                _BFGET_(r32,31, 0)
+    #define   SET32Rule_Rule_enable_enable(r32,v)              _BFSET_(r32,31, 0,v)
+
+    #define     w32Rule_Rule_enable                            {\
+            UNSG32 uRule_enable_enable                         : 32;\
+          }
+    union { UNSG32 u32Rule_Rule_enable;
+            struct w32Rule_Rule_enable;
+          };
+    ///////////////////////////////////////////////////////////
+    #define   GET32Rule_Rule_format_format(r32)                _BFGET_(r32,31, 0)
+    #define   SET32Rule_Rule_format_format(r32,v)              _BFSET_(r32,31, 0,v)
+
+    #define     w32Rule_Rule_format                            {\
+            UNSG32 uRule_format_format                         : 32;\
+          }
+    union { UNSG32 u32Rule_Rule_format;
+            struct w32Rule_Rule_format;
+          };
+    ///////////////////////////////////////////////////////////
+    #define   GET32Rule_Rule_index_sel_index(r32)              _BFGET_(r32, 7, 0)
+    #define   SET32Rule_Rule_index_sel_index(r32,v)            _BFSET_(r32, 7, 0,v)
+    #define   GET16Rule_Rule_index_sel_index(r16)              _BFGET_(r16, 7, 0)
+    #define   SET16Rule_Rule_index_sel_index(r16,v)            _BFSET_(r16, 7, 0,v)
+
+    #define     w32Rule_Rule_index_sel                         {\
+            UNSG32 uRule_index_sel_index                       :  8;\
+            UNSG32 RSVDx810_b8                                 : 24;\
+          }
+    union { UNSG32 u32Rule_Rule_index_sel;
+            struct w32Rule_Rule_index_sel;
+          };
+    ///////////////////////////////////////////////////////////
+    } SIE_Rule;
+
+    typedef union  T32Rule_Rule_lock
+          { UNSG32 u32;
+            struct w32Rule_Rule_lock;
+                 } T32Rule_Rule_lock;
+    typedef union  T32Rule_Rule_sel
+          { UNSG32 u32;
+            struct w32Rule_Rule_sel;
+                 } T32Rule_Rule_sel;
+    typedef union  T32Rule_Rule_enable
+          { UNSG32 u32;
+            struct w32Rule_Rule_enable;
+                 } T32Rule_Rule_enable;
+    typedef union  T32Rule_Rule_format
+          { UNSG32 u32;
+            struct w32Rule_Rule_format;
+                 } T32Rule_Rule_format;
+    typedef union  T32Rule_Rule_index_sel
+          { UNSG32 u32;
+            struct w32Rule_Rule_index_sel;
+                 } T32Rule_Rule_index_sel;
+    ///////////////////////////////////////////////////////////
+
+    typedef union  TRule_Rule_lock
+          { UNSG32 u32[1];
+            struct {
+            struct w32Rule_Rule_lock;
+                   };
+                 } TRule_Rule_lock;
+    typedef union  TRule_Rule_sel
+          { UNSG32 u32[1];
+            struct {
+            struct w32Rule_Rule_sel;
+                   };
+                 } TRule_Rule_sel;
+    typedef union  TRule_Rule_enable
+          { UNSG32 u32[1];
+            struct {
+            struct w32Rule_Rule_enable;
+                   };
+                 } TRule_Rule_enable;
+    typedef union  TRule_Rule_format
+          { UNSG32 u32[1];
+            struct {
+            struct w32Rule_Rule_format;
+                   };
+                 } TRule_Rule_format;
+    typedef union  TRule_Rule_index_sel
+          { UNSG32 u32[1];
+            struct {
+            struct w32Rule_Rule_index_sel;
+                   };
+                 } TRule_Rule_index_sel;
+
+    ///////////////////////////////////////////////////////////
+     SIGN32 Rule_drvrd(SIE_Rule *p, UNSG32 base, SIGN32 mem, SIGN32 tst);
+     SIGN32 Rule_drvwr(SIE_Rule *p, UNSG32 base, SIGN32 mem, SIGN32 tst, UNSG32 *pcmd);
+       void Rule_reset(SIE_Rule *p);
+     SIGN32 Rule_cmp  (SIE_Rule *p, SIE_Rule *pie, char *pfx, void *hLOG, SIGN32 mem, SIGN32 tst);
+    #define Rule_check(p,pie,pfx,hLOG) Rule_cmp(p,pie,pfx,(void*)(hLOG),0,0)
+    #define Rule_print(p,    pfx,hLOG) Rule_cmp(p,0,  pfx,(void*)(hLOG),0,0)
+
+#endif
+//////
+/// ENDOFINTERFACE: Rule
+////////////////////////////////////////////////////////////
+
+//////
+/// 
+/// $INTERFACE SecureZone                               (4,4)
+///     # # ----------------------------------------------------------
+///     @ 0x00000 Zone_CTRL            (RW)
+///               %unsigned 1  Enable                    0x0
+///                                    ###
+///                                    * When set, enables this Zone
+///                                    * When clear, disable this Zone
+///                                    ###
+///               %unsigned 1  NS                        0x1
+///                                    ###
+///                                    * 1: this zone is non-secure
+///                                    * 0: this zone is secure
+///                                    ###
+///               %unsigned 1  Lock                      0x0
+///                                    ###
+///                                    * When set, locks the registers associated with this region (REGION_MST_CFG, REGION_SADDR, REGION_EADDR, REGION_CTRL). Once set, may only be cleared by a reset
+///                                    ###
+///               %%        29         # Stuffing bits...
+///     @ 0x00004 Master_CTRL          (RW)
+///               ###
+///               * Each bit represents a master
+///               ###
+///               %unsigned 32 S_Read_En                 0xFFFFFFFF
+///                                    ###
+///                                    * When set, each bit enables secure read access by the corresponding bus master (or master group) to the region
+///                                    * 0: disable, 1: enable
+///                                    ###
+///     # 0x00008 Master_CTRL1         
+///               %unsigned 32 S_Write_En                0xFFFFFFFF
+///                                    ###
+///                                    * When set, each bit enables secure write access by the corresponding bus master (or master group) to the region
+///                                    * 0: disable, 1: enable
+///                                    ###
+///     # 0x0000C Master_CTRL2         
+///               %unsigned 32 NS_Read_En                0xFFFFFFFF
+///                                    ###
+///                                    * When set, each bit enables non-secure read access by the corresponding bus master (or master group) to the region, if the region is also marked non-secure (NS) in the above control register
+///                                    * 0: disable, 1: enable
+///                                    ###
+///     # 0x00010 Master_CTRL3         
+///               %unsigned 32 NS_Write_En               0xFFFFFFFF
+///                                    ###
+///                                    * When set, each bit enables non-secure write access by the corresponding bus master (or master group) to the region, if the region is also marked non-secure (NS) in the above control register
+///                                    * 0: disable, 1: enable
+///                                    ###
+///     @ 0x00014 REGION_SADDR         (RW)
+///               %unsigned 32 Start_Addr                0x0
+///                                    ###
+///                                    * >=
+///                                    ###
+///     @ 0x00018 REGION_EADDR         (RW)
+///               %unsigned 32 End_Addr                  0x0
+///                                    ###
+///                                    * <
+///                                    ###
+///     # # ----------------------------------------------------------
+/// $ENDOFINTERFACE  # size:      28B, bits:     195b, padding:     0B
+////////////////////////////////////////////////////////////
+#ifndef h_SecureZone
+#define h_SecureZone (){}
+
+    #define     RA_SecureZone_Zone_CTRL                        0x0000
+
+    #define     BA_SecureZone_Zone_CTRL_Enable                 0x0000
+    #define     B16SecureZone_Zone_CTRL_Enable                 0x0000
+    #define   LSb32SecureZone_Zone_CTRL_Enable                    0
+    #define   LSb16SecureZone_Zone_CTRL_Enable                    0
+    #define       bSecureZone_Zone_CTRL_Enable                 1
+    #define   MSK32SecureZone_Zone_CTRL_Enable                    0x00000001
+
+    #define     BA_SecureZone_Zone_CTRL_NS                     0x0000
+    #define     B16SecureZone_Zone_CTRL_NS                     0x0000
+    #define   LSb32SecureZone_Zone_CTRL_NS                        1
+    #define   LSb16SecureZone_Zone_CTRL_NS                        1
+    #define       bSecureZone_Zone_CTRL_NS                     1
+    #define   MSK32SecureZone_Zone_CTRL_NS                        0x00000002
+
+    #define     BA_SecureZone_Zone_CTRL_Lock                   0x0000
+    #define     B16SecureZone_Zone_CTRL_Lock                   0x0000
+    #define   LSb32SecureZone_Zone_CTRL_Lock                      2
+    #define   LSb16SecureZone_Zone_CTRL_Lock                      2
+    #define       bSecureZone_Zone_CTRL_Lock                   1
+    #define   MSK32SecureZone_Zone_CTRL_Lock                      0x00000004
+    ///////////////////////////////////////////////////////////
+    #define     RA_SecureZone_Master_CTRL                      0x0004
+
+    #define     BA_SecureZone_Master_CTRL_S_Read_En            0x0004
+    #define     B16SecureZone_Master_CTRL_S_Read_En            0x0004
+    #define   LSb32SecureZone_Master_CTRL_S_Read_En               0
+    #define   LSb16SecureZone_Master_CTRL_S_Read_En               0
+    #define       bSecureZone_Master_CTRL_S_Read_En            32
+    #define   MSK32SecureZone_Master_CTRL_S_Read_En               0xFFFFFFFF
+
+    #define     RA_SecureZone_Master_CTRL1                     0x0008
+
+    #define     BA_SecureZone_Master_CTRL_S_Write_En           0x0008
+    #define     B16SecureZone_Master_CTRL_S_Write_En           0x0008
+    #define   LSb32SecureZone_Master_CTRL_S_Write_En              0
+    #define   LSb16SecureZone_Master_CTRL_S_Write_En              0
+    #define       bSecureZone_Master_CTRL_S_Write_En           32
+    #define   MSK32SecureZone_Master_CTRL_S_Write_En              0xFFFFFFFF
+
+    #define     RA_SecureZone_Master_CTRL2                     0x000C
+
+    #define     BA_SecureZone_Master_CTRL_NS_Read_En           0x000C
+    #define     B16SecureZone_Master_CTRL_NS_Read_En           0x000C
+    #define   LSb32SecureZone_Master_CTRL_NS_Read_En              0
+    #define   LSb16SecureZone_Master_CTRL_NS_Read_En              0
+    #define       bSecureZone_Master_CTRL_NS_Read_En           32
+    #define   MSK32SecureZone_Master_CTRL_NS_Read_En              0xFFFFFFFF
+
+    #define     RA_SecureZone_Master_CTRL3                     0x0010
+
+    #define     BA_SecureZone_Master_CTRL_NS_Write_En          0x0010
+    #define     B16SecureZone_Master_CTRL_NS_Write_En          0x0010
+    #define   LSb32SecureZone_Master_CTRL_NS_Write_En             0
+    #define   LSb16SecureZone_Master_CTRL_NS_Write_En             0
+    #define       bSecureZone_Master_CTRL_NS_Write_En          32
+    #define   MSK32SecureZone_Master_CTRL_NS_Write_En             0xFFFFFFFF
+    ///////////////////////////////////////////////////////////
+    #define     RA_SecureZone_REGION_SADDR                     0x0014
+
+    #define     BA_SecureZone_REGION_SADDR_Start_Addr          0x0014
+    #define     B16SecureZone_REGION_SADDR_Start_Addr          0x0014
+    #define   LSb32SecureZone_REGION_SADDR_Start_Addr             0
+    #define   LSb16SecureZone_REGION_SADDR_Start_Addr             0
+    #define       bSecureZone_REGION_SADDR_Start_Addr          32
+    #define   MSK32SecureZone_REGION_SADDR_Start_Addr             0xFFFFFFFF
+    ///////////////////////////////////////////////////////////
+    #define     RA_SecureZone_REGION_EADDR                     0x0018
+
+    #define     BA_SecureZone_REGION_EADDR_End_Addr            0x0018
+    #define     B16SecureZone_REGION_EADDR_End_Addr            0x0018
+    #define   LSb32SecureZone_REGION_EADDR_End_Addr               0
+    #define   LSb16SecureZone_REGION_EADDR_End_Addr               0
+    #define       bSecureZone_REGION_EADDR_End_Addr            32
+    #define   MSK32SecureZone_REGION_EADDR_End_Addr               0xFFFFFFFF
+    ///////////////////////////////////////////////////////////
+
+    typedef struct SIE_SecureZone {
+    ///////////////////////////////////////////////////////////
+    #define   GET32SecureZone_Zone_CTRL_Enable(r32)            _BFGET_(r32, 0, 0)
+    #define   SET32SecureZone_Zone_CTRL_Enable(r32,v)          _BFSET_(r32, 0, 0,v)
+    #define   GET16SecureZone_Zone_CTRL_Enable(r16)            _BFGET_(r16, 0, 0)
+    #define   SET16SecureZone_Zone_CTRL_Enable(r16,v)          _BFSET_(r16, 0, 0,v)
+
+    #define   GET32SecureZone_Zone_CTRL_NS(r32)                _BFGET_(r32, 1, 1)
+    #define   SET32SecureZone_Zone_CTRL_NS(r32,v)              _BFSET_(r32, 1, 1,v)
+    #define   GET16SecureZone_Zone_CTRL_NS(r16)                _BFGET_(r16, 1, 1)
+    #define   SET16SecureZone_Zone_CTRL_NS(r16,v)              _BFSET_(r16, 1, 1,v)
+
+    #define   GET32SecureZone_Zone_CTRL_Lock(r32)              _BFGET_(r32, 2, 2)
+    #define   SET32SecureZone_Zone_CTRL_Lock(r32,v)            _BFSET_(r32, 2, 2,v)
+    #define   GET16SecureZone_Zone_CTRL_Lock(r16)              _BFGET_(r16, 2, 2)
+    #define   SET16SecureZone_Zone_CTRL_Lock(r16,v)            _BFSET_(r16, 2, 2,v)
+
+    #define     w32SecureZone_Zone_CTRL                        {\
+            UNSG32 uZone_CTRL_Enable                           :  1;\
+            UNSG32 uZone_CTRL_NS                               :  1;\
+            UNSG32 uZone_CTRL_Lock                             :  1;\
+            UNSG32 RSVDx0_b3                                   : 29;\
+          }
+    union { UNSG32 u32SecureZone_Zone_CTRL;
+            struct w32SecureZone_Zone_CTRL;
+          };
+    ///////////////////////////////////////////////////////////
+    #define   GET32SecureZone_Master_CTRL_S_Read_En(r32)       _BFGET_(r32,31, 0)
+    #define   SET32SecureZone_Master_CTRL_S_Read_En(r32,v)     _BFSET_(r32,31, 0,v)
+
+    #define     w32SecureZone_Master_CTRL                      {\
+            UNSG32 uMaster_CTRL_S_Read_En                      : 32;\
+          }
+    union { UNSG32 u32SecureZone_Master_CTRL;
+            struct w32SecureZone_Master_CTRL;
+          };
+    #define   GET32SecureZone_Master_CTRL_S_Write_En(r32)      _BFGET_(r32,31, 0)
+    #define   SET32SecureZone_Master_CTRL_S_Write_En(r32,v)    _BFSET_(r32,31, 0,v)
+
+    #define     w32SecureZone_Master_CTRL1                     {\
+            UNSG32 uMaster_CTRL_S_Write_En                     : 32;\
+          }
+    union { UNSG32 u32SecureZone_Master_CTRL1;
+            struct w32SecureZone_Master_CTRL1;
+          };
+    #define   GET32SecureZone_Master_CTRL_NS_Read_En(r32)      _BFGET_(r32,31, 0)
+    #define   SET32SecureZone_Master_CTRL_NS_Read_En(r32,v)    _BFSET_(r32,31, 0,v)
+
+    #define     w32SecureZone_Master_CTRL2                     {\
+            UNSG32 uMaster_CTRL_NS_Read_En                     : 32;\
+          }
+    union { UNSG32 u32SecureZone_Master_CTRL2;
+            struct w32SecureZone_Master_CTRL2;
+          };
+    #define   GET32SecureZone_Master_CTRL_NS_Write_En(r32)     _BFGET_(r32,31, 0)
+    #define   SET32SecureZone_Master_CTRL_NS_Write_En(r32,v)   _BFSET_(r32,31, 0,v)
+
+    #define     w32SecureZone_Master_CTRL3                     {\
+            UNSG32 uMaster_CTRL_NS_Write_En                    : 32;\
+          }
+    union { UNSG32 u32SecureZone_Master_CTRL3;
+            struct w32SecureZone_Master_CTRL3;
+          };
+    ///////////////////////////////////////////////////////////
+    #define   GET32SecureZone_REGION_SADDR_Start_Addr(r32)     _BFGET_(r32,31, 0)
+    #define   SET32SecureZone_REGION_SADDR_Start_Addr(r32,v)   _BFSET_(r32,31, 0,v)
+
+    #define     w32SecureZone_REGION_SADDR                     {\
+            UNSG32 uREGION_SADDR_Start_Addr                    : 32;\
+          }
+    union { UNSG32 u32SecureZone_REGION_SADDR;
+            struct w32SecureZone_REGION_SADDR;
+          };
+    ///////////////////////////////////////////////////////////
+    #define   GET32SecureZone_REGION_EADDR_End_Addr(r32)       _BFGET_(r32,31, 0)
+    #define   SET32SecureZone_REGION_EADDR_End_Addr(r32,v)     _BFSET_(r32,31, 0,v)
+
+    #define     w32SecureZone_REGION_EADDR                     {\
+            UNSG32 uREGION_EADDR_End_Addr                      : 32;\
+          }
+    union { UNSG32 u32SecureZone_REGION_EADDR;
+            struct w32SecureZone_REGION_EADDR;
+          };
+    ///////////////////////////////////////////////////////////
+    } SIE_SecureZone;
+
+    typedef union  T32SecureZone_Zone_CTRL
+          { UNSG32 u32;
+            struct w32SecureZone_Zone_CTRL;
+                 } T32SecureZone_Zone_CTRL;
+    typedef union  T32SecureZone_Master_CTRL
+          { UNSG32 u32;
+            struct w32SecureZone_Master_CTRL;
+                 } T32SecureZone_Master_CTRL;
+    typedef union  T32SecureZone_Master_CTRL1
+          { UNSG32 u32;
+            struct w32SecureZone_Master_CTRL1;
+                 } T32SecureZone_Master_CTRL1;
+    typedef union  T32SecureZone_Master_CTRL2
+          { UNSG32 u32;
+            struct w32SecureZone_Master_CTRL2;
+                 } T32SecureZone_Master_CTRL2;
+    typedef union  T32SecureZone_Master_CTRL3
+          { UNSG32 u32;
+            struct w32SecureZone_Master_CTRL3;
+                 } T32SecureZone_Master_CTRL3;
+    typedef union  T32SecureZone_REGION_SADDR
+          { UNSG32 u32;
+            struct w32SecureZone_REGION_SADDR;
+                 } T32SecureZone_REGION_SADDR;
+    typedef union  T32SecureZone_REGION_EADDR
+          { UNSG32 u32;
+            struct w32SecureZone_REGION_EADDR;
+                 } T32SecureZone_REGION_EADDR;
+    ///////////////////////////////////////////////////////////
+
+    typedef union  TSecureZone_Zone_CTRL
+          { UNSG32 u32[1];
+            struct {
+            struct w32SecureZone_Zone_CTRL;
+                   };
+                 } TSecureZone_Zone_CTRL;
+    typedef union  TSecureZone_Master_CTRL
+          { UNSG32 u32[4];
+            struct {
+            struct w32SecureZone_Master_CTRL;
+            struct w32SecureZone_Master_CTRL1;
+            struct w32SecureZone_Master_CTRL2;
+            struct w32SecureZone_Master_CTRL3;
+                   };
+                 } TSecureZone_Master_CTRL;
+    typedef union  TSecureZone_REGION_SADDR
+          { UNSG32 u32[1];
+            struct {
+            struct w32SecureZone_REGION_SADDR;
+                   };
+                 } TSecureZone_REGION_SADDR;
+    typedef union  TSecureZone_REGION_EADDR
+          { UNSG32 u32[1];
+            struct {
+            struct w32SecureZone_REGION_EADDR;
+                   };
+                 } TSecureZone_REGION_EADDR;
+
+    ///////////////////////////////////////////////////////////
+     SIGN32 SecureZone_drvrd(SIE_SecureZone *p, UNSG32 base, SIGN32 mem, SIGN32 tst);
+     SIGN32 SecureZone_drvwr(SIE_SecureZone *p, UNSG32 base, SIGN32 mem, SIGN32 tst, UNSG32 *pcmd);
+       void SecureZone_reset(SIE_SecureZone *p);
+     SIGN32 SecureZone_cmp  (SIE_SecureZone *p, SIE_SecureZone *pie, char *pfx, void *hLOG, SIGN32 mem, SIGN32 tst);
+    #define SecureZone_check(p,pie,pfx,hLOG) SecureZone_cmp(p,pie,pfx,(void*)(hLOG),0,0)
+    #define SecureZone_print(p,    pfx,hLOG) SecureZone_cmp(p,0,  pfx,(void*)(hLOG),0,0)
+
+#endif
+//////
+/// ENDOFINTERFACE: SecureZone
+////////////////////////////////////////////////////////////
+
+//////
+/// 
+/// $INTERFACE AllZone                                  (4,4)
+///     # # ----------------------------------------------------------
+///     @ 0x00000 AllZone              (RW)
+///     # 0x00000 SecureZone           
+///               $SecureZone          SecureZone        REG      [16]
+///                                    ###
+///                                    * Support up to 32 zones
+///                                    ###
+///     @ 0x001C0 Zone_enable          (P)
+///               %unsigned 32 enable                    0x0
+///                                    ###
+///                                    * Bit 0: Master ID 0
+///                                    * …
+///                                    * Bit 31: Master ID 31
+///                                    ###
+///     # # ----------------------------------------------------------
+/// $ENDOFINTERFACE  # size:     452B, bits:    3152b, padding:     0B
+////////////////////////////////////////////////////////////
+#ifndef h_AllZone
+#define h_AllZone (){}
+
+    #define     RA_AllZone_AllZone                             0x0000
+    #define     RA_AllZone_SecureZone                          0x0000
+    ///////////////////////////////////////////////////////////
+    #define     RA_AllZone_Zone_enable                         0x01C0
+
+    #define     BA_AllZone_Zone_enable_enable                  0x01C0
+    #define     B16AllZone_Zone_enable_enable                  0x01C0
+    #define   LSb32AllZone_Zone_enable_enable                     0
+    #define   LSb16AllZone_Zone_enable_enable                     0
+    #define       bAllZone_Zone_enable_enable                  32
+    #define   MSK32AllZone_Zone_enable_enable                     0xFFFFFFFF
+    ///////////////////////////////////////////////////////////
+
+    typedef struct SIE_AllZone {
+    ///////////////////////////////////////////////////////////
+              SIE_SecureZone                                   ie_SecureZone[16];
+    ///////////////////////////////////////////////////////////
+    #define   GET32AllZone_Zone_enable_enable(r32)             _BFGET_(r32,31, 0)
+    #define   SET32AllZone_Zone_enable_enable(r32,v)           _BFSET_(r32,31, 0,v)
+
+    #define     w32AllZone_Zone_enable                         {\
+            UNSG32 uZone_enable_enable                         : 32;\
+          }
+    union { UNSG32 u32AllZone_Zone_enable;
+            struct w32AllZone_Zone_enable;
+          };
+    ///////////////////////////////////////////////////////////
+    } SIE_AllZone;
+
+    typedef union  T32AllZone_Zone_enable
+          { UNSG32 u32;
+            struct w32AllZone_Zone_enable;
+                 } T32AllZone_Zone_enable;
+    ///////////////////////////////////////////////////////////
+
+    typedef union  TAllZone_Zone_enable
+          { UNSG32 u32[1];
+            struct {
+            struct w32AllZone_Zone_enable;
+                   };
+                 } TAllZone_Zone_enable;
+
+    ///////////////////////////////////////////////////////////
+     SIGN32 AllZone_drvrd(SIE_AllZone *p, UNSG32 base, SIGN32 mem, SIGN32 tst);
+     SIGN32 AllZone_drvwr(SIE_AllZone *p, UNSG32 base, SIGN32 mem, SIGN32 tst, UNSG32 *pcmd);
+       void AllZone_reset(SIE_AllZone *p);
+     SIGN32 AllZone_cmp  (SIE_AllZone *p, SIE_AllZone *pie, char *pfx, void *hLOG, SIGN32 mem, SIGN32 tst);
+    #define AllZone_check(p,pie,pfx,hLOG) AllZone_cmp(p,pie,pfx,(void*)(hLOG),0,0)
+    #define AllZone_print(p,    pfx,hLOG) AllZone_cmp(p,0,  pfx,(void*)(hLOG),0,0)
+
+#endif
+//////
+/// ENDOFINTERFACE: AllZone
+////////////////////////////////////////////////////////////
+
+//////
+/// 
+/// $INTERFACE SZC                     biu              (4,4)
+///     # # ----------------------------------------------------------
+///     @ 0x00000 MPT                  (P)
+///     # 0x00000 MPT                  
+///               $MPT                 MPT               REG          
+///     @ 0x20000 MPT_CTRL             (P)
+///     # 0x20000 MPT_CTRL             
+///               $MPT_CTRL            MPT_CTRL          REG          
+///     @ 0x20034 Rule                 (P)
+///     # 0x20034 Rule                 
+///               $Rule                Rule              REG          
+///     @ 0x20848 AllZone              (P)
+///     # 0x20848 AllZone              
+///               $AllZone             AllZone           REG          
+///     @ 0x20A0C Interrupt            (WOC-)
+///               %unsigned 32 Status                    0x0
+///                                    ###
+///                                    * Indicate which SZC has error
+///                                    * Bit-0 SZC 0 R-channel
+///                                    * Bit-1 SZC 0 W-channel
+///                                    * Bit-2 SZC 1 R-channel
+///                                    * Bit-3 SZC 1 W-channel
+///                                    * Bit-4 SZC 2 R-channel
+///                                    * Bit-5 SZC 2 W-channel
+///                                    * Bit-6 SZC 3 R-channel
+///                                    * Bit-7 SZC 3 W-channel
+///                                    ###
+///     # 0x20A10 Interrupt1           
+///               %unsigned 32 Address_SZC0_R            0x0
+///     # 0x20A14 Interrupt2           
+///               %unsigned 32 Address_SZC0_W            0x0
+///     # 0x20A18 Interrupt3           
+///               %unsigned 32 Address_SZC1_R            0x0
+///     # 0x20A1C Interrupt4           
+///               %unsigned 32 Address_SZC1_W            0x0
+///     # 0x20A20 Interrupt5           
+///               %unsigned 32 Address_SZC2_R            0x0
+///     # 0x20A24 Interrupt6           
+///               %unsigned 32 Address_SZC2_W            0x0
+///     # 0x20A28 Interrupt7           
+///               %unsigned 32 Address_SZC3_R            0x0
+///     # 0x20A2C Interrupt8           
+///               %unsigned 32 Address_SZC3_W            0x0
+///     @ 0x20A30 W_After_AW           (P)
+///               %unsigned 32 W_After_AW                0xFFFFFFFF
+///                                    ###
+///                                    * 1: W Valid can only be issued after AW is accepted
+///                                    * 0: W Valid can be issued without AW is accepted
+///                                    * Bit0: SZC0
+///                                    * Bit1: SZC1
+///                                    * Bit2: SZC2
+///                                    ###
+///     @ 0x20A34                      (W-)
+///     #         # Stuffing bytes...
+///               %% 1027680
+///     # # ----------------------------------------------------------
+/// $ENDOFINTERFACE  # size:  262144B, bits:    5840b, padding:     0B
+////////////////////////////////////////////////////////////
+#ifndef h_SZC
+#define h_SZC (){}
+
+    #define     RA_SZC_MPT                                     0x0000
+    ///////////////////////////////////////////////////////////
+    #define     RA_SZC_MPT_CTRL                                0x20000
+    ///////////////////////////////////////////////////////////
+    #define     RA_SZC_Rule                                    0x20034
+    ///////////////////////////////////////////////////////////
+    #define     RA_SZC_AllZone                                 0x20848
+    ///////////////////////////////////////////////////////////
+    #define     RA_SZC_Interrupt                               0x20A0C
+
+    #define     BA_SZC_Interrupt_Status                        0x20A0C
+    #define     B16SZC_Interrupt_Status                        0x20A0C
+    #define   LSb32SZC_Interrupt_Status                           0
+    #define   LSb16SZC_Interrupt_Status                           0
+    #define       bSZC_Interrupt_Status                        32
+    #define   MSK32SZC_Interrupt_Status                           0xFFFFFFFF
+
+    #define     RA_SZC_Interrupt1                              0x20A10
+
+    #define     BA_SZC_Interrupt_Address_SZC0_R                0x20A10
+    #define     B16SZC_Interrupt_Address_SZC0_R                0x20A10
+    #define   LSb32SZC_Interrupt_Address_SZC0_R                   0
+    #define   LSb16SZC_Interrupt_Address_SZC0_R                   0
+    #define       bSZC_Interrupt_Address_SZC0_R                32
+    #define   MSK32SZC_Interrupt_Address_SZC0_R                   0xFFFFFFFF
+
+    #define     RA_SZC_Interrupt2                              0x20A14
+
+    #define     BA_SZC_Interrupt_Address_SZC0_W                0x20A14
+    #define     B16SZC_Interrupt_Address_SZC0_W                0x20A14
+    #define   LSb32SZC_Interrupt_Address_SZC0_W                   0
+    #define   LSb16SZC_Interrupt_Address_SZC0_W                   0
+    #define       bSZC_Interrupt_Address_SZC0_W                32
+    #define   MSK32SZC_Interrupt_Address_SZC0_W                   0xFFFFFFFF
+
+    #define     RA_SZC_Interrupt3                              0x20A18
+
+    #define     BA_SZC_Interrupt_Address_SZC1_R                0x20A18
+    #define     B16SZC_Interrupt_Address_SZC1_R                0x20A18
+    #define   LSb32SZC_Interrupt_Address_SZC1_R                   0
+    #define   LSb16SZC_Interrupt_Address_SZC1_R                   0
+    #define       bSZC_Interrupt_Address_SZC1_R                32
+    #define   MSK32SZC_Interrupt_Address_SZC1_R                   0xFFFFFFFF
+
+    #define     RA_SZC_Interrupt4                              0x20A1C
+
+    #define     BA_SZC_Interrupt_Address_SZC1_W                0x20A1C
+    #define     B16SZC_Interrupt_Address_SZC1_W                0x20A1C
+    #define   LSb32SZC_Interrupt_Address_SZC1_W                   0
+    #define   LSb16SZC_Interrupt_Address_SZC1_W                   0
+    #define       bSZC_Interrupt_Address_SZC1_W                32
+    #define   MSK32SZC_Interrupt_Address_SZC1_W                   0xFFFFFFFF
+
+    #define     RA_SZC_Interrupt5                              0x20A20
+
+    #define     BA_SZC_Interrupt_Address_SZC2_R                0x20A20
+    #define     B16SZC_Interrupt_Address_SZC2_R                0x20A20
+    #define   LSb32SZC_Interrupt_Address_SZC2_R                   0
+    #define   LSb16SZC_Interrupt_Address_SZC2_R                   0
+    #define       bSZC_Interrupt_Address_SZC2_R                32
+    #define   MSK32SZC_Interrupt_Address_SZC2_R                   0xFFFFFFFF
+
+    #define     RA_SZC_Interrupt6                              0x20A24
+
+    #define     BA_SZC_Interrupt_Address_SZC2_W                0x20A24
+    #define     B16SZC_Interrupt_Address_SZC2_W                0x20A24
+    #define   LSb32SZC_Interrupt_Address_SZC2_W                   0
+    #define   LSb16SZC_Interrupt_Address_SZC2_W                   0
+    #define       bSZC_Interrupt_Address_SZC2_W                32
+    #define   MSK32SZC_Interrupt_Address_SZC2_W                   0xFFFFFFFF
+
+    #define     RA_SZC_Interrupt7                              0x20A28
+
+    #define     BA_SZC_Interrupt_Address_SZC3_R                0x20A28
+    #define     B16SZC_Interrupt_Address_SZC3_R                0x20A28
+    #define   LSb32SZC_Interrupt_Address_SZC3_R                   0
+    #define   LSb16SZC_Interrupt_Address_SZC3_R                   0
+    #define       bSZC_Interrupt_Address_SZC3_R                32
+    #define   MSK32SZC_Interrupt_Address_SZC3_R                   0xFFFFFFFF
+
+    #define     RA_SZC_Interrupt8                              0x20A2C
+
+    #define     BA_SZC_Interrupt_Address_SZC3_W                0x20A2C
+    #define     B16SZC_Interrupt_Address_SZC3_W                0x20A2C
+    #define   LSb32SZC_Interrupt_Address_SZC3_W                   0
+    #define   LSb16SZC_Interrupt_Address_SZC3_W                   0
+    #define       bSZC_Interrupt_Address_SZC3_W                32
+    #define   MSK32SZC_Interrupt_Address_SZC3_W                   0xFFFFFFFF
+    ///////////////////////////////////////////////////////////
+    #define     RA_SZC_W_After_AW                              0x20A30
+
+    #define     BA_SZC_W_After_AW_W_After_AW                   0x20A30
+    #define     B16SZC_W_After_AW_W_After_AW                   0x20A30
+    #define   LSb32SZC_W_After_AW_W_After_AW                      0
+    #define   LSb16SZC_W_After_AW_W_After_AW                      0
+    #define       bSZC_W_After_AW_W_After_AW                   32
+    #define   MSK32SZC_W_After_AW_W_After_AW                      0xFFFFFFFF
+    ///////////////////////////////////////////////////////////
+
+    typedef struct SIE_SZC {
+    ///////////////////////////////////////////////////////////
+              SIE_MPT                                          ie_MPT;
+    ///////////////////////////////////////////////////////////
+              SIE_MPT_CTRL                                     ie_MPT_CTRL;
+    ///////////////////////////////////////////////////////////
+              SIE_Rule                                         ie_Rule;
+    ///////////////////////////////////////////////////////////
+              SIE_AllZone                                      ie_AllZone;
+    ///////////////////////////////////////////////////////////
+    #define   GET32SZC_Interrupt_Status(r32)                   _BFGET_(r32,31, 0)
+    #define   SET32SZC_Interrupt_Status(r32,v)                 _BFSET_(r32,31, 0,v)
+
+    #define     w32SZC_Interrupt                               {\
+            UNSG32 uInterrupt_Status                           : 32;\
+          }
+    union { UNSG32 u32SZC_Interrupt;
+            struct w32SZC_Interrupt;
+          };
+    #define   GET32SZC_Interrupt_Address_SZC0_R(r32)           _BFGET_(r32,31, 0)
+    #define   SET32SZC_Interrupt_Address_SZC0_R(r32,v)         _BFSET_(r32,31, 0,v)
+
+    #define     w32SZC_Interrupt1                              {\
+            UNSG32 uInterrupt_Address_SZC0_R                   : 32;\
+          }
+    union { UNSG32 u32SZC_Interrupt1;
+            struct w32SZC_Interrupt1;
+          };
+    #define   GET32SZC_Interrupt_Address_SZC0_W(r32)           _BFGET_(r32,31, 0)
+    #define   SET32SZC_Interrupt_Address_SZC0_W(r32,v)         _BFSET_(r32,31, 0,v)
+
+    #define     w32SZC_Interrupt2                              {\
+            UNSG32 uInterrupt_Address_SZC0_W                   : 32;\
+          }
+    union { UNSG32 u32SZC_Interrupt2;
+            struct w32SZC_Interrupt2;
+          };
+    #define   GET32SZC_Interrupt_Address_SZC1_R(r32)           _BFGET_(r32,31, 0)
+    #define   SET32SZC_Interrupt_Address_SZC1_R(r32,v)         _BFSET_(r32,31, 0,v)
+
+    #define     w32SZC_Interrupt3                              {\
+            UNSG32 uInterrupt_Address_SZC1_R                   : 32;\
+          }
+    union { UNSG32 u32SZC_Interrupt3;
+            struct w32SZC_Interrupt3;
+          };
+    #define   GET32SZC_Interrupt_Address_SZC1_W(r32)           _BFGET_(r32,31, 0)
+    #define   SET32SZC_Interrupt_Address_SZC1_W(r32,v)         _BFSET_(r32,31, 0,v)
+
+    #define     w32SZC_Interrupt4                              {\
+            UNSG32 uInterrupt_Address_SZC1_W                   : 32;\
+          }
+    union { UNSG32 u32SZC_Interrupt4;
+            struct w32SZC_Interrupt4;
+          };
+    #define   GET32SZC_Interrupt_Address_SZC2_R(r32)           _BFGET_(r32,31, 0)
+    #define   SET32SZC_Interrupt_Address_SZC2_R(r32,v)         _BFSET_(r32,31, 0,v)
+
+    #define     w32SZC_Interrupt5                              {\
+            UNSG32 uInterrupt_Address_SZC2_R                   : 32;\
+          }
+    union { UNSG32 u32SZC_Interrupt5;
+            struct w32SZC_Interrupt5;
+          };
+    #define   GET32SZC_Interrupt_Address_SZC2_W(r32)           _BFGET_(r32,31, 0)
+    #define   SET32SZC_Interrupt_Address_SZC2_W(r32,v)         _BFSET_(r32,31, 0,v)
+
+    #define     w32SZC_Interrupt6                              {\
+            UNSG32 uInterrupt_Address_SZC2_W                   : 32;\
+          }
+    union { UNSG32 u32SZC_Interrupt6;
+            struct w32SZC_Interrupt6;
+          };
+    #define   GET32SZC_Interrupt_Address_SZC3_R(r32)           _BFGET_(r32,31, 0)
+    #define   SET32SZC_Interrupt_Address_SZC3_R(r32,v)         _BFSET_(r32,31, 0,v)
+
+    #define     w32SZC_Interrupt7                              {\
+            UNSG32 uInterrupt_Address_SZC3_R                   : 32;\
+          }
+    union { UNSG32 u32SZC_Interrupt7;
+            struct w32SZC_Interrupt7;
+          };
+    #define   GET32SZC_Interrupt_Address_SZC3_W(r32)           _BFGET_(r32,31, 0)
+    #define   SET32SZC_Interrupt_Address_SZC3_W(r32,v)         _BFSET_(r32,31, 0,v)
+
+    #define     w32SZC_Interrupt8                              {\
+            UNSG32 uInterrupt_Address_SZC3_W                   : 32;\
+          }
+    union { UNSG32 u32SZC_Interrupt8;
+            struct w32SZC_Interrupt8;
+          };
+    ///////////////////////////////////////////////////////////
+    #define   GET32SZC_W_After_AW_W_After_AW(r32)              _BFGET_(r32,31, 0)
+    #define   SET32SZC_W_After_AW_W_After_AW(r32,v)            _BFSET_(r32,31, 0,v)
+
+    #define     w32SZC_W_After_AW                              {\
+            UNSG32 uW_After_AW_W_After_AW                      : 32;\
+          }
+    union { UNSG32 u32SZC_W_After_AW;
+            struct w32SZC_W_After_AW;
+          };
+    ///////////////////////////////////////////////////////////
+             UNSG8 RSVDx20A34                                  [128460];
+    ///////////////////////////////////////////////////////////
+    } SIE_SZC;
+
+    typedef union  T32SZC_Interrupt
+          { UNSG32 u32;
+            struct w32SZC_Interrupt;
+                 } T32SZC_Interrupt;
+    typedef union  T32SZC_Interrupt1
+          { UNSG32 u32;
+            struct w32SZC_Interrupt1;
+                 } T32SZC_Interrupt1;
+    typedef union  T32SZC_Interrupt2
+          { UNSG32 u32;
+            struct w32SZC_Interrupt2;
+                 } T32SZC_Interrupt2;
+    typedef union  T32SZC_Interrupt3
+          { UNSG32 u32;
+            struct w32SZC_Interrupt3;
+                 } T32SZC_Interrupt3;
+    typedef union  T32SZC_Interrupt4
+          { UNSG32 u32;
+            struct w32SZC_Interrupt4;
+                 } T32SZC_Interrupt4;
+    typedef union  T32SZC_Interrupt5
+          { UNSG32 u32;
+            struct w32SZC_Interrupt5;
+                 } T32SZC_Interrupt5;
+    typedef union  T32SZC_Interrupt6
+          { UNSG32 u32;
+            struct w32SZC_Interrupt6;
+                 } T32SZC_Interrupt6;
+    typedef union  T32SZC_Interrupt7
+          { UNSG32 u32;
+            struct w32SZC_Interrupt7;
+                 } T32SZC_Interrupt7;
+    typedef union  T32SZC_Interrupt8
+          { UNSG32 u32;
+            struct w32SZC_Interrupt8;
+                 } T32SZC_Interrupt8;
+    typedef union  T32SZC_W_After_AW
+          { UNSG32 u32;
+            struct w32SZC_W_After_AW;
+                 } T32SZC_W_After_AW;
+    ///////////////////////////////////////////////////////////
+
+    typedef union  TSZC_Interrupt
+          { UNSG32 u32[9];
+            struct {
+            struct w32SZC_Interrupt;
+            struct w32SZC_Interrupt1;
+            struct w32SZC_Interrupt2;
+            struct w32SZC_Interrupt3;
+            struct w32SZC_Interrupt4;
+            struct w32SZC_Interrupt5;
+            struct w32SZC_Interrupt6;
+            struct w32SZC_Interrupt7;
+            struct w32SZC_Interrupt8;
+                   };
+                 } TSZC_Interrupt;
+    typedef union  TSZC_W_After_AW
+          { UNSG32 u32[1];
+            struct {
+            struct w32SZC_W_After_AW;
+                   };
+                 } TSZC_W_After_AW;
+
+    ///////////////////////////////////////////////////////////
+     SIGN32 SZC_drvrd(SIE_SZC *p, UNSG32 base, SIGN32 mem, SIGN32 tst);
+     SIGN32 SZC_drvwr(SIE_SZC *p, UNSG32 base, SIGN32 mem, SIGN32 tst, UNSG32 *pcmd);
+       void SZC_reset(SIE_SZC *p);
+     SIGN32 SZC_cmp  (SIE_SZC *p, SIE_SZC *pie, char *pfx, void *hLOG, SIGN32 mem, SIGN32 tst);
+    #define SZC_check(p,pie,pfx,hLOG) SZC_cmp(p,pie,pfx,(void*)(hLOG),0,0)
+    #define SZC_print(p,    pfx,hLOG) SZC_cmp(p,0,  pfx,(void*)(hLOG),0,0)
+
+#endif
+//////
+/// ENDOFINTERFACE: SZC
+////////////////////////////////////////////////////////////
+
+
+
+#ifdef __cplusplus
+  }
+#endif
+#pragma  pack()
+
+#endif
+//////
+/// ENDOFFILE: SZC.h
+////////////////////////////////////////////////////////////
+

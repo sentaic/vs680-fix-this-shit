@@ -1,0 +1,10 @@
+global-incdirs-y += .
+subdirs-$(CFG_BCM) += bcm
+subdirs-$(CFG_RF) += regfirewall
+subdirs-$(CFG_MASTER_PROTECT) += protor
+subdirs-$(CFG_MZONE) += mzone
+subdirs-$(CFG_SZC) += szc
+subdirs-$(CFG_APB_TIMER) += apb_timer
+subdirs-$(CFG_APPCRYPTO) += appcrypto
+subdirs-$(CFG_SYNAPROT_MAILBOX) += mailbox
+srcs-$(CFG_SYNA_TRNG) += syna_trng.c

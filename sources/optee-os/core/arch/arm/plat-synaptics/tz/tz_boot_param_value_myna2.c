@@ -1,0 +1,196 @@
+// SPDX-License-Identifier: BSD-2-Clause
+/*
+ * Copyright (c) 2024, Synaptics Incorporated.
+ */
+
+#include "mem_region.h"
+#include "mem_region_userdata.h"
+#include "ta_info.h"
+#include "prot_id.h"
+#include "tz_boot_cmd.h"
+#include "tz_boot_param.h"
+#include "tee_ta_perm_rule_def.h"
+#include "szc_mst.h"
+
+#define ION_ATTR_SW_NONCACHED	\
+	(ION_A_CO | ION_A_CC | ION_A_ND | ION_A_FD | ION_A_NC | ION_A_FS)
+#define ION_ATTR_SW_OTHER	\
+	(ION_A_CO | ION_A_CG | ION_A_CV | ION_A_CC | ION_A_ND | ION_A_FD | \
+	 ION_A_NC | ION_A_FC | ION_A_FS)
+#define ION_ATTR_NW_ALL	\
+	(ION_A_CO | ION_A_CG | ION_A_CV | ION_A_CC | ION_A_ND | ION_A_FD | \
+	 ION_A_FC | ION_A_NS)
+
+/* Temporary add. It should be removed once TEE support mapping memory on demand. */
+#define ION_ATTR_NW_NONCACHED \
+	(ION_A_CO | ION_A_CG | ION_A_CV | ION_A_CC | ION_A_ND | ION_A_FD | \
+	 ION_A_NC | ION_A_NS)
+
+#define RF_ACPU_GROUP		0
+#define RF_SCPU_GROUP		1
+
+/* register firewall setting */
+const struct rf_window rf_window_param[] = {
+	// MPTS_REG
+	{1, 0xf9000000, 0xf9040000 - 0xf9000000,
+		RF_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZ_SRW_NNA),
+		1 << RF_ACPU_GROUP | 1 << RF_SCPU_GROUP},
+
+	// CPU_REG_CSSY_CTRL， CPU_REG_RWTC
+	{2, 0xf79200ac, 0xf79200b4 - 0xf79200ac ,
+		RF_ATTR(TZ_BOOT_STAGE_SYSINIT, TZ_SRW_NNA),
+		1 << RF_SCPU_GROUP},
+
+	// CPU_WRP_CFG64_REG
+	{3, 0xf7920800, 0xf7921000 - 0xf7920800 ,
+		RF_ATTR(TZ_BOOT_STAGE_SYSINIT, TZ_SRW_NNA),
+		1 << RF_SCPU_GROUP | 1 << RF_ACPU_GROUP},
+
+	// BCM_REG
+	{4,  0xf7930000, 0xf7940000 -  0xf7930000 ,
+		RF_ATTR(TZ_BOOT_STAGE_SYSINIT, TZ_SRW_NNA),
+		1 << RF_ACPU_GROUP},
+
+	// SOC_AHB_RESP_CTRL, SOC_AXI_BRESP_CTRL
+	{7,  0xf7ca0100,  0xf7ca010c - 0xf7ca0100 ,
+		RF_ATTR(TZ_BOOT_STAGE_SYSINIT, TZ_SRW_NNA),
+		1 << RF_SCPU_GROUP},
+
+	// SOC_AHB_RESP_CTRL, SOC_AXI_BRESP_CTRL
+	{8,  0xf7ca0114, 0xf7cb0000 - 0xf7ca0114 ,
+		RF_ATTR(TZ_BOOT_STAGE_SYSINIT, TZ_SRW_NNA),
+		1 << RF_SCPU_GROUP | 1 << RF_ACPU_GROUP},
+
+	// KILOPASS_OTP
+	{9, 0xf7ce4000, 0xf7cea000 - 0xf7ce4000,
+		RF_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZ_SRW_NNA),
+		1 << RF_SCPU_GROUP},
+
+	// TSSS_BC
+	{10, 0xf7cef000, 0xf7ceff00 - 0xf7cef000,
+		RF_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZ_SRW_NNA),
+		1 << RF_SCPU_GROUP},
+
+	// HIGH_ROM_VECTOR
+	{11, 0xffff0000, 0xffffffff - 0xffff0000,
+			RF_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZ_SRW_NNA),
+			1 << RF_ACPU_GROUP | 1 << RF_SCPU_GROUP},
+
+	// CORESIGHT_REG
+	{12, 0xf6800000, 0xf7000000 - 0xf6800000 ,
+		RF_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZ_SRW_NNA),
+		1 << RF_ACPU_GROUP},
+
+	// MTEST
+	{13, 0xf7b40000, 0xf7b50000 - 0xf7b40000 ,
+		RF_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZ_SRW_NNA),
+		1 << RF_SCPU_GROUP},
+
+	// TSSS_GKL, TSSS_EMM
+	{14, 0xf7ceff00, 0xf7d00000 - 0xf7ceff00 ,
+		RF_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZ_SRW_NNA),
+		1 << RF_ACPU_GROUP},
+
+	{15, 0xf7ea0100, 0xf7ea0620 - 0xf7ea0100 ,
+		RF_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZ_SRW_NRO),
+		1 << RF_ACPU_GROUP},
+
+	{17, 0xf7ea0960, 0xf7ea0970 - 0xf7ea0960 ,
+		RF_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZ_SRW_NNA),
+		1 << RF_ACPU_GROUP},
+};
+
+const uint32_t rf_window_num = ARRAY_SIZE(rf_window_param);
+
+#define MASTER_ACPUS	(1 << MstUserID_ACPU0 | 1 << MstUserID_ACPU1 | 1 << MstUserID_ACPU2 | 1 << MstUserID_ACPU3)
+#define MASTER_BCM		(1 << MstUserID_SCPU)
+#define MASTER_AVIO		(1 << MstUserID_AIO | 1 << MstUserID_VIO)
+#define MASTER_GFX		(1 << MstUserID_GFXDATA | 1 << MstUserID_GFXCODE | 1 << MstUserID_GFXFW | 1 << MstUserID_GFXPM)
+#define MASTER_EMMC		(1 << MstUserID_EMMC)
+#define MASTER_NAND		(1 << MstUserID_NAND)
+
+const struct mem_zone mem_zone_param[] = {
+	{0, "sys_init",	 NS_ZONE, MASTER_ACPUS | MASTER_BCM | MASTER_EMMC | MASTER_NAND,
+		MASTER_ACPUS | MASTER_BCM | MASTER_EMMC | MASTER_NAND,
+		MASTER_ACPUS | MASTER_BCM | MASTER_EMMC | MASTER_NAND,
+		MASTER_ACPUS | MASTER_BCM | MASTER_EMMC | MASTER_NAND},
+	{1, "tz",		 S_ZONE, 0x0, 0x0,
+		MASTER_ACPUS | MASTER_BCM | MASTER_AVIO,
+		MASTER_ACPUS | MASTER_BCM},
+
+	{2, "Secure",	 S_ZONE, 0x0, 0x0,
+		MASTER_ACPUS | MASTER_BCM | MASTER_AVIO | MASTER_GFX,
+		MASTER_ACPUS | MASTER_BCM | MASTER_AVIO | MASTER_GFX},
+
+	// DO NOT allowed secure GPU masters(14, 15, 16, 17) to access Non secure buffer, clear related bits in s_rd and s_wr
+	// NS Zones: bootloader, NonSecure, NonSecure
+	{3, "bootloader",	 NS_ZONE, 0xffffffff, 0xffffffff,0xffffffff, ~MASTER_GFX},
+	{4, "NonSecure",	 NS_ZONE, 0xffffffff, 0xffffffff,0xffffffff, ~MASTER_GFX},
+	{5, "NonSecure-NC",	 NS_ZONE, 0xffffffff, 0xffffffff,0xffffffff, ~MASTER_GFX},
+	{6, "pt",		 S_ZONE, 0x0, 0x0, MASTER_ACPUS | MASTER_AVIO, MASTER_ACPUS },
+	{7, "rollback",		 NS_ZONE, 0, 0, 0, 0},
+	{8, "vpp",	 	NS_ZONE, 0xffffffff, 0xffffffff,0xffffffff, 0xffffffff},
+};
+
+const uint32_t mem_zone_num = ARRAY_SIZE(mem_zone_param);
+
+/* master setting */
+const struct master_setting master_setting_param[] = {
+	{PROT_ID_AIO,	MST_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZM_S)},
+	{PROT_ID_VIO,	MST_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZM_S)},
+	{PROT_ID_IMTEST,	MST_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZM_N)},
+	{PROT_ID_EMMC,		MST_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZM_N)},
+	{PROT_ID_SDIO,		MST_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZM_N)},
+	{PROT_ID_USB2,		MST_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZM_N)},
+	{PROT_ID_PB,		MST_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZM_N)},
+	{PROT_ID_USB3,		MST_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZM_N)},
+	{PROT_ID_NAND,		MST_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZM_N)},
+	{PROT_ID_GE,		MST_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZM_N)},
+	{PROT_ID_BCMCPU,	MST_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZM_S)},
+	{PROT_ID_BCMDMA,	MST_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZM_S)},
+	{PROT_ID_BCMDIR,	MST_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZM_S)},
+};
+
+const uint32_t master_setting_num = ARRAY_SIZE(master_setting_param);
+
+/*the white list for debug ta read*/
+const struct reg_region reg_region_param[] = {
+#if 0
+	{"VPP",      0xF7F60000, 0x20000,  RF_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZ_SRW_NNA)},
+	{"V2G",      0xF7600000, 0x200000, RF_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZ_SRO_NNA)},
+	{"TSP1",     0xF7A47000, 0x1000,   RF_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZ_SRW_NNA)},
+	{"TSP2",     0xF7A48000, 0x800,    RF_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZ_SRO_NNA)},
+	{"TSP3",     0xF7A50000, 0x10000,  RF_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZ_SRW_NNA)},
+	{"TSP4",     0xF7A67000, 0x1000,   RF_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZ_SRW_NNA)},
+	{"TSP5",     0xF7A68000, 0x800,    RF_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZ_SRO_NNA)},
+	{"TSP6",     0xF7A70000, 0x10000,  RF_ATTR(TZ_BOOT_STAGE_TRUSTZONE, TZ_SRW_NNA)}
+#endif
+};
+
+const uint32_t reg_region_param_num = ARRAY_SIZE(reg_region_param);
+
+START_OBJ_DEFINE
+	OBJ_REG(KILOPASS_OTP,    0xf7ce4000, 0x00001000)
+
+	OBJ_BCM_PI(OEM_CMD_PI,      0x0021, 0x01)
+	OBJ_BCM_PI(SECBOOT_PI,      0x1000, 0x04)
+	OBJ_BCM_PI(DRM_CKEY_PI,     0x4002, 0x03)
+	OBJ_BCM_PI(DRM_SECKEY_PI,   0x400a, 0x01)
+	OBJ_BCM_PI(DRM_CISCO_PI,    0x400b, 0x01)
+	OBJ_BCM_PI(DRM_KM_PI,       0x400d, 0x01)
+	OBJ_BCM_PI(EFUSEOTP_PI,     0x5000, 0x03)
+	OBJ_BCM_PI(GENCRYTO_PI,     0x7004, 0x03)
+	OBJ_BCM_PI(COMMONCRYPTO_PI, 0xc000, 0x0f)
+FINISH_OBJ_DEFINE
+
+START_RULE_DEFINE
+	RULE(KILOPASS_OTP,      KILOPASS_G,      TEE_TA_PERM_WRITE | TEE_TA_PERM_READ)
+
+	RULE(DRM_CKEY_PI,     CONTENTKEY_G,     TEE_TA_PERM_EXEC)
+	RULE(OEM_CMD_PI,      EFUSEOTP_G,       TEE_TA_PERM_EXEC)
+	RULE(EFUSEOTP_PI,     EFUSEOTP_G,       TEE_TA_PERM_EXEC)
+	RULE(GENCRYTO_PI,     COMMON_CRYPTO_G,  TEE_TA_PERM_EXEC)
+	RULE(COMMONCRYPTO_PI, COMMON_CRYPTO_G,  TEE_TA_PERM_EXEC)
+	RULE(DRM_KM_PI,       DRM_KM_G,         TEE_TA_PERM_EXEC)
+	RULE(DRM_CISCO_PI,    DRM_CISCO_G,      TEE_TA_PERM_EXEC)
+FINISH_RULE_DEFINE

@@ -1,0 +1,63 @@
+/* SPDX-License-Identifier: GPL-2.0+ */
+/*
+* Copyright (C) 2016~2025 Synaptics Incorporated. All rights reserved.
+*/
+
+/dts-v1/;
+/plugin/;
+
+/ {
+	fragment@0 {
+		target-path = "/soc/sm";
+
+		__overlay__ {
+			xspi0: xspi@e5050000 {
+				/delete-node/ flash@0;
+
+				flash@0 {
+					compatible = "spi-nand";
+					reg = <0>;
+					status = "okay";
+
+					#address-cells = <1>;
+					#size-cells = <1>;
+
+					partition@0 {
+						label = "block0";
+						reg = <0x00000000 0x00040000>; /* 256 KiB */
+						read-only;
+					};
+
+					partition@40000 {
+						label = "prebootloader";
+						reg = <0x00040000 0x00400000>; /* 4 MiB */
+						read-only;
+					};
+
+					partition@440000 {
+						label = "cmboot_a";
+						reg = <0x00440000 0x01000000>; /* 16 MiB */
+						read-only;
+					};
+
+					partition@1440000 {
+						label = "cmboot_b";
+						reg = <0x01440000 0x01000000>; /* 16 MiB */
+						read-only;
+					};
+
+					partition@2440000 {
+						label = "rootfs_a";
+						reg = <0x02440000 0x06b00000>; /* 107 MiB */
+					};
+
+					partition@8f40000 {
+						label = "rootfs_b";
+						reg = <0x08f40000 0x06b00000>; /* 107 MiB */
+					};
+				};
+			};
+		};
+	};
+};
+

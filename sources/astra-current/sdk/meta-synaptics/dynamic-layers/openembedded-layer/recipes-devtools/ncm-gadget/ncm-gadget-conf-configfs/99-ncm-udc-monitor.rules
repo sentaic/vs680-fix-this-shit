@@ -1,0 +1,1 @@
+ACTION=="add", SUBSYSTEM=="udc", RUN+="/usr/bin/ncm-gadget-start"

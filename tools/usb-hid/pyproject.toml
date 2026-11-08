@@ -1,0 +1,6 @@
+[project]
+name = "vs680-hid-client"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = ["cbor2==5.6.5"]
+license = "GPL-2.0-only"

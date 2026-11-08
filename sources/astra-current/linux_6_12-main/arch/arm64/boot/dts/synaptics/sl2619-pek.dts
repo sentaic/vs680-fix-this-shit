@@ -1,0 +1,530 @@
+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+/*
+ * Copyright (C) 2025 Synaptics Incorporated
+ *
+ * Author: Jisheng Zhang <jszhang@kernel.org>
+ */
+
+
+/dts-v1/;
+
+#include <dt-bindings/gpio/gpio.h>
+
+#include "sl2619.dtsi"
+
+&cpu0 {
+	/delete-property/ operating-points-v2;
+};
+
+&cpu1 {
+	/delete-property/ operating-points-v2;
+};
+
+/ {
+	model = "Synaptics SL2619 PEK";
+	compatible = "syna,sl2619-pek", "syna,sl2619";
+
+	aliases {
+		ethernet0 = &ethernet0;
+		ethernet1 = &ethernet1;
+	};
+
+	chosen {
+		stdout-path = "serial0:115200n8";
+	};
+
+	memory {
+		device_type = "memory";
+		reg = <0x0 0x01000000 0x0 0xdf000000>,
+		      <0x1 0xe0000000 0x0 0x20000000>;
+	};
+
+	reserved-memory {
+		#address-cells = <2>;
+		#size-cells = <2>;
+		ranges;
+
+		vdev0vring0: vdev0vring0@7f00000 {
+			compatible = "shared-dma-pool";
+			reg = <0 0x7f00000 0 0x8000>;
+			no-map;
+		};
+
+		vdev0vring1: vdev0vring1@7f08000 {
+			compatible = "shared-dma-pool";
+			reg = <0 0x7f08000 0 0x8000>;
+			no-map;
+		};
+
+		vdevbuffer: vdevbuffer {
+			compatible = "shared-dma-pool";
+			reg = <0 0x7f10000 0 0xf0000>;
+			no-map;
+		};
+	};
+
+	rpmsg {
+		compatible = "syna,rpmsg";
+		mbox-names = "rpmsg";
+		mboxes = <&ipc 0>;
+		syna,vdev-nums = <1>;
+		reg = <0x0 0x7f00000 0x0 0x10000>;
+		memory-region = <&vdevbuffer>;
+	};
+
+	sdhci1_pwrseq: sdhci1-pwrseq {
+		compatible = "mmc-pwrseq-simple";
+		reset-gpios = <&fxl6408_u96 2 GPIO_ACTIVE_LOW>;
+		post-power-on-delay-ms = <50>;
+	};
+
+	regulators {
+		compatible = "simple-bus";
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		reg_usb1_vbus: usb1_vbus {
+			compatible = "regulator-fixed";
+			regulator-name = "usb0_vbus";
+			regulator-min-microvolt = <5000000>;
+			regulator-max-microvolt = <5000000>;
+			gpio = <&tca6416_u98 14 GPIO_ACTIVE_HIGH>;
+			enable-active-high;
+		};
+	};
+
+	usb2513b {
+		compatible = "microchip,usb2513b";
+		reset-gpios = <&tca6416_u98 0 GPIO_ACTIVE_LOW>;
+	};
+
+	mdio-demux {
+		compatible = "mdio-demux";
+		mux-controls = <&mux1 0>;
+		mdio-parent-bus = <&mdio0>, <&mdio1>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		mdio@0 {
+			reg = <0x0>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			ethernet_phy0: ethernet-phy@3 {
+				compatible = "ethernet-phy-id001c.c916";
+				reg = <3>;
+				realtek,clkout-disable;
+				realtek,rxc-ssc-enable;
+				realtek,sysclk-ssc-enable;
+				reset-assert-us = <20000>;
+				reset-deassert-us = <100000>;
+				reset-gpios = <&fxl6408_u96 6 GPIO_ACTIVE_LOW>;
+			};
+		};
+
+		mdio@1 {
+			reg = <0x1>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			ethernet_phy1: ethernet-phy@2 {
+				compatible = "ethernet-phy-id001c.c916";
+				reg = <2>;
+				pinctrl-0 = <&eth1_phy_rst_pmux>;
+				pinctrl-names = "default";
+				realtek,clkout-disable;
+				realtek,rxc-ssc-enable;
+				realtek,sysclk-ssc-enable;
+				reset-assert-us = <20000>;
+				reset-deassert-us = <100000>;
+				reset-gpios = <&portf 3 GPIO_ACTIVE_HIGH>;
+			};
+		};
+	};
+
+	bt_reg_on: bt_reg_on {
+		compatible = "syna,rfkill";
+		bt-power-gpio = <&fxl6408_u96 5 GPIO_ACTIVE_HIGH>;
+	};
+
+	bluesleep: bluesleep {
+		compatible = "syna,bluesleep";
+		bt-dev-wake-gpio = <&fxl6408_u96 3 GPIO_ACTIVE_HIGH>;
+	};
+
+	dmabuf_heap {
+		compatible = "syna,berlin-heaps";
+		pool-num = <1>;
+		reg-names = "NonSecure-NC";
+		reg = <0 0x3ec00000 0  0x400000>;
+		attributes-num-per-pool = <2>;
+		pool-attributes = <0x00000105 0x00000F3A>;
+	};
+};
+
+&pinctrl {
+	eth_mdio_pmux: eth-mdio-pmux {
+		groups = "GPIO31", "GPIO32";
+		function = "rgmii";
+		drive-strength = <7>;
+	};
+
+	eth0_pmux: eth0-pmux {
+		groups = "GPIO33", "GPIO34", "GPIO35", "GPIO36", "GPIO37", "GPIO38", "GPIO39", "GPIO40", "GPIO41", "GPIO42", "GPIO43", "GPIO44";
+		function = "rgmii1";
+		drive-strength = <7>;
+	};
+
+	eth1_pmux: eth1-pmux {
+		groups = "GPIO48", "GPIO49", "GPIO50", "GPIO51", "GPIO52", "GPIO53", "GPIO54", "GPIO55", "GPIO56", "GPIO57", "GPIO58", "GPIO59";
+		function = "rgmii2";
+		drive-strength = <7>;
+	};
+
+	i2c2_pmux: i2c2-pmux {
+		groups = "GPIO23", "GPIO24";
+		function = "tw2";
+		drive-strength = <8>;
+	};
+
+	i2c3_pmux: i2c3-pmux {
+		groups = "GPIO27", "GPIO28";
+		function = "tw3";
+		drive-strength = <8>;
+	};
+
+	i2s1_pmux: i2s1-pmux {
+		groups = "GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4";
+		function = "i2s1";
+	};
+
+	i2s2_pmux: i2s2-pmux {
+		groups = "GPIO5", "GPIO6", "GPIO7", "GPIO8", "GPIO11";
+		function = "i2s2";
+	};
+
+	i2s3_pmux: i2s3-pmux {
+		groups = "GPIO12", "GPIO13", "GPIO14", "GPIO15";
+		function = "i2s3";
+	};
+};
+
+&sm_pinctrl {
+	eth1_phy_rst_pmux: eth1_phy_rst-pmux {
+		groups = "SM_GPIO35";
+		function = "gpio";
+	};
+
+	i2c0_pmux: i2c0-pmux {
+		groups = "SM_GPIO12", "SM_GPIO13";
+		function = "tw0";
+		drive-strength = <8>;
+	};
+
+	i2c1_pmux: i2c1-pmux {
+		groups = "SM_GPIO3", "SM_GPIO4";
+		function = "tw1";
+		drive-strength = <8>;
+	};
+
+	tca6416_u98_pmux: tca6416_u98-pmux {
+		groups = "SM_GPIO24";
+		function = "gpio";
+	};
+
+	uart1_pmux: uart1-pmux {
+		groups = "SM_GPIO7", "SM_GPIO8", "SM_GPIO14", "SM_GPIO15";
+		function = "uart1";
+		drive-strength = <7>;
+	};
+
+	pdm_pmux: pdm-pmux {
+		groups = "SM_GPIO31", "SM_GPIO32";
+		function = "pdm";
+	};
+};
+
+&mux1 {
+	status = "okay";
+};
+
+&i2c0 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c0_pmux>;
+	clock-frequency = <100000>;
+
+	fxl6408_u95: gpio@43 {
+		compatible = "fcs,fxl6408";
+		reg = <0x43>;
+		reset-gpios = <&porte 0 GPIO_ACTIVE_LOW>;
+		gpio-controller;
+		#gpio-cells = <2>;
+	};
+
+	fxl6408_u96: gpio@44 {
+		compatible = "fcs,fxl6408";
+		reg = <0x44>;
+		reset-gpios = <&porte 0 GPIO_ACTIVE_LOW>;
+		gpio-controller;
+		#gpio-cells = <2>;
+	};
+
+	tca6416_u97: gpio@20 {
+		compatible = "ti,tca6416";
+		reg = <0x20>;
+		reset-gpios = <&porte 0 GPIO_ACTIVE_LOW>;
+		gpio-controller;
+		#gpio-cells = <2>;
+	};
+};
+
+&i2c1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c1_pmux>;
+
+	tca9539_u100: gpio@74 {
+		compatible = "ti,tca9539";
+		reg = <0x74>;
+		reset-gpios = <&porte 0 GPIO_ACTIVE_LOW>;
+		gpio-controller;
+		#gpio-cells = <2>;
+	};
+
+	tca9539_u101: gpio@75 {
+		compatible = "ti,tca9539";
+		reg = <0x75>;
+		reset-gpios = <&porte 0 GPIO_ACTIVE_LOW>;
+		gpio-controller;
+		#gpio-cells = <2>;
+	};
+
+	tca9539_u102: gpio@76 {
+		compatible = "ti,tca9539";
+		reg = <0x76>;
+		reset-gpios = <&porte 0 GPIO_ACTIVE_LOW>;
+		gpio-controller;
+		#gpio-cells = <2>;
+	};
+
+	tca9539_u103: gpio@77 {
+		compatible = "ti,tca9539";
+		reg = <0x77>;
+		reset-gpios = <&porte 0 GPIO_ACTIVE_LOW>;
+		gpio-controller;
+		#gpio-cells = <2>;
+	};
+};
+
+&i2c2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c2_pmux>;
+
+	tca6416_u98: gpio@21 {
+		compatible = "ti,tca6416";
+		pinctrl-names = "default";
+		pinctrl-0 = <&tca6416_u98_pmux>;
+		reg = <0x21>;
+		reset-gpios = <&porte 0 GPIO_ACTIVE_LOW>;
+		gpio-controller;
+		#gpio-cells = <2>;
+	};
+};
+
+&i2c3 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c3_pmux>;
+};
+
+&ipc {
+	status = "okay";
+};
+
+&pdma0 {
+	status = "okay";
+};
+
+&sdhci0 {
+	status = "okay";
+	sdclkdl-dc = /bits/ 8 <20>;
+	pad-sp = /bits/ 8 <10>;
+	pad-sn = /bits/ 8 <10>;
+	mmc-ddr-1_8v;
+	mmc-hs200-1_8v;
+	mmc-hs400-1_8v;
+	mmc-hs400-enhanced-strobe;
+};
+
+&sdhci1 {
+	status = "okay";
+	bus-width = <4>;
+	sdclkdl-dc = /bits/ 8 <50>;
+	pad-sp = /bits/ 8 <12>;
+	pad-sn = /bits/ 8 <12>;
+	no-sd;
+	no-mmc;
+	non-removable;
+	mmc-pwrseq = <&sdhci1_pwrseq>;
+	mode1-tune;
+	keep-power-in-suspend;
+};
+
+&ethernet0 {
+	status = "okay";
+	pinctrl-0 = <&eth_mdio_pmux>, <&eth0_pmux>;
+	pinctrl-names = "default";
+	phy-handle = <&ethernet_phy0>;
+	phy-mode = "rgmii-id";
+
+	mdio0: mdio {
+		compatible = "snps,dwmac-mdio";
+		#address-cells = <1>;
+		#size-cells = <0>;
+	};
+};
+
+&ethernet1 {
+	status = "okay";
+	pinctrl-0 = <&eth_mdio_pmux>, <&eth1_pmux>;
+	pinctrl-names = "default";
+	phy-handle = <&ethernet_phy1>;
+	phy-mode = "rgmii-id";
+
+	mdio1: mdio {
+		compatible = "snps,dwmac-mdio";
+		#address-cells = <1>;
+		#size-cells = <0>;
+	};
+};
+
+&usb0 {
+	status = "okay";
+	dr_mode = "peripheral";
+};
+
+&usb_phy0{
+	status = "okay";
+};
+
+&usb1 {
+	status = "okay";
+	vbus-supply = <&reg_usb1_vbus>;
+	dr_mode = "host";
+};
+
+&usb_phy1{
+	status = "okay";
+};
+
+&uart0 {
+	status = "okay";
+};
+
+&gpu {
+	status = "okay";
+};
+
+&smmu {
+	status = "okay";
+};
+
+&synpu {
+	status = "okay";
+};
+
+&uart1 {
+	pinctrl-0 = <&uart1_pmux>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+
+&avio {
+	status = "okay";
+};
+
+&klamath_pcm {
+	status = "okay";
+};
+
+&i2s1_dai {
+	status = "okay";
+	pinctrl-0 = <&i2s1_pmux>;
+	pinctrl-names = "default";
+	clk_src = "APLL";
+	clk_feed = "I2S1_DI";
+	output-mclk;
+};
+
+&i2s2_dai {
+	status = "okay";
+	pinctrl-0 = <&i2s2_pmux>;
+	pinctrl-names = "default";
+	clk_src = "APLL";
+	clk_feed = "I2S3_DI";
+};
+
+&i2s3_dai {
+	status = "okay";
+	pinctrl-0 = <&i2s3_pmux>;
+	pinctrl-names = "default";
+	clk_src = "APLL";
+	clk_feed = "I2S3_DI";
+};
+
+&dmic {
+	status = "okay";
+	pinctrl-0 = <&pdm_pmux>;
+	pinctrl-names = "default";
+	pdm-type = <1>;
+	pdm-clk-sel = <1>;
+};
+
+&klamath_asoc {
+	status = "okay";
+
+	asoc_i2s1: asoc-i2s1 {
+		status = "okay";
+		stream-name = "asoc-i2s1";
+		link-name = "asoc-i2s1";
+		format = "i2s";
+		cpu-node = <&i2s1_dai>;
+		codec-name = "snd-soc-dummy";
+		codec-dai-name = "snd-soc-dummy-dai";
+		platform-node = <&klamath_pcm>;
+	};
+
+	asoc_i2s2: asoc-i2s2 {
+		status = "okay";
+		stream-name = "asoc-i2s2";
+		link-name = "asoc-i2s2";
+		format = "i2s";
+		cpu-node = <&i2s2_dai>;
+		codec-name = "snd-soc-dummy";
+		codec-dai-name = "snd-soc-dummy-dai";
+		platform-node = <&klamath_pcm>;
+	};
+
+	asoc_i2s3: asoc-i2s3 {
+		status = "okay";
+		stream-name = "asoc-i2s3";
+		link-name = "asoc-i2s3";
+		format = "i2s";
+		cpu-node = <&i2s3_dai>;
+		codec-name = "snd-soc-dummy";
+		codec-dai-name = "snd-soc-dummy-dai";
+		platform-node = <&klamath_pcm>;
+	};
+
+	asoc_dmic: asoc-dmic {
+		status = "okay";
+		stream-name = "dummy-dmic";
+		link-name = "dummy-dmic";
+		cpu-node = <&dmic>;
+		codec-name = "snd-soc-dummy";
+		codec-dai-name = "snd-soc-dummy-dai";
+		platform-node = <&klamath_pcm>;
+	};
+};

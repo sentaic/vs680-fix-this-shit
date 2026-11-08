@@ -1,0 +1,31 @@
+# SPDX-License-Identifier: GPL-2.0-only
+#
+#
+
+menuconfig SYNAPTICS_CRYPTO
+	bool "Synaptics hardware crypto driver support"
+	default y
+	help
+	  Synaptics crypto driver support
+
+if SYNAPTICS_CRYPTO
+
+config BERLIN_M2M
+	tristate "Support BERLIN M2M CRYPTO"
+	default n
+	depends on BERLIN_BM
+	depends on BERLIN_TSP
+	help
+	  Enable support for berlin HW CRYPTO
+
+
+config SYNAPTICS_CRYPTO_TEE
+	tristate "Synaptics OP-TEE Crypto Support"
+	depends on OPTEE
+	default n
+	help
+	  This enables the custom AES-GCM hardware key API (aes_hwkey_gcm_*)
+	  It routes the cryptography requests securely to the OP-TEE Trusted
+	  Application via SMC.
+
+endif

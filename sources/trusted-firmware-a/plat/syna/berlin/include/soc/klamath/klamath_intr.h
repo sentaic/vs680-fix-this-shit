@@ -1,0 +1,270 @@
+//////////////////////////////////////////////// 
+// 
+// klamath C Interrupt Defines from Memmap Excel File 
+// Source Excel: klamath_memmap.xlsx 
+//         Time: Fri Apr 18 16:12:26 2025
+//         User: aktambol
+// 
+//////////////////////////////////////////////// 
+
+#define   IRQ_mc                         0 
+#define   IRQ_szc                        1 
+#define   IRQ_dfc_pmu                    2 
+#define   IRQ_usb0                       3 
+#define   IRQ_usb0_hird_vld              4 
+#define   IRQ_usb0_suspend               5 
+#define   IRQ_usb1                       6 
+#define   IRQ_usb1_hird_vld              7 
+#define   IRQ_usb1_suspend               8 
+#define   IRQ_sdio0                      9 
+#define   IRQ_sdio0_wakeup               10 
+#define   IRQ_sdio1                      11 
+#define   IRQ_sdio1_wakeup               12 
+#define   IRQ_emmc                       13 
+#define   IRQ_emmc_wakeup                14 
+#define   IRQ_ge0                        15 
+#define   IRQ_ge1                        16 
+#define   IRQ_keypad                     17 
+#define   IRQ_gpio0                      18 
+#define   IRQ_uart0                      19 
+#define   IRQ_uart1                      20 
+#define   IRQ_uart2                      21 
+#define   IRQ_uart3                      22 
+#define   IRQ_spi_m                      23 
+#define   IRQ_i2c0                       24 
+#define   IRQ_i2c1                       25 
+#define   IRQ_timer_0                    26 
+#define   IRQ_timer_1                    27 
+#define   IRQ_timer_2                    28 
+#define   IRQ_timer_3                    29 
+#define   IRQ_timer_4                    30 
+#define   IRQ_timer_5                    31 
+#define   IRQ_timer_6                    32 
+#define   IRQ_timer_7                    33 
+#define   IRQ_timer_8                    34 
+#define   IRQ_timer_9                    35 
+#define   IRQ_timer_10                   36 
+#define   IRQ_timer_11                   37 
+#define   IRQ_timer_12                   38 
+#define   IRQ_timer_13                   39 
+#define   IRQ_timer_14                   40 
+#define   IRQ_timer_15                   41 
+#define   IRQ_wdog0                      42 
+#define   IRQ_wdog0_rst                  43 
+#define   IRQ_wdog1                      44 
+#define   IRQ_wdog1_rst                  45 
+#define   IRQ_wdog2                      46 
+#define   IRQ_wdog2_rst                  47 
+#define   IRQ_gpu                        48 
+#define   IRQ_gpu_event                  49 
+#define   IRQ_gpu_job                    50 
+#define   IRQ_gpu_mmu                    51 
+#define   IRQ_synpu                      52 
+#define   IRQ_axi_errmon                 53 
+#define   IRQ_soc_dummy_sw_0             54 
+#define   IRQ_soc_dummy_sw_1             55 
+#define   IRQ_soc_dummy_sw_2             56 
+#define   IRQ_soc_dummy_sw_3             57 
+#define   IRQ_soc_dummy_sw_4             58 
+#define   IRQ_soc_dummy_sw_5             59 
+#define   IRQ_soc_dummy_sw_6             60 
+#define   IRQ_soc_dummy_sw_7             61 
+#define   IRQ_avio_0                     62 
+#define   IRQ_avio_1                     63 
+#define   IRQ_avio_2                     64 
+#define   IRQ_avio_3                     65 
+#define   IRQ_avio_4                     66 
+#define   IRQ_avio_5                     67 
+#define   IRQ_avio_6                     68 
+#define   IRQ_dhub_avio0_0               69 
+#define   IRQ_dhub_avio0_1               70 
+#define   IRQ_dhub_avio0_2               71 
+#define   IRQ_dhub_avio1_0               72 
+#define   IRQ_dhub_avio1_1               73 
+#define   IRQ_dhub_avio1_2               74 
+#define   IRQ_acpu_cti_0                 75 
+#define   IRQ_acpu_cti_1                 76 
+#define   IRQ_acpu_pmu_n_0               77 
+#define   IRQ_acpu_pmu_n_1               78 
+#define   IRQ_acpu_comm_n_0              79 
+#define   IRQ_acpu_comm_n_1              80 
+#define   IRQ_channel_pdma_0             81 
+#define   IRQ_channel_pdma_1             82 
+#define   IRQ_channel_pdma_2             83 
+#define   IRQ_channel_pdma_3             84 
+#define   IRQ_channel_pdma_4             85 
+#define   IRQ_channel_pdma_5             86 
+#define   IRQ_channel_pdma_6             87 
+#define   IRQ_channel_pdma_7             88 
+#define   IRQ_channel_pdma_8             89 
+#define   IRQ_channel_pdma_9             90 
+#define   IRQ_channel_pdma_10            91 
+#define   IRQ_channel_pdma_11            92 
+#define   IRQ_channel_pdma_12            93 
+#define   IRQ_channel_pdma_13            94 
+#define   IRQ_channel_pdma_14            95 
+#define   IRQ_channel_pdma_15            96 
+#define   IRQ_comb_nonsec_pdma           97 
+#define   IRQ_comb_sec_pdma              98 
+#define   IRQ_sec_viol_err_pdma          99 
+#define   IRQ_ppc_perif                  100 
+#define   IRQ_ipc_acpu_lock              101 
+#define   IRQ_ipc_acpu_mbx0              102 
+#define   IRQ_ipc_acpu_mbx1              103 
+#define   IRQ_ipc_acpu_mbx2              104 
+#define   IRQ_ipc_acpu_mbx3              105 
+#define   IRQ_ge0_perch_tx_intr_0        106 
+#define   IRQ_ge0_perch_tx_intr_1        107 
+#define   IRQ_ge0_perch_rx_intr_0        108 
+#define   IRQ_ge0_perch_rx_intr_1        109 
+#define   IRQ_ge1_perch_tx_intr_0        110 
+#define   IRQ_ge1_perch_tx_intr_1        111 
+#define   IRQ_ge1_perch_rx_intr_0        112 
+#define   IRQ_ge1_perch_rx_intr_1        113 
+#define   IRQ_dHubIntrAvio2_0            114 
+#define   IRQ_dHubIntrAvio2_1            115 
+#define   IRQ_dHubIntrAvio2_2            116 
+#define   IRQ_tbu_ras                    117 
+#define   IRQ_tbu_pmu                    118 
+#define   IRQ_tcu_event_q_s              119 
+#define   IRQ_tcu_event_q_ns             120 
+#define   IRQ_tcu_pri_q_ns               121 
+#define   IRQ_tcu_cmd_sync_s             122 
+#define   IRQ_tcu_cmd_sync_ns            123 
+#define   IRQ_tcu_global_s               124 
+#define   IRQ_tcu_global_ns              125 
+#define   IRQ_tcu_ras                    126 
+#define   IRQ_tcu_pmu                    127 
+#define   IRQ_mcu2soc_0                  128 
+#define   IRQ_mcu2soc_1                  129 
+#define   IRQ_mcu2soc_2                  130 
+#define   IRQ_mcu2soc_3                  131 
+#define   IRQ_mcu2soc_4                  132 
+#define   IRQ_mcu2soc_5                  133 
+#define   IRQ_mcu2soc_6                  134 
+#define   IRQ_mcu2soc_7                  135 
+#define   IRQ_mcu2soc_8                  136 
+#define   IRQ_mcu2soc_9                  137 
+#define   IRQ_mcu2soc_10                 138 
+#define   IRQ_mcu2soc_11                 139 
+#define   IRQ_mcu2soc_12                 140 
+#define   IRQ_mcu2soc_13                 141 
+#define   IRQ_mcu2soc_14                 142 
+#define   IRQ_mcu2soc_15                 143 
+#define   IRQ_mcu2soc_16                 144 
+#define   IRQ_mcu2soc_17                 145 
+#define   IRQ_mcu2soc_18                 146 
+#define   IRQ_mcu2soc_19                 147 
+#define   IRQ_mcu2soc_20                 148 
+#define   IRQ_mcu2soc_21                 149 
+#define   IRQ_mcu2soc_22                 150 
+#define   IRQ_mcu2soc_23                 151 
+#define   IRQ_mcu2soc_24                 152 
+#define   IRQ_mcu2soc_25                 153 
+#define   IRQ_mcu2soc_26                 154 
+#define   IRQ_mcu2soc_27                 155 
+#define   IRQ_mcu2soc_28                 156 
+#define   IRQ_mcu2soc_29                 157 
+#define   IRQ_mcu2soc_30                 158 
+#define   IRQ_mcu2soc_31                 159 
+#define   IRQ_mcu2soc_32                 160 
+#define   IRQ_mcu2soc_33                 161 
+#define   IRQ_mcu2soc_34                 162 
+#define   IRQ_mcu2soc_35                 163 
+#define   IRQ_mcu2soc_36                 164 
+#define   IRQ_mcu2soc_37                 165 
+#define   IRQ_mcu2soc_38                 166 
+#define   IRQ_mcu2soc_39                 167 
+#define   IRQ_mcu2soc_40                 168 
+#define   IRQ_mcu2soc_41                 169 
+#define   IRQ_mcu2soc_42                 170 
+#define   IRQ_mcu2soc_43                 171 
+#define   IRQ_mcu2soc_44                 172 
+#define   IRQ_mcu2soc_45                 173 
+#define   IRQ_mcu2soc_46                 174 
+#define   IRQ_mcu2soc_47                 175 
+#define   IRQ_mcu2soc_48                 176 
+#define   IRQ_mcu2soc_49                 177 
+#define   IRQ_mcu2soc_50                 178 
+#define   IRQ_mcu2soc_51                 179 
+#define   IRQ_mcu2soc_52                 180 
+#define   IRQ_mcu2soc_53                 181 
+#define   IRQ_mcu2soc_54                 182 
+#define   IRQ_mcu2soc_55                 183 
+#define   IRQ_mcu2soc_56                 184 
+#define   IRQ_mcu2soc_57                 185 
+#define   IRQ_mcu2soc_58                 186 
+#define   IRQ_mcu2soc_59                 187 
+#define   IRQ_mcu2soc_60                 188 
+#define   IRQ_mcu2soc_61                 189 
+#define   IRQ_mcu2soc_62                 190 
+#define   IRQ_mcu2soc_63                 191 
+#define   IRQ_avio_7                     192 
+#define   IRQ_avio_8                     193 
+#define   IRQ_avio_9                     194 
+#define   IRQ_avio_10                    195 
+#define   IRQ_avio_11                    196 
+#define   IRQ_avio_12                    197 
+#define   IRQ_avio_13                    198 
+#define   IRQ_spi_m_1                    199 
+#define   IRQ_spi_m_2                    200 
+#define   IRQ_spi_m_3                    201 
+#define   IRQ_channel_pdma_16            202 
+#define   IRQ_channel_pdma_17            203 
+#define   IRQ_channel_pdma_18            204 
+#define   IRQ_channel_pdma_19            205 
+#define   IRQ_gpio1                      206 
+#define   fault_synpu                    207 
+#define   nCLUSTERPMUIRQ                 208 
+// #define   RESERVED                    209 
+// #define   RESERVED                    210 
+// #define   RESERVED                    211 
+// #define   RESERVED                    212 
+// #define   RESERVED                    213 
+// #define   RESERVED                    214 
+// #define   RESERVED                    215 
+// #define   RESERVED                    216 
+// #define   RESERVED                    217 
+// #define   RESERVED                    218 
+// #define   RESERVED                    219 
+// #define   RESERVED                    220 
+// #define   RESERVED                    221 
+// #define   RESERVED                    222 
+// #define   RESERVED                    223 
+
+#define   IRQ_TOTAL                      209 
+
+#define   IRQ_SOC2MCU_usb0               0 
+#define   IRQ_SOC2MCU_usb0_hird_vld      1 
+#define   IRQ_SOC2MCU_usb0_suspend       2 
+#define   IRQ_SOC2MCU_usb1               3 
+#define   IRQ_SOC2MCU_usb1_hird_vld      4 
+#define   IRQ_SOC2MCU_usb1_suspend       5 
+#define   IRQ_SOC2MCU_emmc               6 
+#define   IRQ_SOC2MCU_emmc_wakeup        7 
+#define   IRQ_SOC2MCU_wdog0              8 
+#define   IRQ_SOC2MCU_wdog0_rst          9 
+#define   IRQ_SOC2MCU_wdog1              10 
+#define   IRQ_SOC2MCU_wdog1_rst          11 
+#define   IRQ_SOC2MCU_wdog2              12 
+#define   IRQ_SOC2MCU_wdog2_rst          13 
+#define   IRQ_SOC2MCU_ipc_mcu_lock       14 
+#define   IRQ_SOC2MCU_ipc_mcu_mbx0       15 
+#define   IRQ_SOC2MCU_ipc_mcu_mbx1       16 
+#define   IRQ_SOC2MCU_ipc_mcu_mbx2       17 
+#define   IRQ_SOC2MCU_ipc_mcu_mbx3       18 
+#define   IRQ_SOC2MCU_sec_viol_err_pdma  19 
+#define   IRQ_SOC2MCU_ppc_perif          20 
+#define   IRQ_SOC2MCU_mc                 21 
+#define   IRQ_SOC2MCU_szc                22 
+#define   IRQ_SOC2MCU_axi_errmon         23 
+#define   IRQ_SOC2MCU_dhub_avio0_0       24 
+#define   IRQ_SOC2MCU_dhub_avio1_0       25 
+#define   IRQ_SOC2MCU_dhub_avio1_1       26 
+#define   IRQ_SOC2MCU_dHubIntrAvio2_0    27 
+#define   IRQ_SOC2MCU_avio_2             28 
+#define   irq0_soc2mcu                   29 
+#define   irq1_soc2mcu                   30 
+#define   irq2_soc2mcu                   31 
+
+#define   IRQ_SOC2MCU_TOTAL              32 

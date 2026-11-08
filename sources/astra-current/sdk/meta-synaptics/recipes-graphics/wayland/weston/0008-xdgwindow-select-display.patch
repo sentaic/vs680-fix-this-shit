@@ -1,0 +1,131 @@
+Upstream-Status: Inappropriate [ astra specific ]
+
+diff --git a/desktop-shell/shell.c b/desktop-shell/shell.c
+--- a/desktop-shell/shell.c
++++ b/desktop-shell/shell.c
+@@ -4049,25 +4049,30 @@
+ 	pixman_rectangle32_t area;
+ 	struct weston_coord_global pos;
+ 
+-	/* As a heuristic place the new window on the same output as the
+-	 * pointer. Falling back to the output containing 0, 0.
+-	 *
+-	 * TODO: Do something clever for touch too?
+-	 */
+ 	pos.c = weston_coord(0, 0);
+-	wl_list_for_each(seat, &compositor->seat_list, link) {
+-		struct weston_pointer *pointer = weston_seat_get_pointer(seat);
++	/* Use focused output (touch > pointer > keyboard > file override fallback).
++	 * This ensures touch on a panel opens windows there, while mouse clicks
++	 * on another output open windows on that output instead.
++	 */
++	target_output = weston_shell_utils_get_focused_output(compositor);
++	if (!target_output) {
++		/* As a heuristic place the new window on the same output as the
++		 * pointer. Falling back to the output containing 0, 0.
++		 */
++		wl_list_for_each(seat, &compositor->seat_list, link) {
++			struct weston_pointer *pointer = weston_seat_get_pointer(seat);
+ 
+-		if (pointer) {
+-			pos = pointer->pos;
+-			break;
++			if (pointer) {
++				pos = pointer->pos;
++				break;
++			}
+ 		}
+-	}
+ 
+-	wl_list_for_each(output, &compositor->output_list, link) {
+-		if (weston_output_contains_coord(output, pos)) {
+-			target_output = output;
+-			break;
++		wl_list_for_each(output, &compositor->output_list, link) {
++			if (weston_output_contains_coord(output, pos)) {
++				target_output = output;
++				break;
++			}
+ 		}
+ 	}
+ 
+
+diff --git a/include/libweston/shell-utils.h b/include/libweston/shell-utils.h
+--- a/include/libweston/shell-utils.h
++++ b/include/libweston/shell-utils.h
+@@ -50,6 +50,9 @@
+ weston_shell_utils_get_default_output(struct weston_compositor *compositor);
+ 
+ struct weston_output *
++weston_shell_utils_get_output_user_override(struct weston_compositor *compositor);
++
++struct weston_output *
+ weston_shell_utils_get_focused_output(struct weston_compositor *compositor);
+ 
+ void
+
+diff --git a/libweston/shell-utils/shell-utils.c b/libweston/shell-utils/shell-utils.c
+--- a/libweston/shell-utils/shell-utils.c
++++ b/libweston/shell-utils/shell-utils.c
+@@ -28,6 +28,9 @@
+ #include <libweston/shell-utils.h>
+ #include <libweston/desktop.h>
+ #include "shared/helpers.h"
++#include <string.h>
++
++#define OUTPUT_NAME_MAX_LEN 9 /* longest output name: HDMI-A-1 */
+ 
+ /**
+  * \defgroup shell-utils Shell utils
+@@ -50,6 +53,41 @@
+ 			    struct weston_output, link);
+ }
+ 
++WL_EXPORT struct weston_output *
++weston_shell_utils_get_output_user_override(struct weston_compositor *compositor)
++{
++	struct weston_output *output = NULL, *target_output = NULL;
++	char *override_disp, *override_disp_file;
++	int str_len;
++	FILE *filp;
++
++	override_disp_file = getenv("SHELL_OVERRIDE_DISPLAY_WINDOW");
++
++	if (override_disp_file) {
++		filp = fopen(override_disp_file, "r");
++		if (filp) {
++			fseek(filp, 0, SEEK_END);
++			str_len = ftell(filp);
++			fseek(filp, 0, SEEK_SET);
++
++			override_disp = malloc(str_len);
++			if (override_disp)
++				fread(override_disp, sizeof(char), str_len, filp);
++			fclose(filp);
++
++			if (str_len && (str_len <= OUTPUT_NAME_MAX_LEN)) {
++				wl_list_for_each(output, &compositor->output_list, link) {
++					if (!memcmp(output->name, override_disp, str_len - 1))
++						target_output = output;
++				}
++			}
++
++			free(override_disp);
++		}
++	}
++	return target_output;
++}
++
+ /**
+  * \ingroup shell-utils
+  */
+@@ -81,6 +119,9 @@
+ 			break;
+ 	}
+ 
++	if (!output)
++		output = weston_shell_utils_get_output_user_override(compositor);
++
+ 	return output;
+ }
+ 

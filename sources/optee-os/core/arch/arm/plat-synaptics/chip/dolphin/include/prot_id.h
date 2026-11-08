@@ -1,0 +1,41 @@
+// SPDX-License-Identifier: BSD-2-Clause
+/*
+ * Copyright (c) 2024, Synaptics Incorporated.
+ */
+
+#ifndef _PROT_ID_H_
+#define _PROT_ID_H_
+
+/* refer to h_protOR in soc.h */
+
+enum prot_id {
+	PROT_ID_CPU,
+	PROT_ID_AVIOM0,
+	PROT_ID_GFX3D,
+	PROT_ID_NPU,
+	PROT_ID_RFU0,
+	PROT_ID_RFU1,
+	PROT_ID_IMTEST,
+	PROT_ID_DECODER,
+	PROT_ID_ENCODER,
+	PROT_ID_OVP,
+	PROT_ID_BMON,
+	PROT_ID_ISPM0,
+	PROT_ID_ISPM1,
+	PROT_ID_ISPM2,
+	PROT_ID_GE,
+	PROT_ID_EMMC,
+	PROT_ID_SDIO,
+	PROT_ID_USB2,
+	PROT_ID_USB3,
+	PROT_ID_PCIE,
+	PROT_ID_PB,
+	PROT_ID_TSP,
+	PROT_ID_BC,
+	PROT_ID_BCMCPU,
+	PROT_ID_BCMDMA,
+	PROT_ID_BCMDIR,
+	PROT_ID_MAX
+};
+
+#endif /* _PROT_ID_H_ */

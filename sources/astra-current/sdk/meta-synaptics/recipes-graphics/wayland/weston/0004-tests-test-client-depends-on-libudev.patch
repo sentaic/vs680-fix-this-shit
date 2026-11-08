@@ -1,0 +1,27 @@
+From 874d04b2cdefd68aa619ca7b8bd43d08e98c78e1 Mon Sep 17 00:00:00 2001
+From: Brendan King <Brendan.King@imgtec.com>
+Date: Sat, 12 Jun 2021 16:50:01 +0100
+Subject: [PATCH 4/5] tests: test-client depends on libudev
+
+Source file weston-test-fixture-compositor.c includes libudev.h.
+---
+ tests/meson.build | 1 +
+ 1 file changed, 1 insertion(+)
+
+Upstream-Status: Inappropriate [ astra specific ]
+
+diff --git a/tests/meson.build b/tests/meson.build
+index a62c595f..b9e4bd2f 100644
+--- a/tests/meson.build
++++ b/tests/meson.build
+@@ -49,6 +49,7 @@ lib_test_client = static_library(
+ 		dep_pixman,
+                 dep_threads,
+ 		dependency('cairo'),
++		dependency('libudev'),
+ 	],
+ 	install: false,
+ )
+-- 
+2.34.1
+

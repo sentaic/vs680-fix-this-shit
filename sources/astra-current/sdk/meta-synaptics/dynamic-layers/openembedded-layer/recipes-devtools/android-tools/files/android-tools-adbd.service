@@ -1,0 +1,15 @@
+[Unit]
+Description=Android Debug Bridge
+ConditionPathExists=/etc/usb-debugging-enabled
+Before=android-system.service
+After=ncm-gadget-setup.service
+
+[Service]
+Type=simple
+Restart=on-failure
+ExecStartPre=-/usr/bin/android-gadget-setup adb
+Environment="ADBD_PORT=5555"
+ExecStart=/usr/bin/adbd
+
+[Install]
+WantedBy=basic.target

@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: GPL-2.0-only
+#
+# PHY Layer Configuration
+#
+
+config MDIO_BUS_DEMUX
+	tristate "MDIO BUS DEMUX"
+	select MULTIPLEXER
+	help
+	  Supports the MDIO BUX DEMUX.

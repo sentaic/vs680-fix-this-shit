@@ -1,0 +1,31 @@
+From 810fed30afd56a7e84ee1ef3b67a0505ff7f17a7 Mon Sep 17 00:00:00 2001
+From: Brendan King <Brendan.King@imgtec.com>
+Date: Tue, 4 Sep 2018 14:59:09 +0100
+Subject: [PATCH 1/5] backend-drm: disable "bo geometry out of bounds" message
+
+The message was being printed repeatedly whilst running an opaque
+windowed application, because the application wasn't within the
+framebuffer dimension limits.
+---
+ libweston/backend-drm/fb.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+Upstream-Status: Inappropriate [ astra specific ]
+
+diff --git a/libweston/backend-drm/fb.c b/libweston/backend-drm/fb.c
+index 8c200b88..7ac60973 100644
+--- a/libweston/backend-drm/fb.c
++++ b/libweston/backend-drm/fb.c
+@@ -457,7 +457,9 @@ drm_fb_get_from_dmabuf(struct linux_dmabuf_buffer *dmabuf,
+ 	    fb->width > device->max_width ||
+ 	    device->min_height > fb->height ||
+ 	    fb->height > device->max_height) {
++#if 0
+ 		weston_log("bo geometry out of bounds\n");
++#endif
+ 		goto err_free;
+ 	}
+ 
+-- 
+2.34.1
+

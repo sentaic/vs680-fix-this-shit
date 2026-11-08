@@ -1,0 +1,71 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright (C) 2025 Synaptics Incorporated
+ */
+#ifndef lcdc_config_prv_h
+#define lcdc_config_prv_h
+#include "ctypes.h"
+#include "avio.h"
+#include "avioGbl.h"
+#include "Galois_memmap.h"
+
+//LCDC Frame end interrupts
+#define LCDC1_FRAME_END_INTERRUPT 0x18
+#define LCDC2_FRAME_END_INTERRUPT 0x1B
+
+// VPP/AIO - DHUB CG Disable
+#define SYNA_LCDC_AIODHUB_CG_DISABLE(x)   \
+do { \
+	x.uCTRL_AIODHUB_dyCG_en = 0; \
+	x.uCTRL_AIODHUB_CG_en = 0; \
+} \
+while (0)
+
+#define SYNA_LCDC_VPPDHUB_CG_DISABLE(x)   \
+do { \
+	x.uCTRL_VPPDHUB_dyCG_en = 0; \
+	x.uCTRL_VPPDHUB_CG_en = 0; \
+} \
+while (0)
+
+#define SYNA_LCDC_GET_DEV_NDX(crtc_id) (crtc_id)
+
+// LCDC BCM Dhub handle
+#define SYNA_LCDC_BCM_DHUB_HANDLE Dhub_GetDhub2dHandle_ByDhubId(DHUB_ID_AG_DHUB)
+
+#define SYNA_MEMMAP_AVIO_VPP_GBL_BASE         	(MEMMAP_AVIO_REG_BASE + AVIO_MEMMAP_AVIO_GBL_BASE)
+#define SYNA_MEMMAP_AVIO_VPP_GBL_INTR_CTRL    	(SYNA_MEMMAP_AVIO_VPP_GBL_BASE + RA_avioGbl_INTR_CTRL)
+#define SYNA_MEMMAP_AVIO_VPP_GBL_LCDC_CTRL    	(SYNA_MEMMAP_AVIO_VPP_GBL_BASE + RA_avioGbl_LCDC_CTRL)
+#define SYNA_MEMMAP_AVIO_VPP_GBL_LCDC2_CTRL   	(SYNA_MEMMAP_AVIO_VPP_GBL_BASE + RA_avioGbl_LCDC2_CTRL)
+#define SYNA_MEMMAP_AVIO_VPP_GBL_AVPLLA_CLK_EN  (SYNA_MEMMAP_AVIO_VPP_GBL_BASE + RA_avioGbl_AVPLLA_CLK_EN)
+#define SYNA_MEMMAP_AVIO_VPP_GBL_SWPDOWN_CTRL 	(SYNA_MEMMAP_AVIO_VPP_GBL_BASE + RA_avioGbl_SWPDWN_CTRL)
+#define SYNA_MEMMAP_AVIO_VPP_GBL_CTRL         	(SYNA_MEMMAP_AVIO_VPP_GBL_BASE + RA_avioGbl_CTRL)
+
+#define SYNA_MEMMAP_AVIO_VPP_GBL_LCDC1_REG_BASE (MEMMAP_AVIO_REG_BASE + AVIO_MEMMAP_AVIO_LCDC1_REG_BASE)
+#define SYNA_MEMMAP_AVIO_VPP_GBL_LCDC2_REG_BASE (MEMMAP_AVIO_REG_BASE + AVIO_MEMMAP_AVIO_LCDC2_REG_BASE)
+#define SYNA_LCDC_GET_BASE_ADDRESS(x) (x ? SYNA_MEMMAP_AVIO_VPP_GBL_LCDC2_REG_BASE : SYNA_MEMMAP_AVIO_VPP_GBL_LCDC1_REG_BASE)
+
+#define SYNA_MEMMAP_AVIO_VPP_GBL_DPHYTX (MEMMAP_AVIO_REG_BASE + AVIO_MEMMAP_AVIO_GBL_BASE + RA_avioGbl_DPHYTX)
+#define SYNA_MEMMAP_AVIO_VPP_GBL_MIPI   (MEMMAP_AVIO_REG_BASE + AVIO_MEMMAP_AVIO_GBL_BASE + RA_avioGbl_MEMMAP_MIPI)
+
+#define RA_avioVppGbl_VPLL0_WRAP      RA_avioGbl_VPLL0_WRAP
+#define RA_avioVppGbl_VPPL1_WRAP      RA_avioGbl_VPLL1_WRAP
+
+#define RA_avioVppGbl_LCDC2_CTRL      RA_avioGbl_LCDC2_CTRL
+
+#define avioDhubChMap_vpp_BCM_R       avioDhubChMap_aio64b_BCM_R
+
+#define AVIO_GBL_BASE_ADDR      (MEMMAP_AVIO_REG_BASE+  AVIO_MEMMAP_AVIO_GBL_BASE)
+#define MIPI_SRAM_PWR_BASE_ADDR (AVIO_GBL_BASE_ADDR + RA_avioGbl_MIPI_SRAMPWR)
+#define MIPI_SRAM_PWRCTRL_ADDR  (MIPI_SRAM_PWR_BASE_ADDR + RA_SRAMPWR_ctrl)
+
+#define MIPI_CTRL_ADDR (AVIO_GBL_BASE_ADDR +  RA_avioGbl_MIPI_CTRL)
+
+// Typedef added to maintain same datatypes in common files
+typedef T32avioGbl_INTR_CTRL     T32avioVppGbl_INTR_CTRL;
+typedef T32avioGbl_LCDC_CTRL     T32avioVppGbl_LCDC_CTRL;
+typedef T32avioGbl_AVPLLA_CLK_EN T32avioVppGbl_AVPLLA_CLK_EN;
+typedef T32avioGbl_SWPDWN_CTRL   T32avioVppGbl_SWPDWN_CTRL;
+typedef T32avioGbl_CTRL          T32avioVppGbl_CTRL;
+
+#endif
